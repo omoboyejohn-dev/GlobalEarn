@@ -1,33 +1,43 @@
-// ===============================
+// ==============================
 // GlobalEarn JavaScript
-// ===============================
+// ==============================
 
 // Sticky Header
-const header = document.querySelector("header");
+
+const header = document.querySelector(".header");
 
 window.addEventListener("scroll", () => {
-    if (window.scrollY > 80) {
-        header.style.background = "rgba(8,15,25,0.95)";
-        header.style.boxShadow = "0 10px 30px rgba(0,0,0,.35)";
+
+    if (window.scrollY > 50) {
+
+        header.style.background = "#08121d";
+        header.style.boxShadow = "0 10px 25px rgba(0,0,0,.4)";
+
     } else {
-        header.style.background = "rgba(15,20,30,.75)";
+
+        header.style.background = "rgba(5,15,25,.88)";
         header.style.boxShadow = "none";
+
     }
+
 });
 
-// Smooth Scroll Navigation
+// Smooth Scroll
+
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 
-    anchor.addEventListener("click", function(e) {
+    anchor.addEventListener("click", function (e) {
 
         e.preventDefault();
 
         const target = document.querySelector(this.getAttribute("href"));
 
-        if(target){
+        if (target) {
 
             target.scrollIntoView({
-                behavior:"smooth"
+
+                behavior: "smooth"
+
             });
 
         }
@@ -36,54 +46,85 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 
 });
 
-// Fade Animation
-const observer = new IntersectionObserver(entries => {
+// Statistics Counter
+
+const counters = document.querySelectorAll(".stat-card h2");
+
+const speed = 150;
+
+counters.forEach(counter => {
+
+    const updateCount = () => {
+
+        const target = counter.innerText.replace(/\D/g, "");
+
+        const count = +counter.getAttribute("data-count") || 0;
+
+        const increment = target / speed;
+
+        if (count < target) {
+
+            const newCount = Math.ceil(count + increment);
+
+            counter.setAttribute("data-count", newCount);
+
+            counter.innerText = newCount.toLocaleString() + "+";
+
+            setTimeout(updateCount, 20);
+
+        } else {
+
+            if (counter.innerText.includes("$")) {
+
+                counter.innerText = "$20M+";
+
+            }
+
+        }
+
+    };
+
+    updateCount();
+
+});
+
+// Fade In Animation
+
+const observer = new IntersectionObserver((entries) => {
 
     entries.forEach(entry => {
 
-        if(entry.isIntersecting){
+        if (entry.isIntersecting) {
 
-            entry.target.style.opacity = "1";
-            entry.target.style.transform = "translateY(0)";
+            entry.target.classList.add("show");
 
         }
 
     });
 
-},{
-    threshold:0.15
+}, {
+
+    threshold: 0.15
+
 });
 
-document.querySelectorAll(".card,.step,.task,.feature").forEach(el=>{
-
-    el.style.opacity="0";
-    el.style.transform="translateY(40px)";
-    el.style.transition=".8s";
+document.querySelectorAll(".stat-card, .step-card, .feature-card, .task-card, .crypto-card").forEach(el => {
 
     observer.observe(el);
 
 });
 
-// Button Animation
-document.querySelectorAll("a").forEach(btn=>{
+// Hero Image Floating Effect
 
-    btn.addEventListener("mouseenter",()=>{
+const heroImage = document.querySelector(".hero-right img");
 
-        btn.style.transition=".3s";
+if (heroImage) {
 
-    });
+    let angle = 0;
 
-});
+    setInterval(() => {
 
-// Welcome Message
-console.log("Welcome to GlobalEarn");
+        angle += 0.03;
 
-// Current Year
-const copyright = document.querySelector(".copyright");
-
-if(copyright){
-
-    copyright.innerHTML =
-    `© ${new Date().getFullYear()} GlobalEarn. All Rights Reserved.`;
-
-}
+        heroImage.style.transform =
+            `translateY(${Math.sin(angle) *
