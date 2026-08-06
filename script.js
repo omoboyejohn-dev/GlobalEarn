@@ -1,6 +1,6 @@
-// ==============================
+// ======================================
 // GlobalEarn JavaScript
-// ==============================
+// ======================================
 
 // Sticky Header
 
@@ -10,12 +10,12 @@ window.addEventListener("scroll", () => {
 
     if (window.scrollY > 50) {
 
-        header.style.background = "#08121d";
-        header.style.boxShadow = "0 10px 25px rgba(0,0,0,.4)";
+        header.style.background = "#081420";
+        header.style.boxShadow = "0 10px 30px rgba(0,0,0,.35)";
 
     } else {
 
-        header.style.background = "rgba(5,15,25,.88)";
+        header.style.background = "rgba(7,19,31,.92)";
         header.style.boxShadow = "none";
 
     }
@@ -26,17 +26,17 @@ window.addEventListener("scroll", () => {
 
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 
-    anchor.addEventListener("click", function (e) {
+    anchor.addEventListener("click", function(e){
 
         e.preventDefault();
 
         const target = document.querySelector(this.getAttribute("href"));
 
-        if (target) {
+        if(target){
 
             target.scrollIntoView({
 
-                behavior: "smooth"
+                behavior:"smooth"
 
             });
 
@@ -46,106 +46,145 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 
 });
 
-// Statistics Counter
+// Scroll Reveal
 
-const counters = document.querySelectorAll(".stat-card h2");
+const observer = new IntersectionObserver((entries)=>{
 
-const speed = 150;
+    entries.forEach(entry=>{
 
-counters.forEach(counter => {
+        if(entry.isIntersecting){
 
-    const updateCount = () => {
+            entry.target.style.opacity="1";
 
-        const target = counter.innerText.replace(/\D/g, "");
+            entry.target.style.transform="translateY(0)";
 
-        const count = +counter.getAttribute("data-count") || 0;
+        }
 
-        const increment = target / speed;
+    });
 
-        if (count < target) {
+},{
+    threshold:0.2
+});
 
-            const newCount = Math.ceil(count + increment);
+document.querySelectorAll(".stat-card,.feature-card,.task-card,.withdraw-card,.faq-card").forEach(card=>{
 
-            counter.setAttribute("data-count", newCount);
+    card.style.opacity="0";
 
-            counter.innerText = newCount.toLocaleString() + "+";
+    card.style.transform="translateY(40px)";
 
-            setTimeout(updateCount, 20);
+    card.style.transition=".6s ease";
 
-        } else {
+    observer.observe(card);
 
-            if (counter.innerText.includes("$")) {
+});
 
-                counter.innerText = "$20M+";
+// Animated Counter
+
+const counters = document.querySelectorAll(".stat-info h2");
+
+let started = false;
+
+function startCounter(){
+
+    if(started) return;
+
+    started = true;
+
+    counters.forEach(counter=>{
+
+        const targetText = counter.innerText;
+
+        const target = parseInt(targetText.replace(/\D/g,""));
+
+        let count = 0;
+
+        const speed = target / 100;
+
+        const update = ()=>{
+
+            count += speed;
+
+            if(count < target){
+
+                if(targetText.includes("$")){
+
+                    counter.innerText="$"+Math.floor(count)+"M+";
+
+                }else{
+
+                    counter.innerText=Math.floor(count)+"+";
+
+                }
+
+                requestAnimationFrame(update);
+
+            }else{
+
+                counter.innerText=targetText;
 
             }
 
-        }
+        };
 
-    };
-
-    updateCount();
-
-});
-
-// Fade In Animation
-
-const observer = new IntersectionObserver((entries) => {
-
-    entries.forEach(entry => {
-
-        if (entry.isIntersecting) {
-
-            entry.target.classList.add("show");
-
-        }
+        update();
 
     });
-
-}, {
-
-    threshold: 0.15
-
-});
-
-document.querySelectorAll(".stat-card, .step-card, .feature-card, .task-card, .crypto-card").forEach(el => {
-
-    observer.observe(el);
-
-});
-
-// Hero Image Floating Effect
-
-const heroImage = document.querySelector(".hero-right img");
-
-if (heroImage) {
-
-    let angle = 0;
-
-    setInterval(() => {
-
-        angle += 0.03;
-
-        heroImage.style.transform =
-            `translateY(${Math.sin(angle) * 12}px)`;
-
-    }, 20);
 
 }
 
-// Button Hover Effect
+window.addEventListener("scroll",()=>{
 
-document.querySelectorAll(".register-btn,.start-btn").forEach(btn => {
+    const stats=document.querySelector(".statistics");
 
-    btn.addEventListener("mouseenter", () => {
+    if(stats){
 
-        btn.style.transform = "scale(1.05)";
+        const top=stats.getBoundingClientRect().top;
 
-    });
+        if(top<window.innerHeight-100){
 
-    btn.addEventListener("mouseleave", () => {
+            startCounter();
 
-        btn.style.transform = "scale(1)";
+        }
+
+    }
+
+});
+
+// Back To Top Button
+
+const backTop=document.querySelector(".back-top");
+
+window.addEventListener("scroll",()=>{
+
+    if(window.scrollY>500){
+
+        backTop.style.display="flex";
+
+    }else{
+
+        backTop.style.display="none";
+
+    }
+
+});
+
+// Floating Icons
+
+document.querySelectorAll(".floating").forEach((icon,index)=>{
+
+    icon.animate([
+
+        {transform:"translateY(0px)"},
+
+        {transform:"translateY(-20px)"},
+
+        {transform:"translateY(0px)"}
+
+    ],{
+
+        duration:3000+(index*500),
+
+        iterations:Infinity
 
     });
 
