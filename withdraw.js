@@ -1,157 +1,289 @@
-const withdrawButton =
-    document.getElementById("withdrawButton");
+/* =========================================
+   GlobalEarn
+   withdraw.js
+========================================= */
 
-const amountInput =
-    document.getElementById("withdrawAmount");
+const withdrawForm = document.getElementById("withdrawForm");
 
-const walletInput =
-    document.getElementById("walletAddress");
+const amountInput = document.getElementById("withdrawAmount");
+const walletInput = document.getElementById("walletAddress");
+const withdrawBalance = document.getElementById("withdrawBalance");
 
-const errorMessage =
-    document.getElementById("errorMessage");
+const withdrawError = document.getElementById("withdrawError");
+const withdrawErrorText = document.getElementById("withdrawErrorText");
 
-const successMessage =
-    document.getElementById("successMessage");
+const withdrawSuccess = document.getElementById("withdrawSuccess");
 
+const withdrawButton = document.getElementById("withdrawButton");
+
+const MINIMUM_WITHDRAWAL = 200;
+
+
+/* =========================================
+   SHOW ERROR
+========================================= */
 
 function showError(message) {
 
-    errorMessage.querySelector("span").textContent =
-        message;
+    withdrawErrorText.textContent = message;
 
-    errorMessage.classList.add("show");
+    withdrawError.hidden = false;
 
-    successMessage.classList.remove("show");
-
-}
-
-
-function hideMessages() {
-
-    errorMessage.classList.remove("show");
-
-    successMessage.classList.remove("show");
+    withdrawSuccess.hidden = true;
 
 }
 
 
-withdrawButton.addEventListener(
-    "click",
-    async () => {
+/* =========================================
+   HIDE MESSAGES
+========================================= */
 
-        hideMessages();
+function clearMessages() {
 
+    withdrawError.hidden = true;
 
-        const selectedCrypto =
-            document.querySelector(
-                'input[name="crypto"]:checked'
-            );
+    withdrawSuccess.hidden = true;
 
-
-        const walletAddress =
-            walletInput.value.trim();
+}
 
 
-        const amount =
-            Number(amountInput.value);
+/* =========================================
+   PAYMENT METHOD
+========================================= */
+
+const paymentMethods = document.querySelectorAll(
+    'input[name="paymentMethod"]'
+);
+
+paymentMethods.forEach(method => {
+
+    method.addEventListener("change", () => {
+
+        clearMessages();
+
+        const walletHelp =
+            document.getElementById("walletHelp");
+
+        if (!walletHelp) return;
+
+        const selectedMethod = method.value;
+
+        walletHelp.textContent =
+            `Enter your ${selectedMethod} wallet address.`;
+
+    });
+
+});
 
 
-        /* CRYPTO CHECK */
+/* =========================================
+   FORM SUBMIT
+========================================= */
 
-        if (!selectedCrypto) {
+withdrawForm.addEventListener("submit", function (event) {
 
-            showError(
-                "Please select a withdrawal method."
-            );
+    event.preventDefault();
 
-            return;
-
-        }
+    clearMessages();
 
 
-        /* WALLET CHECK */
+    /* =====================================
+       SELECT PAYMENT METHOD
+    ===================================== */
 
-        if (!walletAddress) {
-
-            showError(
-                "Please enter your wallet address."
-            );
-
-            walletInput.focus();
-
-            return;
-
-        }
-
-
-        if (walletAddress.length < 10) {
-
-            showError(
-                "Please enter a valid wallet address."
-            );
-
-            walletInput.focus();
-
-            return;
-
-        }
-
-
-        /* AMOUNT CHECK */
-
-        if (!amount || amount < 200) {
-
-            showError(
-                "You can only withdraw $200 or more."
-            );
-
-            amountInput.focus();
-
-            return;
-
-        }
-
-
-        /*
-         * NOTE:
-         * The real available balance must come
-         * from Firebase/backend.
-         *
-         * This frontend check is only temporary.
-         */
-
-        withdrawButton.disabled = true;
-
-        withdrawButton.innerHTML = `
-            <i class="fa-solid fa-spinner fa-spin"></i>
-            Processing...
-        `;
-
-
-        /*
-         * Simulate request submission.
-         *
-         * Later we will replace this with
-         * Firebase/Firestore transaction creation.
-         */
-
-        await new Promise(
-            resolve => setTimeout(resolve, 1200)
+    const selectedMethod =
+        document.querySelector(
+            'input[name="paymentMethod"]:checked'
         );
 
 
-        successMessage.classList.add("show");
+    if (!selectedMethod) {
 
-        successMessage.querySelector("span").textContent =
-            `Your ${selectedCrypto.value} withdrawal request for $${amount.toFixed(2)} has been submitted successfully.`;
+        showError(
+            "Please select a cryptocurrency payment method."
+        );
 
+        return;
+
+    }
+
+
+    /* =====================================
+       GET AMOUNT
+    ===================================== */
+
+    const amount =
+        parseFloat(amountInput.value);
+
+
+    if (
+        isNaN(amount) ||
+        amount <= 0
+    ) {
+
+        showError(
+            "Please enter a valid withdrawal amount."
+        );
+
+        return;
+
+    }
+
+
+    /* =====================================
+       MINIMUM WITHDRAWAL
+    ===================================== */
+
+    if (amount < MINIMUM_WITHDRAWAL) {
+
+        showError(
+            "You can only withdraw $200 or more."
+        );
+
+        amountInput.focus();
+
+        return;
+
+    }
+
+
+    /* =====================================
+       CHECK BALANCE
+    ===================================== */
+
+    const balanceText =
+        withdrawBalance.textContent
+            .replace("$", "")
+            .replace(",", "")
+            .trim();
+
+    const balance =
+        parseFloat(balanceText);
+
+
+    if (
+        !isNaN(balance) &&
+        amount > balance
+    ) {
+
+        showError(
+            `Insufficient balance. Your available balance is $${balance.toFixed(2)}.`
+        );
+
+        amountInput.focus();
+
+        return;
+
+    }
+
+
+    /* =====================================
+       WALLET ADDRESS
+    ===================================== */
+
+    const walletAddress =
+        walletInput.value.trim();
+
+
+    if (!walletAddress) {
+
+        showError(
+            `Please enter your ${selectedMethod.value} wallet address.`
+        );
+
+        walletInput.focus();
+
+        return;
+
+    }
+
+
+    if (walletAddress.length < 20) {
+
+        showError(
+            "Please enter a valid wallet address."
+        );
+
+        walletInput.focus();
+
+        return;
+
+    }
+
+
+    /* =====================================
+       DISABLE BUTTON
+    ===================================== */
+
+    withdrawButton.disabled = true;
+
+    withdrawButton.innerHTML = `
+        <i class="fa-solid fa-spinner fa-spin"></i>
+        <span>Processing...</span>
+    `;
+
+
+    /* =====================================
+       DEMO REQUEST PROCESSING
+    ===================================== */
+
+    setTimeout(() => {
 
         withdrawButton.disabled = false;
 
         withdrawButton.innerHTML = `
-            <i class="fa-solid fa-circle-check"></i>
-            Request Submitted
+            <i class="fa-solid fa-money-bill-transfer"></i>
+            <span>Request Withdrawal</span>
         `;
 
-    }
-);
+
+        /* =================================
+           SHOW SUCCESS
+        ================================= */
+
+        withdrawSuccess.hidden = false;
+
+        withdrawError.hidden = true;
+
+        withdrawSuccess.querySelector("strong").textContent =
+            "Withdrawal request submitted";
+
+        withdrawSuccess.querySelector("span").textContent =
+            `Your $${amount.toFixed(2)} ${selectedMethod.value} withdrawal request has been received and is pending review.`;
+
+
+        /* =================================
+           SAVE DEMO REQUEST
+        ================================= */
+
+        const withdrawal = {
+
+            amount: amount,
+
+            method: selectedMethod.value,
+
+            walletAddress: walletAddress,
+
+            status: "pending",
+
+            createdAt: new Date().toISOString()
+
+        };
+
+
+        localStorage.setItem(
+            "lastWithdrawal",
+            JSON.stringify(withdrawal)
+        );
+
+
+        /* =================================
+           RESET FORM
+        ================================= */
+
+        withdrawForm.reset();
+
+
+    }, 1200);
+
+});
