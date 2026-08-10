@@ -12,6 +12,9 @@
 
     <title>Withdraw | GlobalEarn</title>
 
+
+    <!-- Google Font -->
+
     <link
         rel="preconnect"
         href="https://fonts.googleapis.com"
@@ -24,14 +27,28 @@
     >
 
     <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet"
     >
+
+
+    <!-- Font Awesome -->
 
     <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
     >
+
+
+    <!-- Dashboard CSS -->
+
+    <link
+        rel="stylesheet"
+        href="dashboard.css"
+    >
+
+
+    <!-- Withdraw CSS -->
 
     <link
         rel="stylesheet"
@@ -47,9 +64,12 @@
 <main class="withdraw-page">
 
 
-    <!-- HEADER -->
+    <!-- =================================================
+         TOP HEADER
+    ================================================= -->
 
     <header class="withdraw-header">
+
 
         <a
             href="dashboard.html"
@@ -58,313 +78,563 @@
 
             <i class="fa-solid fa-arrow-left"></i>
 
-            Dashboard
+            <span>
+                Dashboard
+            </span>
 
         </a>
 
-        <div class="page-title">
 
-            <span>GLOBAL EARN</span>
+        <div class="withdraw-title">
 
-            <h1>Withdraw Funds</h1>
+            <span>
+                WALLET
+            </span>
+
+            <h1>
+                Withdraw Funds
+            </h1>
+
+            <p>
+                Withdraw your available GlobalEarn balance.
+            </p>
 
         </div>
+
 
     </header>
 
 
 
-    <!-- BALANCE -->
+    <!-- =================================================
+         BALANCE CARD
+    ================================================= -->
 
-    <section class="balance-card">
-
-        <div class="balance-icon">
-
-            <i class="fa-solid fa-wallet"></i>
-
-        </div>
-
-        <div>
-
-            <span>AVAILABLE BALANCE</span>
-
-            <strong id="walletBalance">
-                $50.00
-            </strong>
-
-        </div>
-
-    </section>
+    <section class="withdraw-balance-card">
 
 
-
-    <!-- WITHDRAW CARD -->
-
-    <section class="withdraw-card">
+        <div class="balance-left">
 
 
-        <div class="card-heading">
+            <div class="balance-icon">
 
-            <div>
-
-                <span>WITHDRAWAL</span>
-
-                <h2>Request Withdrawal</h2>
-
-                <p>
-                    Select your cryptocurrency and enter your wallet details.
-                </p>
+                <i class="fa-solid fa-wallet"></i>
 
             </div>
 
+
+            <div>
+
+                <span>
+                    AVAILABLE BALANCE
+                </span>
+
+                <strong id="withdrawBalance">
+                    $50.00
+                </strong>
+
+            </div>
+
+
         </div>
 
 
 
-        <!-- MINIMUM NOTICE -->
-
-        <div class="minimum-notice">
+        <div class="minimum-info">
 
             <i class="fa-solid fa-circle-info"></i>
 
             <div>
 
-                <strong>
-                    Minimum withdrawal: $200.00
-                </strong>
-
-                <p>
-                    You can only withdraw $200 or more.
-                </p>
-
-            </div>
-
-        </div>
-
-
-
-        <!-- CRYPTO -->
-
-        <div class="form-group">
-
-            <label>
-                Withdrawal Method
-            </label>
-
-
-            <div class="crypto-grid">
-
-
-                <label class="crypto-option">
-
-                    <input
-                        type="radio"
-                        name="crypto"
-                        value="BTC"
-                    >
-
-                    <div class="crypto-box">
-
-                        <i class="fa-brands fa-bitcoin"></i>
-
-                        <span>BTC</span>
-
-                    </div>
-
-                </label>
-
-
-
-                <label class="crypto-option">
-
-                    <input
-                        type="radio"
-                        name="crypto"
-                        value="ETH"
-                    >
-
-                    <div class="crypto-box">
-
-                        <i class="fa-brands fa-ethereum"></i>
-
-                        <span>ETH</span>
-
-                    </div>
-
-                </label>
-
-
-
-                <label class="crypto-option">
-
-                    <input
-                        type="radio"
-                        name="crypto"
-                        value="LTC"
-                    >
-
-                    <div class="crypto-box">
-
-                        <i class="fa-solid fa-litecoin-sign"></i>
-
-                        <span>LTC</span>
-
-                    </div>
-
-                </label>
-
-
-
-                <label class="crypto-option">
-
-                    <input
-                        type="radio"
-                        name="crypto"
-                        value="USDT"
-                    >
-
-                    <div class="crypto-box">
-
-                        <i class="fa-solid fa-dollar-sign"></i>
-
-                        <span>USDT</span>
-
-                    </div>
-
-                </label>
-
-
-            </div>
-
-        </div>
-
-
-
-        <!-- WALLET ADDRESS -->
-
-        <div class="form-group">
-
-            <label for="walletAddress">
-                Wallet Address
-            </label>
-
-            <div class="input-box">
-
-                <i class="fa-solid fa-wallet"></i>
-
-                <input
-                    type="text"
-                    id="walletAddress"
-                    placeholder="Enter your wallet address"
-                    autocomplete="off"
-                >
-
-            </div>
-
-        </div>
-
-
-
-        <!-- AMOUNT -->
-
-        <div class="form-group">
-
-            <label for="withdrawAmount">
-                Withdrawal Amount
-            </label>
-
-            <div class="input-box">
-
-                <i class="fa-solid fa-dollar-sign"></i>
-
-                <input
-                    type="number"
-                    id="withdrawAmount"
-                    placeholder="Minimum $200"
-                    min="200"
-                    step="0.01"
-                >
-
-            </div>
-
-            <small>
-                Minimum withdrawal amount is $200.00
-            </small>
-
-        </div>
-
-
-
-        <!-- ERROR -->
-
-        <div
-            id="errorMessage"
-            class="message error-message"
-        >
-
-            <i class="fa-solid fa-circle-exclamation"></i>
-
-            <span></span>
-
-        </div>
-
-
-
-        <!-- SUCCESS -->
-
-        <div
-            id="successMessage"
-            class="message success-message"
-        >
-
-            <i class="fa-solid fa-circle-check"></i>
-
-            <div>
-
-                <strong>
-                    Withdrawal request submitted
-                </strong>
-
                 <span>
-                    Your withdrawal request has been submitted successfully.
+                    Minimum withdrawal
                 </span>
 
+                <strong>
+                    $200+
+                </strong>
+
             </div>
 
         </div>
-
-
-
-        <!-- BUTTON -->
-
-        <button
-            type="button"
-            id="withdrawButton"
-            class="withdraw-submit"
-        >
-
-            <i class="fa-solid fa-money-bill-transfer"></i>
-
-            Submit Withdrawal
-
-        </button>
 
 
     </section>
 
 
 
-    <!-- FOOTER -->
+    <!-- =================================================
+         MINIMUM WARNING
+    ================================================= -->
 
-    <footer>
+    <section class="minimum-warning">
 
-        <p>
+
+        <div class="warning-icon">
+
+            <i class="fa-solid fa-triangle-exclamation"></i>
+
+        </div>
+
+
+        <div>
+
+            <strong>
+                You can only withdraw $200+
+            </strong>
+
+            <p>
+                Your withdrawal amount must be at least
+                $200.00.
+            </p>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =================================================
+         WITHDRAW FORM
+    ================================================= -->
+
+    <section class="withdraw-container">
+
+
+        <div class="withdraw-form-header">
+
+            <span>
+                WITHDRAWAL REQUEST
+            </span>
+
+            <h2>
+                Withdrawal Details
+            </h2>
+
+            <p>
+                Select your cryptocurrency and enter your
+                withdrawal information.
+            </p>
+
+        </div>
+
+
+
+        <form
+            id="withdrawForm"
+            novalidate
+        >
+
+
+
+            <!-- =========================================
+                 CRYPTOCURRENCY
+            ========================================== -->
+
+            <div class="form-group">
+
+
+                <label>
+                    Select Cryptocurrency
+                </label>
+
+
+                <div class="method-grid">
+
+
+                    <!-- BTC -->
+
+                    <label class="method-option">
+
+                        <input
+                            type="radio"
+                            name="paymentMethod"
+                            value="BTC"
+                            required
+                        >
+
+                        <span class="method-card">
+
+                            <span class="method-icon btc-icon">
+
+                                <i class="fa-brands fa-bitcoin"></i>
+
+                            </span>
+
+                            <span>
+
+                                <strong>
+                                    BTC
+                                </strong>
+
+                                <small>
+                                    Bitcoin
+                                </small>
+
+                            </span>
+
+                        </span>
+
+                    </label>
+
+
+
+                    <!-- ETH -->
+
+                    <label class="method-option">
+
+                        <input
+                            type="radio"
+                            name="paymentMethod"
+                            value="ETH"
+                        >
+
+                        <span class="method-card">
+
+                            <span class="method-icon eth-icon">
+
+                                <i class="fa-brands fa-ethereum"></i>
+
+                            </span>
+
+                            <span>
+
+                                <strong>
+                                    ETH
+                                </strong>
+
+                                <small>
+                                    Ethereum
+                                </small>
+
+                            </span>
+
+                        </span>
+
+                    </label>
+
+
+
+                    <!-- LTC -->
+
+                    <label class="method-option">
+
+                        <input
+                            type="radio"
+                            name="paymentMethod"
+                            value="LTC"
+                        >
+
+                        <span class="method-card">
+
+                            <span class="method-icon ltc-icon">
+
+                                <i class="fa-solid fa-coins"></i>
+
+                            </span>
+
+                            <span>
+
+                                <strong>
+                                    LTC
+                                </strong>
+
+                                <small>
+                                    Litecoin
+                                </small>
+
+                            </span>
+
+                        </span>
+
+                    </label>
+
+
+
+                    <!-- USDT -->
+
+                    <label class="method-option">
+
+                        <input
+                            type="radio"
+                            name="paymentMethod"
+                            value="USDT"
+                        >
+
+                        <span class="method-card">
+
+                            <span class="method-icon usdt-icon">
+
+                                <i class="fa-solid fa-dollar-sign"></i>
+
+                            </span>
+
+                            <span>
+
+                                <strong>
+                                    USDT
+                                </strong>
+
+                                <small>
+                                    Tether
+                                </small>
+
+                            </span>
+
+                        </span>
+
+                    </label>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- =========================================
+                 AMOUNT
+            ========================================== -->
+
+            <div class="form-group">
+
+
+                <label for="withdrawAmount">
+                    Withdrawal Amount
+                </label>
+
+
+                <div class="input-wrapper">
+
+                    <span class="input-prefix">
+                        $
+                    </span>
+
+
+                    <input
+                        type="number"
+                        id="withdrawAmount"
+                        name="amount"
+                        min="200"
+                        step="0.01"
+                        placeholder="200.00"
+                        required
+                    >
+
+                </div>
+
+
+                <small class="input-help">
+
+                    Minimum withdrawal amount:
+                    <strong>$200.00</strong>
+
+                </small>
+
+
+            </div>
+
+
+
+            <!-- =========================================
+                 WALLET ADDRESS
+            ========================================== -->
+
+            <div class="form-group">
+
+
+                <label for="walletAddress">
+                    Wallet Address
+                </label>
+
+
+                <div class="input-wrapper address-wrapper">
+
+
+                    <i class="fa-solid fa-wallet input-icon"></i>
+
+
+                    <input
+                        type="text"
+                        id="walletAddress"
+                        name="walletAddress"
+                        placeholder="Enter your wallet address"
+                        autocomplete="off"
+                        required
+                    >
+
+
+                </div>
+
+
+                <small
+                    id="walletHelp"
+                    class="input-help"
+                >
+                    Select a cryptocurrency above and enter
+                    the correct wallet address.
+                </small>
+
+
+            </div>
+
+
+
+            <!-- =========================================
+                 ERROR
+            ========================================== -->
+
+            <div
+                id="withdrawError"
+                class="withdraw-message withdraw-error"
+                hidden
+            >
+
+                <i class="fa-solid fa-circle-exclamation"></i>
+
+
+                <div>
+
+                    <strong>
+                        Withdrawal Error
+                    </strong>
+
+                    <span id="withdrawErrorText">
+                        Please check your withdrawal details.
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- =========================================
+                 SUCCESS
+            ========================================== -->
+
+            <div
+                id="withdrawSuccess"
+                class="withdraw-message withdraw-success"
+                hidden
+            >
+
+                <div class="success-icon">
+
+                    <i class="fa-solid fa-check"></i>
+
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        Withdrawal Successful
+                    </strong>
+
+                    <span id="withdrawSuccessText">
+                        Your withdrawal request has been submitted successfully.
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- =========================================
+                 SUBMIT BUTTON
+            ========================================== -->
+
+            <button
+                type="submit"
+                id="withdrawButton"
+                class="submit-withdraw"
+            >
+
+                <i class="fa-solid fa-money-bill-transfer"></i>
+
+                <span>
+                    Withdraw Funds
+                </span>
+
+            </button>
+
+
+        </form>
+
+
+    </section>
+
+
+
+    <!-- =================================================
+         WITHDRAWAL NOTICE
+    ================================================= -->
+
+    <section class="withdraw-notice">
+
+
+        <div class="notice-icon">
+
+            <i class="fa-solid fa-shield-halved"></i>
+
+        </div>
+
+
+        <div>
+
+            <strong>
+                Withdrawal Information
+            </strong>
+
+
+            <p>
+                The minimum withdrawal amount is $200.00.
+                Always make sure your cryptocurrency and
+                wallet address are correct before submitting.
+            </p>
+
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =================================================
+         FOOTER
+    ================================================= -->
+
+    <footer class="withdraw-footer">
+
+
+        <span>
             © 2026 GlobalEarn. All Rights Reserved.
-        </p>
+        </span>
 
-        <a href="support.html">
-            Support
-        </a>
+
+        <div>
+
+            <a href="support.html">
+                Support
+            </a>
+
+            <a href="#">
+                Privacy Policy
+            </a>
+
+            <a href="#">
+                Terms of Service
+            </a>
+
+        </div>
+
 
     </footer>
 
@@ -373,7 +643,12 @@
 
 
 
-<script src="withdraw.js"></script>
+<!-- =====================================================
+     WITHDRAW JAVASCRIPT
+===================================================== -->
+
+<script type="module" src="withdraw.js"></script>
+
 
 </body>
 
