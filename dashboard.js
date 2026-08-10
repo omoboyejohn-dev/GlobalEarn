@@ -29,7 +29,7 @@ function getElement(id) {
 
 
 /* =========================================
-   FORMAT MONEY
+   MONEY FORMAT
 ========================================= */
 
 function formatMoney(value) {
@@ -42,7 +42,7 @@ function formatMoney(value) {
 
 
 /* =========================================
-   FORMAT DATE
+   DATE FORMAT
 ========================================= */
 
 function formatDate(timestamp) {
@@ -53,10 +53,9 @@ function formatDate(timestamp) {
 
     try {
 
-        const date =
-            timestamp.toDate
-                ? timestamp.toDate()
-                : new Date(timestamp);
+        const date = timestamp.toDate
+            ? timestamp.toDate()
+            : new Date(timestamp);
 
         return date.toLocaleDateString(
             "en-US",
@@ -81,7 +80,239 @@ function formatDate(timestamp) {
 
 
 /* =========================================
-   LOAD USER DATA
+   SHOW USER DATA
+========================================= */
+
+function displayUserData(user, userData) {
+
+    const fullName =
+        userData.fullName ||
+        user.displayName ||
+        "GlobalEarn Member";
+
+    const username =
+        userData.username ||
+        fullName;
+
+
+    /* =====================================
+       USERNAME / NAME
+    ===================================== */
+
+    const welcomeName =
+        getElement("welcomeName");
+
+    if (welcomeName) {
+
+        welcomeName.textContent =
+            username;
+
+    }
+
+
+    const headerUsername =
+        getElement("headerUsername");
+
+    if (headerUsername) {
+
+        headerUsername.textContent =
+            username;
+
+    }
+
+
+    /* =====================================
+       BALANCE
+    ===================================== */
+
+    const balance =
+        Number(userData.balance) || 0;
+
+    const walletBalance =
+        getElement("walletBalance");
+
+    if (walletBalance) {
+
+        walletBalance.textContent =
+            formatMoney(balance);
+
+    }
+
+
+    /* =====================================
+       WELCOME BONUS
+    ===================================== */
+
+    const welcomeBonus =
+        Number(userData.welcomeBonus) || 0;
+
+    const welcomeBonusElement =
+        getElement("welcomeBonus");
+
+    if (welcomeBonusElement) {
+
+        welcomeBonusElement.textContent =
+            formatMoney(welcomeBonus);
+
+    }
+
+
+    /* =====================================
+       TASK EARNINGS
+    ===================================== */
+
+    const taskEarnings =
+        Number(userData.taskEarnings) || 0;
+
+    const taskEarningsElement =
+        getElement("taskEarnings");
+
+    if (taskEarningsElement) {
+
+        taskEarningsElement.textContent =
+            formatMoney(taskEarnings);
+
+    }
+
+
+    /* =====================================
+       REFERRAL EARNINGS
+    ===================================== */
+
+    const referralEarnings =
+        Number(userData.referralEarnings) || 0;
+
+    const referralEarningsElement =
+        getElement("referralEarnings");
+
+    if (referralEarningsElement) {
+
+        referralEarningsElement.textContent =
+            formatMoney(referralEarnings);
+
+    }
+
+
+    /* =====================================
+       TOTAL WITHDRAWN
+    ===================================== */
+
+    const totalWithdrawn =
+        Number(userData.totalWithdrawn) || 0;
+
+    const totalWithdrawnElement =
+        getElement("totalWithdrawn");
+
+    if (totalWithdrawnElement) {
+
+        totalWithdrawnElement.textContent =
+            formatMoney(totalWithdrawn);
+
+    }
+
+
+    /* =====================================
+       ACCOUNT STATUS
+    ===================================== */
+
+    const accountStatus =
+        getElement("accountStatus");
+
+    if (accountStatus) {
+
+        const status =
+            userData.accountStatus ||
+            "active";
+
+        accountStatus.textContent =
+            status.charAt(0).toUpperCase() +
+            status.slice(1);
+
+        accountStatus.classList.remove(
+            "status-active",
+            "status-disabled"
+        );
+
+        if (
+            status.toLowerCase() ===
+            "active"
+        ) {
+
+            accountStatus.classList.add(
+                "status-active"
+            );
+
+        } else {
+
+            accountStatus.classList.add(
+                "status-disabled"
+            );
+
+        }
+
+    }
+
+
+    /* =====================================
+       MEMBER SINCE
+    ===================================== */
+
+    const memberSince =
+        getElement("memberSince");
+
+    if (memberSince) {
+
+        memberSince.textContent =
+            formatDate(
+                userData.createdAt
+            );
+
+    }
+
+
+    /* =====================================
+       COUNTRY
+    ===================================== */
+
+    const countryElement =
+        getElement("userCountry");
+
+    if (countryElement) {
+
+        countryElement.textContent =
+            userData.country ||
+            "—";
+
+    }
+
+
+    /* =====================================
+       EMAIL
+    ===================================== */
+
+    const emailElement =
+        getElement("userEmail");
+
+    if (emailElement) {
+
+        emailElement.textContent =
+            userData.email ||
+            user.email ||
+            "—";
+
+    }
+
+
+    console.log(
+        "GlobalEarn user data loaded:",
+        userData
+    );
+
+}
+
+
+/* =========================================
+   LOAD USER FROM FIRESTORE
 ========================================= */
 
 async function loadUserData(user) {
@@ -89,16 +320,20 @@ async function loadUserData(user) {
     try {
 
         const userRef =
-            doc(db, "users", user.uid);
+            doc(
+                db,
+                "users",
+                user.uid
+            );
 
-        const userSnapshot =
+        const snapshot =
             await getDoc(userRef);
 
 
-        if (!userSnapshot.exists()) {
+        if (!snapshot.exists()) {
 
             console.error(
-                "User document does not exist."
+                "User document not found."
             );
 
             return;
@@ -107,189 +342,19 @@ async function loadUserData(user) {
 
 
         const userData =
-            userSnapshot.data();
+            snapshot.data();
 
 
-        /* =====================================
-           USER NAME
-        ====================================== */
-
-        const fullName =
-            userData.fullName ||
-            user.displayName ||
-            "GlobalEarn Member";
-
-
-        const username =
-            userData.username ||
-            fullName;
-
-
-        /* =====================================
-           BALANCES
-        ====================================== */
-
-        const balance =
-            Number(userData.balance) || 0;
-
-
-        const welcomeBonus =
-            Number(userData.welcomeBonus) || 0;
-
-
-        const taskEarnings =
-            Number(userData.taskEarnings) || 0;
-
-
-        const referralEarnings =
-            Number(userData.referralEarnings) || 0;
-
-
-        const totalWithdrawn =
-            Number(userData.totalWithdrawn) || 0;
-
-
-        /* =====================================
-           UPDATE NAME
-        ====================================== */
-
-        const welcomeName =
-            getElement("welcomeName");
-
-        if (welcomeName) {
-
-            welcomeName.textContent =
-                fullName;
-
-        }
-
-
-        const headerUsername =
-            getElement("headerUsername");
-
-        if (headerUsername) {
-
-            headerUsername.textContent =
-                username;
-
-        }
-
-
-        /* =====================================
-           UPDATE BALANCES
-        ====================================== */
-
-        const walletBalance =
-            getElement("walletBalance");
-
-        if (walletBalance) {
-
-            walletBalance.textContent =
-                formatMoney(balance);
-
-        }
-
-
-        const welcomeBonusElement =
-            getElement("welcomeBonus");
-
-        if (welcomeBonusElement) {
-
-            welcomeBonusElement.textContent =
-                formatMoney(welcomeBonus);
-
-        }
-
-
-        const taskEarningsElement =
-            getElement("taskEarnings");
-
-        if (taskEarningsElement) {
-
-            taskEarningsElement.textContent =
-                formatMoney(taskEarnings);
-
-        }
-
-
-        const referralEarningsElement =
-            getElement("referralEarnings");
-
-        if (referralEarningsElement) {
-
-            referralEarningsElement.textContent =
-                formatMoney(referralEarnings);
-
-        }
-
-
-        const totalWithdrawnElement =
-            getElement("totalWithdrawn");
-
-        if (totalWithdrawnElement) {
-
-            totalWithdrawnElement.textContent =
-                formatMoney(totalWithdrawn);
-
-        }
-
-
-        /* =====================================
-           ACCOUNT STATUS
-        ====================================== */
-
-        const accountStatus =
-            getElement("accountStatus");
-
-
-        if (accountStatus) {
-
-            const status =
-                userData.accountStatus ||
-                "active";
-
-
-            accountStatus.textContent =
-                status.charAt(0).toUpperCase() +
-                status.slice(1);
-
-
-            if (status.toLowerCase() === "active") {
-
-                accountStatus.classList.add(
-                    "status-active"
-                );
-
-            }
-
-        }
-
-
-        /* =====================================
-           MEMBER SINCE
-        ====================================== */
-
-        const memberSince =
-            getElement("memberSince");
-
-
-        if (memberSince) {
-
-            memberSince.textContent =
-                formatDate(userData.createdAt);
-
-        }
-
-
-        console.log(
-            "Dashboard data loaded successfully."
+        displayUserData(
+            user,
+            userData
         );
 
 
     } catch (error) {
 
         console.error(
-            "Unable to load user data:",
+            "Error loading dashboard:",
             error
         );
 
@@ -299,7 +364,7 @@ async function loadUserData(user) {
 
 
 /* =========================================
-   AUTHENTICATION
+   AUTH STATE
 ========================================= */
 
 onAuthStateChanged(
@@ -308,11 +373,6 @@ onAuthStateChanged(
 
         if (!user) {
 
-            /*
-             * User is not logged in.
-             * Send them back to login.
-             */
-
             window.location.href =
                 "login.html";
 
@@ -320,11 +380,6 @@ onAuthStateChanged(
 
         }
 
-
-        /*
-         * User is authenticated.
-         * Load their Firestore data.
-         */
 
         await loadUserData(user);
 
@@ -363,11 +418,10 @@ if (logoutButton) {
                     true;
 
 
-                logoutButton.innerHTML =
-                    `
+                logoutButton.innerHTML = `
                     <i class="fa-solid fa-spinner fa-spin"></i>
                     <span>Logging out...</span>
-                    `;
+                `;
 
 
                 await signOut(auth);
@@ -394,11 +448,10 @@ if (logoutButton) {
                     false;
 
 
-                logoutButton.innerHTML =
-                    `
+                logoutButton.innerHTML = `
                     <i class="fa-solid fa-right-from-bracket"></i>
                     <span>Logout</span>
-                    `;
+                `;
 
             }
 
@@ -433,11 +486,6 @@ if (menuButton && sidebar) {
     );
 
 
-    /*
-     * Close sidebar after selecting
-     * a navigation item on mobile.
-     */
-
     document
         .querySelectorAll(".nav-item")
         .forEach(item => {
@@ -459,8 +507,7 @@ if (menuButton && sidebar) {
 
 
 /* =========================================
-   PREVENT DASHBOARD FLASH
-   FOR LOGGED-OUT USERS
+   DASHBOARD READY
 ========================================= */
 
 document.documentElement.classList.add(
