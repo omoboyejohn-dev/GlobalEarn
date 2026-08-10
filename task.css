@@ -1,0 +1,642 @@
+/* =========================================
+   GlobalEarn Task Page
+   task.css
+========================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: "Poppins", sans-serif;
+    background:
+        radial-gradient(
+            circle at 15% 15%,
+            rgba(99, 255, 66, 0.07),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 85% 80%,
+            rgba(0, 180, 255, 0.05),
+            transparent 30%
+        ),
+        #07111f;
+    color: #ffffff;
+    min-height: 100vh;
+}
+
+a {
+    text-decoration: none;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.task-header {
+    min-height: 82px;
+    padding: 16px 7%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background: rgba(5, 12, 22, 0.94);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #ffffff;
+}
+
+.logo > i {
+    color: #63ff42;
+    font-size: 36px;
+}
+
+.logo div {
+    display: flex;
+    flex-direction: column;
+}
+
+.logo strong {
+    color: #63ff42;
+    font-size: 24px;
+    line-height: 1.2;
+}
+
+.logo span {
+    color: #8f9aaa;
+    font-size: 10px;
+}
+
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 10px 17px;
+
+    color: #c6cfda;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 9px;
+
+    background: rgba(255, 255, 255, 0.03);
+
+    font-size: 13px;
+
+    transition: 0.3s;
+}
+
+.back-button:hover {
+    color: #63ff42;
+    border-color: rgba(99, 255, 66, 0.35);
+}
+
+
+/* =========================================
+   PAGE
+========================================= */
+
+.task-page {
+    min-height: calc(100vh - 145px);
+    padding: 60px 20px;
+}
+
+.task-container {
+    width: 100%;
+    max-width: 760px;
+    margin: 0 auto;
+}
+
+
+/* =========================================
+   MAIN TASK CARD
+========================================= */
+
+.task-card {
+    padding: 35px;
+
+    background: rgba(16, 28, 42, 0.97);
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 22px;
+
+    box-shadow:
+        0 25px 70px rgba(0, 0, 0, 0.35),
+        0 0 40px rgba(99, 255, 66, 0.03);
+}
+
+
+/* =========================================
+   TASK HEADING
+========================================= */
+
+.task-heading {
+    display: flex;
+    align-items: center;
+    gap: 17px;
+    margin-bottom: 25px;
+}
+
+.task-icon {
+    width: 58px;
+    height: 58px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 15px;
+
+    background: rgba(99, 255, 66, 0.09);
+    border: 1px solid rgba(99, 255, 66, 0.2);
+}
+
+.task-icon i {
+    color: #63ff42;
+    font-size: 23px;
+}
+
+.task-category {
+    display: block;
+
+    margin-bottom: 3px;
+
+    color: #7f8b9b;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+}
+
+.task-heading h1 {
+    font-size: 27px;
+    font-weight: 700;
+}
+
+
+/* =========================================
+   REWARD BOX
+========================================= */
+
+.reward-box {
+    padding: 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    border-radius: 14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(99, 255, 66, 0.10),
+            rgba(99, 255, 66, 0.03)
+        );
+
+    border: 1px solid rgba(99, 255, 66, 0.18);
+
+    margin-bottom: 28px;
+}
+
+.reward-box span {
+    color: #aeb8c5;
+    font-size: 13px;
+}
+
+.reward-box strong {
+    color: #63ff42;
+    font-size: 25px;
+    font-weight: 700;
+}
+
+
+/* =========================================
+   DESCRIPTION
+========================================= */
+
+.task-description {
+    margin-bottom: 25px;
+}
+
+.task-description h2 {
+    color: #ffffff;
+    font-size: 17px;
+    line-height: 1.5;
+    margin-bottom: 10px;
+}
+
+.task-description h2 span {
+    color: #63ff42;
+}
+
+.task-description p {
+    color: #aeb8c5;
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+
+/* =========================================
+   TELEGRAM BOX
+========================================= */
+
+.telegram-box {
+    padding: 18px;
+
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    background: #0a1726;
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+
+    margin-bottom: 25px;
+}
+
+.telegram-icon {
+    width: 48px;
+    height: 48px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: rgba(0, 160, 255, 0.10);
+
+    color: #29a9ea;
+
+    font-size: 22px;
+}
+
+.telegram-info {
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.telegram-info span {
+    color: #7f8b9b;
+    font-size: 11px;
+    margin-bottom: 2px;
+}
+
+.telegram-info strong {
+    color: #ffffff;
+    font-size: 14px;
+}
+
+.telegram-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+
+    padding: 10px 15px;
+
+    color: #ffffff;
+    background: #168acd;
+
+    border-radius: 8px;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    transition: 0.3s;
+}
+
+.telegram-button:hover {
+    background: #1179b5;
+    transform: translateY(-2px);
+}
+
+
+/* =========================================
+   STATUS
+========================================= */
+
+.task-status {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+
+    margin-bottom: 25px;
+}
+
+.task-status > div {
+    padding: 15px;
+
+    background: rgba(255, 255, 255, 0.025);
+
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 11px;
+}
+
+.status-label {
+    display: block;
+
+    color: #7f8b9b;
+    font-size: 11px;
+
+    margin-bottom: 5px;
+}
+
+.task-status strong {
+    color: #ffffff;
+    font-size: 14px;
+}
+
+.task-status strong i {
+    color: #63ff42;
+    font-size: 7px;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+#statusReward {
+    color: #63ff42;
+}
+
+
+/* =========================================
+   START BUTTON
+========================================= */
+
+.start-task-button {
+    width: 100%;
+    height: 54px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: #63ff42;
+    color: #07111f;
+
+    font-family: "Poppins", sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+.start-task-button:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 12px 30px rgba(99, 255, 66, 0.22);
+}
+
+.start-task-button:active {
+    transform: translateY(0);
+}
+
+.start-task-button:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+
+/* =========================================
+   MESSAGE
+========================================= */
+
+.task-message {
+    display: none;
+
+    margin-top: 18px;
+    padding: 13px 15px;
+
+    border-radius: 9px;
+
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.task-message.success {
+    display: block;
+
+    color: #63ff42;
+
+    background: rgba(99, 255, 66, 0.07);
+
+    border: 1px solid rgba(99, 255, 66, 0.18);
+}
+
+.task-message.error {
+    display: block;
+
+    color: #ff7373;
+
+    background: rgba(255, 80, 80, 0.07);
+
+    border: 1px solid rgba(255, 80, 80, 0.18);
+}
+
+
+/* =========================================
+   INFORMATION
+========================================= */
+
+.task-information {
+    margin-top: 20px;
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.info-item {
+    padding: 17px;
+
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+
+    background: rgba(16, 28, 42, 0.80);
+
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 13px;
+}
+
+.info-item > i {
+    color: #63ff42;
+    font-size: 15px;
+    margin-top: 3px;
+}
+
+.info-item strong {
+    display: block;
+
+    color: #ffffff;
+    font-size: 12px;
+
+    margin-bottom: 5px;
+}
+
+.info-item p {
+    color: #7f8b9b;
+    font-size: 10px;
+    line-height: 1.6;
+}
+
+
+/* =========================================
+   FOOTER
+========================================= */
+
+.task-footer {
+    padding: 23px 20px;
+
+    text-align: center;
+
+    background: #050c16;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.task-footer p {
+    color: #687586;
+    font-size: 11px;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 700px) {
+
+    .task-header {
+        padding: 15px 5%;
+        min-height: 72px;
+    }
+
+    .logo > i {
+        font-size: 30px;
+    }
+
+    .logo strong {
+        font-size: 21px;
+    }
+
+    .logo span {
+        display: none;
+    }
+
+    .back-button {
+        padding: 9px 12px;
+        font-size: 11px;
+    }
+
+    .task-page {
+        padding: 30px 14px;
+    }
+
+    .task-card {
+        padding: 25px 18px;
+        border-radius: 18px;
+    }
+
+    .task-heading h1 {
+        font-size: 23px;
+    }
+
+    .reward-box {
+        padding: 17px;
+    }
+
+    .reward-box strong {
+        font-size: 22px;
+    }
+
+    .telegram-box {
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .telegram-info {
+        min-width: calc(100% - 65px);
+    }
+
+    .telegram-button {
+        width: 100%;
+        margin-top: 3px;
+    }
+
+    .task-information {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+/* =========================================
+   SMALL PHONES
+========================================= */
+
+@media (max-width: 420px) {
+
+    .task-page {
+        padding: 22px 10px;
+    }
+
+    .task-card {
+        padding: 22px 15px;
+    }
+
+    .task-heading {
+        gap: 12px;
+    }
+
+    .task-icon {
+        width: 50px;
+        height: 50px;
+    }
+
+    .task-heading h1 {
+        font-size: 20px;
+    }
+
+    .task-description h2 {
+        font-size: 15px;
+    }
+
+    .task-description p {
+        font-size: 12px;
+    }
+
+    .task-status {
+        grid-template-columns: 1fr;
+    }
+
+    .task-footer p {
+        font-size: 10px;
+    }
+
+  }
