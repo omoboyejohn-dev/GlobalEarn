@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Settings | GlobalEarn</title>
+
+    <!-- Google Font -->
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- Font Awesome -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    >
+
+    <!-- Settings CSS -->
+    <link
+        rel="stylesheet"
+        href="settings.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<main class="settings-page">
+
+
+    <!-- =========================================
+         HEADER
+    ========================================== -->
+
+    <header class="settings-header">
+
+        <a
+            href="dashboard.html"
+            class="back-button"
+        >
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+            Dashboard
+
+        </a>
+
+
+        <div class="settings-heading">
+
+            <span>
+                ACCOUNT SETTINGS
+            </span>
+
+            <h1>
+                Settings
+            </h1>
+
+            <p>
+                Manage your GlobalEarn account information.
+            </p>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =========================================
+         ACCOUNT SETTINGS
+    ========================================== -->
+
+    <section class="settings-card">
+
+
+        <div class="settings-card-header">
+
+            <div class="settings-card-icon">
+
+                <i class="fa-solid fa-user-gear"></i>
+
+            </div>
+
+            <div>
+
+                <span>
+                    ACCOUNT
+                </span>
+
+                <h2>
+                    Account Information
+                </h2>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =====================================
+             FULL NAME
+        ====================================== -->
+
+        <div
+            id="name"
+            class="setting-row"
+        >
+
+            <div class="setting-row-icon">
+
+                <i class="fa-solid fa-user"></i>
+
+            </div>
+
+
+            <div class="setting-row-content">
+
+                <strong>
+                    Full Name
+                </strong>
+
+                <span>
+                    Update the name displayed on your account.
+                </span>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="editNameButton"
+                class="setting-button"
+            >
+
+                Edit
+
+            </button>
+
+        </div>
+
+
+
+        <!-- =====================================
+             PASSWORD
+        ====================================== -->
+
+        <div
+            id="password"
+            class="setting-row"
+        >
+
+            <div class="setting-row-icon password-icon">
+
+                <i class="fa-solid fa-lock"></i>
+
+            </div>
+
+
+            <div class="setting-row-content">
+
+                <strong>
+                    Password
+                </strong>
+
+                <span>
+                    Change your account password securely.
+                </span>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="editPasswordButton"
+                class="setting-button"
+            >
+
+                Change
+
+            </button>
+
+        </div>
+
+
+
+        <!-- =====================================
+             EMAIL
+        ====================================== -->
+
+        <div class="setting-row disabled-row">
+
+            <div class="setting-row-icon email-icon">
+
+                <i class="fa-solid fa-envelope"></i>
+
+            </div>
+
+
+            <div class="setting-row-content">
+
+                <strong>
+                    Email Address
+                </strong>
+
+                <span id="settingsEmail">
+                    Loading...
+                </span>
+
+            </div>
+
+
+            <span class="locked-label">
+
+                <i class="fa-solid fa-lock"></i>
+
+                Locked
+
+            </span>
+
+        </div>
+
+
+
+        <!-- =====================================
+             USERNAME
+        ====================================== -->
+
+        <div class="setting-row disabled-row">
+
+            <div class="setting-row-icon username-icon">
+
+                <i class="fa-solid fa-at"></i>
+
+            </div>
+
+
+            <div class="setting-row-content">
+
+                <strong>
+                    Username
+                </strong>
+
+                <span id="settingsUsername">
+                    Loading...
+                </span>
+
+            </div>
+
+
+            <span class="locked-label">
+
+                <i class="fa-solid fa-lock"></i>
+
+                Locked
+
+            </span>
+
+        </div>
+
+
+
+        <!-- =====================================
+             COUNTRY
+        ====================================== -->
+
+        <div class="setting-row disabled-row">
+
+            <div class="setting-row-icon country-icon">
+
+                <i class="fa-solid fa-globe"></i>
+
+            </div>
+
+
+            <div class="setting-row-content">
+
+                <strong>
+                    Country
+                </strong>
+
+                <span id="settingsCountry">
+                    Loading...
+                </span>
+
+            </div>
+
+
+            <span class="locked-label">
+
+                <i class="fa-solid fa-lock"></i>
+
+                Locked
+
+            </span>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =========================================
+         SECURITY NOTICE
+    ========================================== -->
+
+    <section class="security-notice">
+
+        <div class="security-icon">
+
+            <i class="fa-solid fa-shield-halved"></i>
+
+        </div>
+
+
+        <div>
+
+            <strong>
+                Account Security
+            </strong>
+
+            <p>
+                Your username, email address and country
+                cannot be changed from this page.
+                You can only update your full name and password.
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         LOGOUT
+    ========================================== -->
+
+    <button
+        type="button"
+        id="logoutButton"
+        class="logout-button"
+    >
+
+        <i class="fa-solid fa-right-from-bracket"></i>
+
+        Logout
+
+    </button>
+
+
+
+    <!-- =========================================
+         FOOTER
+    ========================================== -->
+
+    <footer class="settings-footer">
+
+        <span>
+            © 2026 GlobalEarn. All Rights Reserved.
+        </span>
+
+
+        <div>
+
+            <a href="support.html">
+                Support
+            </a>
+
+            <a href="#">
+                Privacy
+            </a>
+
+            <a href="#">
+                Terms
+            </a>
+
+        </div>
+
+    </footer>
+
+
+</main>
+
+
+
+<!-- =============================================
+     EDIT NAME MODAL
+============================================= -->
+
+<div
+    id="nameModal"
+    class="modal-overlay"
+    hidden
+>
+
+    <div class="modal-card">
+
+        <button
+            type="button"
+            id="closeNameModal"
+            class="modal-close"
+        >
+
+            <i class="fa-solid fa-xmark"></i>
+
+        </button>
+
+
+        <div class="modal-icon">
+
+            <i class="fa-solid fa-user"></i>
+
+        </div>
+
+
+        <h2>
+            Change Full Name
+        </h2>
+
+        <p>
+            Enter the new name you want to use on your account.
+        </p>
+
+
+        <form id="nameForm">
+
+            <label for="newFullName">
+                Full Name
+            </label>
+
+            <input
+                type="text"
+                id="newFullName"
+                placeholder="Enter your full name"
+                autocomplete="name"
+                required
+            >
+
+
+            <div
+                id="nameMessage"
+                class="modal-message"
+                hidden
+            ></div>
+
+
+            <button
+                type="submit"
+                id="saveNameButton"
+                class="modal-submit"
+            >
+
+                Save Changes
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+
+<!-- =============================================
+     PASSWORD MODAL
+============================================= -->
+
+<div
+    id="passwordModal"
+    class="modal-overlay"
+    hidden
+>
+
+    <div class="modal-card">
+
+        <button
+            type="button"
+            id="closePasswordModal"
+            class="modal-close"
+        >
+
+            <i class="fa-solid fa-xmark"></i>
+
+        </button>
+
+
+        <div class="modal-icon password-modal-icon">
+
+            <i class="fa-solid fa-lock"></i>
+
+        </div>
+
+
+        <h2>
+            Change Password
+        </h2>
+
+        <p>
+            Create a new secure password for your account.
+        </p>
+
+
+        <form id="passwordForm">
+
+
+            <label for="newPassword">
+                New Password
+            </label>
+
+            <div class="password-input">
+
+                <input
+                    type="password"
+                    id="newPassword"
+                    placeholder="Enter new password"
+                    minlength="6"
+                    autocomplete="new-password"
+                    required
+                >
+
+                <button
+                    type="button"
+                    class="toggle-password"
+                    data-target="newPassword"
+                >
+
+                    <i class="fa-solid fa-eye"></i>
+
+                </button>
+
+            </div>
+
+
+
+            <label for="confirmPassword">
+                Confirm Password
+            </label>
+
+            <div class="password-input">
+
+                <input
+                    type="password"
+                    id="confirmPassword"
+                    placeholder="Confirm new password"
+                    minlength="6"
+                    autocomplete="new-password"
+                    required
+                >
+
+                <button
+                    type="button"
+                    class="toggle-password"
+                    data-target="confirmPassword"
+                >
+
+                    <i class="fa-solid fa-eye"></i>
+
+                </button>
+
+            </div>
+
+
+            <div
+                id="passwordMessage"
+                class="modal-message"
+                hidden
+            ></div>
+
+
+            <button
+                type="submit"
+                id="savePasswordButton"
+                class="modal-submit"
+            >
+
+                Update Password
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+
+<!-- =============================================
+     JAVASCRIPT
+============================================= -->
+
+<script type="module" src="settings.js"></script>
+
+
+</body>
+
+  </html>
