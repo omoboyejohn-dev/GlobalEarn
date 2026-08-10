@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Profile | GlobalEarn</title>
+
+    <!-- Google Font -->
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- Font Awesome -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    >
+
+    <!-- Profile CSS -->
+    <link
+        rel="stylesheet"
+        href="profile.css"
+    >
+
+</head>
+
+
+<body>
+
+<main class="profile-page">
+
+    <!-- HEADER -->
+
+    <header class="profile-header">
+
+        <a
+            href="dashboard.html"
+            class="back-button"
+        >
+            <i class="fa-solid fa-arrow-left"></i>
+            Dashboard
+        </a>
+
+        <div class="profile-heading">
+
+            <span>ACCOUNT</span>
+
+            <h1>My Profile</h1>
+
+            <p>
+                Manage your GlobalEarn account information.
+            </p>
+
+        </div>
+
+    </header>
+
+
+    <!-- PROFILE CARD -->
+
+    <section class="profile-card">
+
+        <div class="profile-top">
+
+            <div class="profile-avatar">
+
+                <i class="fa-solid fa-user"></i>
+
+            </div>
+
+            <div class="profile-name">
+
+                <span>MEMBER PROFILE</span>
+
+                <h2 id="profileFullName">
+                    Loading...
+                </h2>
+
+                <p id="profileUsername">
+                    @username
+                </p>
+
+            </div>
+
+            <div class="account-status">
+
+                <span>ACCOUNT STATUS</span>
+
+                <strong id="accountStatus">
+                    Active
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- ACCOUNT INFORMATION -->
+
+        <div class="profile-section">
+
+            <div class="section-title">
+
+                <span>
+                    ACCOUNT INFORMATION
+                </span>
+
+                <h3>
+                    Personal Details
+                </h3>
+
+            </div>
+
+
+            <div class="profile-info-grid">
+
+
+                <!-- EMAIL -->
+
+                <div class="profile-info-item">
+
+                    <div class="profile-info-icon email-icon">
+                        <i class="fa-solid fa-envelope"></i>
+                    </div>
+
+                    <div>
+
+                        <span>Email Address</span>
+
+                        <strong id="profileEmail">
+                            Loading...
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- COUNTRY -->
+
+                <div class="profile-info-item">
+
+                    <div class="profile-info-icon country-icon">
+                        <i class="fa-solid fa-globe"></i>
+                    </div>
+
+                    <div>
+
+                        <span>Country</span>
+
+                        <strong id="profileCountry">
+                            Loading...
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- MEMBER SINCE -->
+
+                <div class="profile-info-item">
+
+                    <div class="profile-info-icon date-icon">
+                        <i class="fa-solid fa-calendar-days"></i>
+                    </div>
+
+                    <div>
+
+                        <span>Member Since</span>
+
+                        <strong id="memberSince">
+                            Loading...
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- USERNAME -->
+
+                <div class="profile-info-item">
+
+                    <div class="profile-info-icon username-icon">
+                        <i class="fa-solid fa-at"></i>
+                    </div>
+
+                    <div>
+
+                        <span>Username</span>
+
+                        <strong id="profileUsernameInfo">
+                            Loading...
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ACCOUNT SETTINGS -->
+
+        <div class="profile-section">
+
+            <div class="section-title">
+
+                <span>
+                    ACCOUNT SETTINGS
+                </span>
+
+                <h3>
+                    Manage Your Account
+                </h3>
+
+            </div>
+
+
+            <div class="settings-grid">
+
+
+                <!-- CHANGE NAME -->
+
+                <button
+                    type="button"
+                    class="profile-setting-card"
+                    id="changeNameButton"
+                >
+
+                    <div class="setting-icon">
+                        <i class="fa-solid fa-user-pen"></i>
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Change Full Name
+                        </strong>
+
+                        <span>
+                            Update your display name
+                        </span>
+
+                    </div>
+
+                    <i class="fa-solid fa-chevron-right setting-arrow"></i>
+
+                </button>
+
+
+                <!-- CHANGE PASSWORD -->
+
+                <button
+                    type="button"
+                    class="profile-setting-card"
+                    id="changePasswordButton"
+                >
+
+                    <div class="setting-icon password-icon">
+                        <i class="fa-solid fa-lock"></i>
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Change Password
+                        </strong>
+
+                        <span>
+                            Update your account password
+                        </span>
+
+                    </div>
+
+                    <i class="fa-solid fa-chevron-right setting-arrow"></i>
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- FOOTER -->
+
+    <footer class="profile-footer">
+
+        <span>
+            © 2026 GlobalEarn. All Rights Reserved.
+        </span>
+
+        <div>
+
+            <a href="support.html">
+                Support
+            </a>
+
+            <a href="#">
+                Privacy Policy
+            </a>
+
+            <a href="#">
+                Terms of Service
+            </a>
+
+        </div>
+
+    </footer>
+
+</main>
+
+
+<!-- PROFILE JAVASCRIPT -->
+
+<script type="module" src="profile.js"></script>
+
+</body>
+
+</html>
