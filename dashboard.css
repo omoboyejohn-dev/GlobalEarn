@@ -686,3 +686,107 @@ input {
     }
 
 }
+/* =========================================
+   FIXED DESKTOP SIDEBAR
+   NO HAMBURGER MENU
+========================================= */
+
+.dashboard-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+#sidebar,
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 250px;
+    z-index: 1000;
+}
+
+/* Main content must stay beside sidebar */
+.dashboard-main {
+    margin-left: 250px;
+    width: calc(100% - 250px);
+    min-width: 0;
+}
+
+/* Hide hamburger/menu button */
+#menuButton,
+.menu-button,
+.mobile-menu,
+.hamburger {
+    display: none !important;
+}
+
+
+/* =========================================
+   TASK GRID
+========================================= */
+
+.dashboard-task-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 15px;
+}
+
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 1000px) {
+
+    .dashboard-task-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+/* =========================================
+   PHONE
+========================================= */
+
+@media (max-width: 700px) {
+
+    #sidebar,
+    .sidebar {
+        width: 190px;
+    }
+
+    .dashboard-main {
+        margin-left: 190px;
+        width: calc(100% - 190px);
+    }
+
+    .dashboard-task-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+/* =========================================
+   SMALL PHONE
+========================================= */
+
+@media (max-width: 480px) {
+
+    #sidebar,
+    .sidebar {
+        width: 175px;
+    }
+
+    .dashboard-main {
+        margin-left: 175px;
+        width: calc(100% - 175px);
+    }
+
+    .dashboard-task-card {
+        padding: 14px;
+    }
+
+}
