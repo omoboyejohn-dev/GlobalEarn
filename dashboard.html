@@ -12,7 +12,9 @@
 
     <title>Dashboard | GlobalEarn</title>
 
-    <!-- Google Font -->
+
+    <!-- ================= GOOGLE FONT ================= -->
+
     <link
         rel="preconnect"
         href="https://fonts.googleapis.com"
@@ -29,13 +31,17 @@
         rel="stylesheet"
     >
 
-    <!-- Font Awesome -->
+
+    <!-- ================= FONT AWESOME ================= -->
+
     <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
     >
 
-    <!-- Dashboard CSS -->
+
+    <!-- ================= DASHBOARD CSS ================= -->
+
     <link
         rel="stylesheet"
         href="dashboard.css"
@@ -48,268 +54,33 @@
 
 
 <!-- =====================================================
-     MOBILE HEADER
+     DASHBOARD WRAPPER
 ===================================================== -->
 
-<header class="mobile-header">
-
-    <button
-        type="button"
-        id="menuButton"
-        class="menu-button"
-    >
-
-        <i class="fa-solid fa-bars"></i>
-
-    </button>
-
-
-    <a
-        href="dashboard.html"
-        class="mobile-logo"
-    >
-
-        <i class="fa-solid fa-globe"></i>
-
-        <span>GlobalEarn</span>
-
-    </a>
-
-</header>
-
-
-
-<!-- =====================================================
-     SIDEBAR
-===================================================== -->
-
-<aside
-    id="sidebar"
-    class="sidebar"
->
-
-
-    <!-- LOGO -->
-
-    <div class="sidebar-logo">
-
-        <a href="dashboard.html">
-
-            <i class="fa-solid fa-globe"></i>
-
-            <div>
-
-                <strong>
-                    GlobalEarn
-                </strong>
-
-                <span>
-                    Earn • Grow • Succeed
-                </span>
-
-            </div>
-
-        </a>
-
-    </div>
-
-
-
-    <!-- USER -->
-
-    <div class="sidebar-user">
-
-        <div class="user-avatar">
-
-            <i class="fa-solid fa-user"></i>
-
-        </div>
-
-        <div class="sidebar-user-info">
-
-            <strong id="headerUsername">
-                Member
-            </strong>
-
-            <span>
-                Member Account
-            </span>
-
-        </div>
-
-    </div>
-
-
-
-    <!-- NAVIGATION -->
-
-    <nav class="sidebar-nav">
-
-
-        <a
-            href="dashboard.html"
-            class="nav-item active"
-        >
-
-            <i class="fa-solid fa-house"></i>
-
-            <span>
-                Dashboard
-            </span>
-
-        </a>
-
-
-        <a
-            href="profile.html"
-            class="nav-item"
-        >
-
-            <i class="fa-solid fa-user"></i>
-
-            <span>
-                Profile
-            </span>
-
-        </a>
-
-
-        <a
-            href="settings.html"
-            class="nav-item"
-        >
-
-            <i class="fa-solid fa-gear"></i>
-
-            <span>
-                Settings
-            </span>
-
-        </a>
-
-
-        <a
-            href="notifications.html"
-            class="nav-item"
-        >
-
-            <i class="fa-solid fa-bell"></i>
-
-            <span>
-                Notifications
-            </span>
-
-        </a>
-
-
-        <a
-            href="referral.html"
-            class="nav-item"
-        >
-
-            <i class="fa-solid fa-users"></i>
-
-            <span>
-                Referrals
-            </span>
-
-        </a>
-
-
-        <a
-            href="#tasks"
-            class="nav-item"
-        >
-
-            <i class="fa-solid fa-coins"></i>
-
-            <span>
-                Earn Money
-            </span>
-
-        </a>
-
-
-        <a
-            href="transaction-history.html"
-            class="nav-item"
-        >
-
-            <i class="fa-solid fa-clock-rotate-left"></i>
-
-            <span>
-                Transactions
-            </span>
-
-        </a>
-
-
-        <a
-            href="support.html"
-            class="nav-item"
-        >
-
-            <i class="fa-solid fa-headset"></i>
-
-            <span>
-                Support
-            </span>
-
-        </a>
-
-
-    </nav>
-
-
-
-    <!-- LOGOUT -->
-
-    <div class="sidebar-bottom">
-
-        <button
-            type="button"
-            id="logoutButton"
-            class="logout-button"
-        >
-
-            <i class="fa-solid fa-right-from-bracket"></i>
-
-            <span>
-                Logout
-            </span>
-
-        </button>
-
-    </div>
-
-</aside>
-
-
-
-<!-- =====================================================
-     MAIN CONTENT
-===================================================== -->
-
-<main class="dashboard-main">
+<div class="dashboard-wrapper">
 
 
     <!-- =================================================
-         TOP BAR
-    ================================================= -->
+         TOP SECTION
+    ================================================== -->
 
-    <div class="dashboard-topbar">
+    <section class="dashboard-top-section">
 
-        <div>
+
+        <!-- WELCOME -->
+
+        <div class="welcome-area">
 
             <span class="dashboard-label">
                 MEMBER DASHBOARD
             </span>
 
             <h1>
-                Welcome,
+                Welcome back,
                 <span id="welcomeName">
                     Member
                 </span>
+                <span class="welcome-hand">👋</span>
             </h1>
 
             <p>
@@ -319,62 +90,35 @@
         </div>
 
 
-        <a
-            href="profile.html"
-            class="top-profile"
-        >
-
-            <i class="fa-solid fa-user"></i>
-
-            <span>
-                Profile
-            </span>
-
-        </a>
-
-    </div>
-
-
-
-    <!-- =================================================
-         WALLET
-    ================================================= -->
-
-    <section class="wallet-section">
-
+        <!-- WALLET -->
 
         <div class="wallet-card">
 
 
-            <div class="wallet-card-top">
+            <div class="wallet-content">
 
-                <div>
+                <span>
+                    Wallet Balance
+                </span>
 
-                    <span>
-                        WALLET BALANCE
-                    </span>
+                <h2 id="walletBalance">
+                    $0.00
+                </h2>
 
-                    <h2 id="walletBalance">
-                        $0.00
-                    </h2>
+                <small>
+                    Available balance
+                </small>
 
-                </div>
+            </div>
 
+
+            <div class="wallet-right">
 
                 <div class="wallet-icon">
 
                     <i class="fa-solid fa-wallet"></i>
 
                 </div>
-
-            </div>
-
-
-            <div class="wallet-card-bottom">
-
-                <span>
-                    Available balance
-                </span>
 
 
                 <a
@@ -397,11 +141,13 @@
 
 
     <!-- =================================================
-         QUICK ACTIONS
-    ================================================= -->
+         QUICK NAVIGATION
+    ================================================== -->
 
     <section class="quick-actions">
 
+
+        <!-- PROFILE -->
 
         <a
             href="profile.html"
@@ -414,8 +160,12 @@
                 Profile
             </span>
 
+            <i class="fa-solid fa-chevron-right action-arrow"></i>
+
         </a>
 
+
+        <!-- SETTINGS -->
 
         <a
             href="settings.html"
@@ -428,8 +178,12 @@
                 Settings
             </span>
 
+            <i class="fa-solid fa-chevron-right action-arrow"></i>
+
         </a>
 
+
+        <!-- NOTIFICATIONS -->
 
         <a
             href="notifications.html"
@@ -442,8 +196,16 @@
                 Notifications
             </span>
 
+            <span class="notification-badge">
+                3
+            </span>
+
+            <i class="fa-solid fa-chevron-right action-arrow"></i>
+
         </a>
 
+
+        <!-- REFERRALS -->
 
         <a
             href="referral.html"
@@ -456,8 +218,12 @@
                 Referrals
             </span>
 
+            <i class="fa-solid fa-chevron-right action-arrow"></i>
+
         </a>
 
+
+        <!-- EARN MONEY -->
 
         <a
             href="#tasks"
@@ -470,8 +236,12 @@
                 Earn Money
             </span>
 
+            <i class="fa-solid fa-chevron-right action-arrow"></i>
+
         </a>
 
+
+        <!-- SUPPORT -->
 
         <a
             href="support.html"
@@ -484,12 +254,16 @@
                 Support
             </span>
 
+            <i class="fa-solid fa-chevron-right action-arrow"></i>
+
         </a>
 
 
+        <!-- LOGOUT -->
+
         <button
             type="button"
-            id="quickLogoutButton"
+            id="logoutButton"
             class="quick-action quick-logout"
         >
 
@@ -498,6 +272,8 @@
             <span>
                 Logout
             </span>
+
+            <i class="fa-solid fa-chevron-right action-arrow"></i>
 
         </button>
 
@@ -508,10 +284,12 @@
 
     <!-- =================================================
          ACCOUNT SUMMARY
-    ================================================= -->
+    ================================================== -->
 
     <section class="account-summary">
 
+
+        <!-- WELCOME BONUS -->
 
         <div class="summary-card">
 
@@ -536,6 +314,8 @@
         </div>
 
 
+        <!-- TASK EARNINGS -->
+
         <div class="summary-card">
 
             <div class="summary-icon">
@@ -559,6 +339,8 @@
         </div>
 
 
+        <!-- REFERRAL EARNINGS -->
+
         <div class="summary-card">
 
             <div class="summary-icon">
@@ -581,6 +363,8 @@
 
         </div>
 
+
+        <!-- TOTAL WITHDRAWN -->
 
         <div class="summary-card">
 
@@ -611,66 +395,46 @@
 
     <!-- =================================================
          ACCOUNT INFORMATION
-    ================================================= -->
+    ================================================== -->
 
     <section class="account-information">
 
 
-        <div class="information-header">
+        <div class="information-item">
+
+            <div class="information-icon status-icon">
+
+                <i class="fa-solid fa-shield-halved"></i>
+
+            </div>
 
             <div>
 
                 <span>
-                    ACCOUNT
+                    Account Status
                 </span>
 
-                <h2>
-                    Account Information
-                </h2>
+                <strong
+                    id="accountStatus"
+                    class="status-active"
+                >
+                    Active
+                </strong>
 
-            </div>
-
-
-            <div
-                id="accountStatus"
-                class="account-status status-active"
-            >
-                Active
             </div>
 
         </div>
 
 
-        <div class="information-grid">
+        <div class="information-item">
 
+            <div class="information-icon">
 
-            <div class="information-item">
-
-                <span>
-                    Email
-                </span>
-
-                <strong id="userEmail">
-                    —
-                </strong>
+                <i class="fa-solid fa-calendar-days"></i>
 
             </div>
 
-
-            <div class="information-item">
-
-                <span>
-                    Country
-                </span>
-
-                <strong id="userCountry">
-                    —
-                </strong>
-
-            </div>
-
-
-            <div class="information-item">
+            <div>
 
                 <span>
                     Member Since
@@ -682,8 +446,54 @@
 
             </div>
 
+        </div>
+
+
+        <div class="information-item">
+
+            <div class="information-icon">
+
+                <i class="fa-solid fa-earth-americas"></i>
+
+            </div>
+
+            <div>
+
+                <span>
+                    Country
+                </span>
+
+                <strong id="userCountry">
+                    —
+                </strong>
+
+            </div>
 
         </div>
+
+
+        <div class="information-item">
+
+            <div class="information-icon">
+
+                <i class="fa-solid fa-envelope"></i>
+
+            </div>
+
+            <div>
+
+                <span>
+                    Email
+                </span>
+
+                <strong id="userEmail">
+                    —
+                </strong>
+
+            </div>
+
+        </div>
+
 
     </section>
 
@@ -691,7 +501,7 @@
 
     <!-- =================================================
          TASKS
-    ================================================= -->
+    ================================================== -->
 
     <section
         id="tasks"
@@ -699,27 +509,21 @@
     >
 
 
+        <!-- TASK HEADER -->
+
         <div class="section-heading">
 
-            <div>
-
-                <span>
-                    AVAILABLE TASKS
-                </span>
-
-                <h2>
-                    Complete eligible tasks to increase your earnings
-                </h2>
-
-            </div>
+            <h2>
+                Complete eligible tasks to increase your earnings
+            </h2>
 
         </div>
 
 
 
-        <!-- =============================================
+        <!-- =================================================
              REGULAR TASKS
-        ============================================== -->
+        ================================================== -->
 
         <div class="task-section">
 
@@ -748,13 +552,13 @@
 
                     <div class="dashboard-task-content">
 
-                        <span>
-                            Regular Task
-                        </span>
-
                         <h4>
                             Regular 1
                         </h4>
+
+                        <span>
+                            Regular Task
+                        </span>
 
                         <strong>
                             $5.00
@@ -785,13 +589,13 @@
 
                     <div class="dashboard-task-content">
 
-                        <span>
-                            Regular Task
-                        </span>
-
                         <h4>
                             Regular 2
                         </h4>
+
+                        <span>
+                            Regular Task
+                        </span>
 
                         <strong>
                             $10.00
@@ -822,13 +626,13 @@
 
                     <div class="dashboard-task-content">
 
-                        <span>
-                            Regular Task
-                        </span>
-
                         <h4>
                             Regular 3
                         </h4>
+
+                        <span>
+                            Regular Task
+                        </span>
 
                         <strong>
                             $15.00
@@ -848,9 +652,9 @@
 
 
 
-        <!-- =============================================
+        <!-- =================================================
              VIP TASKS
-        ============================================== -->
+        ================================================== -->
 
         <div class="task-section vip-task-section">
 
@@ -879,13 +683,13 @@
 
                     <div class="dashboard-task-content">
 
-                        <span>
-                            VIP Task
-                        </span>
-
                         <h4>
                             VIP 1
                         </h4>
+
+                        <span>
+                            VIP Task
+                        </span>
 
                         <strong>
                             $10.00
@@ -916,13 +720,13 @@
 
                     <div class="dashboard-task-content">
 
-                        <span>
-                            VIP Task
-                        </span>
-
                         <h4>
                             VIP 2
                         </h4>
+
+                        <span>
+                            VIP Task
+                        </span>
 
                         <strong>
                             $20.00
@@ -953,13 +757,13 @@
 
                     <div class="dashboard-task-content">
 
-                        <span>
-                            VIP Task
-                        </span>
-
                         <h4>
                             VIP 3
                         </h4>
+
+                        <span>
+                            VIP Task
+                        </span>
 
                         <strong>
                             $30.00
@@ -983,8 +787,8 @@
 
 
     <!-- =================================================
-         WITHDRAW NOTICE
-    ================================================= -->
+         WITHDRAWAL NOTICE
+    ================================================== -->
 
     <section class="dashboard-notice">
 
@@ -1016,13 +820,15 @@
 
     <!-- =================================================
          FOOTER
-    ================================================= -->
+    ================================================== -->
 
     <footer class="dashboard-footer">
+
 
         <p>
             © 2026 GlobalEarn. All Rights Reserved.
         </p>
+
 
         <div>
 
@@ -1030,20 +836,25 @@
                 Support
             </a>
 
-            <a href="#">
-                Privacy
-            </a>
+            <span>|</span>
 
             <a href="#">
-                Terms
+                Privacy Policy
+            </a>
+
+            <span>|</span>
+
+            <a href="#">
+                Terms of Service
             </a>
 
         </div>
 
+
     </footer>
 
 
-</main>
+</div>
 
 
 
@@ -1051,92 +862,10 @@
      JAVASCRIPT
 ===================================================== -->
 
-<script type="module" src="dashboard.js"></script>
-
-
-<!-- =====================================================
-     QUICK LOGOUT SUPPORT
-===================================================== -->
-
-<script type="module">
-
-    import {
-        auth
-    } from "./firebase.js";
-
-    import {
-        signOut
-    } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-auth.js";
-
-
-    const quickLogoutButton =
-        document.getElementById("quickLogoutButton");
-
-
-    if (quickLogoutButton) {
-
-        quickLogoutButton.addEventListener(
-            "click",
-            async () => {
-
-                const confirmed =
-                    window.confirm(
-                        "Are you sure you want to logout?"
-                    );
-
-
-                if (!confirmed) {
-                    return;
-                }
-
-
-                try {
-
-                    quickLogoutButton.disabled =
-                        true;
-
-                    quickLogoutButton.innerHTML = `
-                        <i class="fa-solid fa-spinner fa-spin"></i>
-                        <span>Logging out...</span>
-                    `;
-
-
-                    await signOut(auth);
-
-
-                    window.location.href =
-                        "login.html";
-
-
-                } catch (error) {
-
-                    console.error(
-                        "Logout error:",
-                        error
-                    );
-
-
-                    alert(
-                        "Unable to logout. Please try again."
-                    );
-
-
-                    quickLogoutButton.disabled =
-                        false;
-
-                    quickLogoutButton.innerHTML = `
-                        <i class="fa-solid fa-right-from-bracket"></i>
-                        <span>Logout</span>
-                    `;
-
-                }
-
-            }
-        );
-
-    }
-
-</script>
+<script
+    type="module"
+    src="dashboard.js"
+></script>
 
 
 </body>
