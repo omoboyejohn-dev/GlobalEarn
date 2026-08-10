@@ -429,4 +429,388 @@ async function loadReferrals(
             documentSnapshot => {
 
                 const data =
-                    document
+                    documentSnapshot.data();
+
+
+                /*
+                 * Do not count the current
+                 * user as their own referral.
+                 */
+
+                if (
+                    documentSnapshot.id !==
+                    user.uid
+                ) {
+
+                    referrals.push(
+                        data
+                    );
+
+                }
+
+            }
+        );
+
+
+        updateProgress(
+            referrals.length
+        );
+
+
+        if (
+            !referrals.length
+        ) {
+
+            showEmptyReferrals();
+
+            return;
+
+        }
+
+
+        if (!referralList) return;
+
+
+        referralList.innerHTML = "";
+
+
+        referrals.forEach(
+            referral => {
+
+                const element =
+                    createReferralElement(
+                        referral
+                    );
+
+
+                referralList.appendChild(
+                    element
+                );
+
+            }
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Unable to load referrals:",
+            error
+        );
+
+
+        updateProgress(0);
+
+        showEmptyReferrals();
+
+    }
+
+}
+
+
+/* =========================================
+   LOAD USER PROFILE
+========================================= */
+
+async function loadReferralData(
+    user
+) {
+
+    try {
+
+        const userRef =
+            doc(
+                db,
+                "users",
+                user.uid
+            );
+
+
+        const snapshot =
+            await getDoc(
+                userRef
+            );
+
+
+        if (!snapshot.exists()) {
+
+            showError(
+                "User profile was not found."
+            );
+
+            return;
+
+        }
+
+
+        const data =
+            snapshot.data();
+
+
+        /*
+         * Existing referral code
+         */
+
+        let referralCode =
+            data.myReferralCode ||
+            data.referralCode;
+
+
+        /*
+         * If the account does not have
+         * a referral code yet, generate
+         * one for display.
+         */
+
+        if (!referralCode) {
+
+            referralCode =
+                generateReferralCode(
+                    user
+                );
+
+        }
+
+
+        /*
+         * Display referral code
+         */
+
+        if (myReferralCode) {
+
+            myReferralCode.textContent =
+                referralCode;
+
+        }
+
+
+        /*
+         * Build referral URL
+         */
+
+        const baseURL =
+            window.location.origin +
+            window.location.pathname
+                .replace(
+                    "referral.html",
+                    "register.html"
+                );
+
+
+        const referralURL =
+            `${baseURL}?ref=${encodeURIComponent(
+                referralCode
+            )}`;
+
+
+        if (referralLink) {
+
+            referralLink.value =
+                referralURL;
+
+        }
+
+
+        /*
+         * Load people who used
+         * this referral code.
+         */
+
+        await loadReferrals(
+            user,
+            {
+                ...data,
+                myReferralCode:
+                    referralCode
+            }
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Referral data error:",
+            error
+        );
+
+        showError(
+            "Unable to load referral information."
+        );
+
+    }
+
+}
+
+
+/* =========================================
+   COPY REFERRAL LINK
+========================================= */
+
+copyReferralButton?.addEventListener(
+    "click",
+    async () => {
+
+        if (!referralLink) return;
+
+
+        try {
+
+            await navigator.clipboard.writeText(
+                referralLink.value
+            );
+
+
+            if (copyMessage) {
+
+                copyMessage.textContent =
+                    "Referral link copied successfully.";
+
+                copyMessage.hidden =
+                    false;
+
+
+                setTimeout(
+                    () => {
+
+                        copyMessage.hidden =
+                            true;
+
+                    },
+                    2500
+                );
+
+            }
+
+
+            copyReferralButton.innerHTML = `
+
+                <i class="fa-solid fa-check"></i>
+
+                Copied
+
+            `;
+
+
+            setTimeout(
+                () => {
+
+                    copyReferralButton.innerHTML = `
+
+                        <i class="fa-solid fa-copy"></i>
+
+                        Copy
+
+                    `;
+
+                },
+                2000
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Copy failed:",
+                error
+            );
+
+
+            /*
+             * Fallback for browsers
+             * that block clipboard API.
+             */
+
+            referralLink.select();
+
+            referralLink.setSelectionRange(
+                0,
+                referralLink.value.length
+            );
+
+            document.execCommand(
+                "copy"
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================
+   COPY REFERRAL CODE
+========================================= */
+
+copyCodeButton?.addEventListener(
+    "click",
+    async () => {
+
+        if (!myReferralCode) return;
+
+
+        const code =
+            myReferralCode.textContent.trim();
+
+
+        if (!code) return;
+
+
+        try {
+
+            await navigator.clipboard.writeText(
+                code
+            );
+
+
+            copyCodeButton.innerHTML =
+                '<i class="fa-solid fa-check"></i>';
+
+
+            setTimeout(
+                () => {
+
+                    copyCodeButton.innerHTML =
+                        '<i class="fa-solid fa-copy"></i>';
+
+                },
+                1800
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Referral code copy failed:",
+                error
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================
+   AUTHENTICATION
+========================================= */
+
+onAuthStateChanged(
+    auth,
+    async user => {
+
+        if (!user) {
+
+            window.location.href =
+                "login.html";
+
+            return;
+
+        }
+
+
+        await loadReferralData(
+            user
+        );
+
+    }
+);
