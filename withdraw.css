@@ -1,0 +1,630 @@
+/* =========================================
+   GlobalEarn Withdraw
+   withdraw.css
+========================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+.withdraw-page {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 35px 25px 50px;
+    color: #ffffff;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.withdraw-header {
+    margin-bottom: 25px;
+}
+
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    margin-bottom: 22px;
+
+    color: #8996a7;
+    font-size: 12px;
+
+    transition: 0.25s;
+}
+
+.back-button:hover {
+    color: #63ff42;
+}
+
+.withdraw-title span {
+    color: #63ff42;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+}
+
+.withdraw-title h1 {
+    margin-top: 5px;
+
+    color: #ffffff;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.withdraw-title p {
+    margin-top: 6px;
+
+    color: #718092;
+    font-size: 12px;
+}
+
+
+/* =========================================
+   BALANCE CARD
+========================================= */
+
+.withdraw-balance-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 22px;
+
+    margin-bottom: 20px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(99,255,66,0.08),
+            #0d1b2b
+        );
+
+    border: 1px solid rgba(99,255,66,0.12);
+    border-radius: 16px;
+}
+
+.balance-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.balance-icon {
+    width: 50px;
+    height: 50px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background: rgba(99,255,66,0.10);
+    color: #63ff42;
+
+    font-size: 21px;
+}
+
+.balance-left span {
+    display: block;
+
+    color: #8996a7;
+
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+}
+
+.balance-left strong {
+    display: block;
+
+    margin-top: 3px;
+
+    color: #63ff42;
+
+    font-size: 25px;
+}
+
+.minimum-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    color: #7f8c9d;
+
+    font-size: 10px;
+}
+
+.minimum-info i {
+    color: #b478ff;
+}
+
+.minimum-info strong {
+    color: #b478ff;
+}
+
+
+/* =========================================
+   FORM CONTAINER
+========================================= */
+
+.withdraw-container {
+    padding: 25px;
+
+    background: #0b1827;
+
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+}
+
+.withdraw-form-header {
+    margin-bottom: 25px;
+}
+
+.withdraw-form-header span {
+    color: #63ff42;
+
+    font-size: 9px;
+    font-weight: 700;
+
+    letter-spacing: 1.3px;
+}
+
+.withdraw-form-header h2 {
+    margin-top: 5px;
+
+    color: #ffffff;
+
+    font-size: 19px;
+    font-weight: 600;
+}
+
+
+/* =========================================
+   FORM GROUP
+========================================= */
+
+.form-group {
+    margin-bottom: 22px;
+}
+
+.form-group > label {
+    display: block;
+
+    margin-bottom: 9px;
+
+    color: #dce3eb;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* =========================================
+   PAYMENT METHODS
+========================================= */
+
+.method-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 10px;
+}
+
+.method-option {
+    cursor: pointer;
+}
+
+.method-option input {
+    position: absolute;
+
+    opacity: 0;
+    pointer-events: none;
+}
+
+.method-card {
+    min-height: 75px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 6px;
+
+    background: #101f30;
+
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 12px;
+
+    color: #8996a7;
+
+    transition: 0.25s;
+}
+
+.method-card i {
+    font-size: 21px;
+}
+
+.method-card strong {
+    font-size: 11px;
+}
+
+.method-option:hover .method-card {
+    border-color: rgba(99,255,66,0.3);
+
+    color: #ffffff;
+
+    transform: translateY(-2px);
+}
+
+.method-option input:checked + .method-card {
+    background: rgba(99,255,66,0.08);
+
+    border-color: #63ff42;
+
+    color: #63ff42;
+
+    box-shadow:
+        0 0 0 1px rgba(99,255,66,0.08);
+}
+
+
+/* =========================================
+   INPUTS
+========================================= */
+
+.input-wrapper {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+}
+
+.input-prefix {
+    position: absolute;
+    left: 15px;
+
+    color: #63ff42;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    pointer-events: none;
+}
+
+.input-wrapper input {
+    width: 100%;
+    height: 50px;
+
+    padding: 0 15px 0 38px;
+
+    background: #07111f;
+
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+
+    outline: none;
+
+    color: #ffffff;
+
+    font-size: 13px;
+
+    transition: 0.25s;
+}
+
+.input-wrapper input:focus {
+    border-color: #63ff42;
+
+    box-shadow:
+        0 0 0 3px rgba(99,255,66,0.07);
+}
+
+.input-wrapper input::placeholder {
+    color: #526173;
+}
+
+
+/* =========================================
+   WALLET ADDRESS
+========================================= */
+
+.address-wrapper .input-icon {
+    position: absolute;
+    left: 15px;
+
+    color: #63ff42;
+
+    font-size: 14px;
+
+    pointer-events: none;
+}
+
+.address-wrapper input {
+    padding-left: 40px;
+}
+
+.input-help {
+    display: block;
+
+    margin-top: 7px;
+
+    color: #647184;
+
+    font-size: 9px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================
+   MESSAGES
+========================================= */
+
+.withdraw-message {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 13px 15px;
+
+    margin-bottom: 18px;
+
+    border-radius: 9px;
+
+    font-size: 11px;
+}
+
+.withdraw-message[hidden] {
+    display: none;
+}
+
+.withdraw-error {
+    background: rgba(255,77,103,0.08);
+
+    border: 1px solid rgba(255,77,103,0.18);
+
+    color: #ff7185;
+}
+
+.withdraw-success {
+    background: rgba(99,255,66,0.08);
+
+    border: 1px solid rgba(99,255,66,0.18);
+
+    color: #63ff42;
+}
+
+.withdraw-success div {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.withdraw-success strong {
+    font-size: 12px;
+}
+
+.withdraw-success span {
+    color: #8ea39b;
+    font-size: 10px;
+}
+
+
+/* =========================================
+   SUBMIT BUTTON
+========================================= */
+
+.submit-withdraw {
+    width: 100%;
+    min-height: 52px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 9px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: #63ff42;
+    color: #07111f;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.25s;
+}
+
+.submit-withdraw:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 25px rgba(99,255,66,0.18);
+}
+
+.submit-withdraw:disabled {
+    opacity: 0.65;
+
+    cursor: not-allowed;
+
+    transform: none;
+
+    box-shadow: none;
+}
+
+
+/* =========================================
+   NOTICE
+========================================= */
+
+.withdraw-notice {
+    display: flex;
+    align-items: flex-start;
+
+    gap: 13px;
+
+    margin-top: 18px;
+
+    padding: 18px;
+
+    background: rgba(167,108,255,0.07);
+
+    border: 1px solid rgba(167,108,255,0.12);
+
+    border-radius: 13px;
+}
+
+.notice-icon {
+    width: 40px;
+    height: 40px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: rgba(167,108,255,0.12);
+
+    color: #b478ff;
+}
+
+.withdraw-notice strong {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #ffffff;
+
+    font-size: 12px;
+}
+
+.withdraw-notice p {
+    color: #8b7da0;
+
+    font-size: 10px;
+
+    line-height: 1.7;
+}
+
+
+/* =========================================
+   FOOTER
+========================================= */
+
+.withdraw-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-top: 25px;
+
+    color: #5f6d7e;
+
+    font-size: 9px;
+}
+
+.withdraw-footer div {
+    display: flex;
+    gap: 15px;
+}
+
+.withdraw-footer a {
+    color: #718092;
+
+    transition: 0.2s;
+}
+
+.withdraw-footer a:hover {
+    color: #63ff42;
+}
+
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 700px) {
+
+    .withdraw-page {
+        padding: 25px 16px 40px;
+    }
+
+    .withdraw-title h1 {
+        font-size: 24px;
+    }
+
+    .withdraw-balance-card {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .minimum-info {
+        padding-left: 2px;
+    }
+
+    .method-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 480px) {
+
+    .withdraw-page {
+        padding: 20px 12px 35px;
+    }
+
+    .withdraw-container {
+        padding: 18px;
+    }
+
+    .withdraw-title h1 {
+        font-size: 21px;
+    }
+
+    .withdraw-title p {
+        font-size: 10px;
+    }
+
+    .withdraw-balance-card {
+        padding: 17px;
+    }
+
+    .balance-left strong {
+        font-size: 22px;
+    }
+
+    .method-card {
+        min-height: 68px;
+    }
+
+    .withdraw-footer {
+        flex-direction: column;
+
+        gap: 10px;
+
+        text-align: center;
+    }
+
+                     }
