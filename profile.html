@@ -12,7 +12,9 @@
 
     <title>Profile | GlobalEarn</title>
 
+
     <!-- Google Font -->
+
     <link
         rel="preconnect"
         href="https://fonts.googleapis.com"
@@ -20,7 +22,7 @@
 
     <link
         rel="preconnect"
-        href="https://fonts.googleapis.com"
+        href="https://fonts.gstatic.com"
         crossorigin
     >
 
@@ -29,13 +31,17 @@
         rel="stylesheet"
     >
 
+
     <!-- Font Awesome -->
+
     <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
     >
 
+
     <!-- Profile CSS -->
+
     <link
         rel="stylesheet"
         href="profile.css"
@@ -46,25 +52,40 @@
 
 <body>
 
+
 <main class="profile-page">
 
-    <!-- HEADER -->
+
+    <!-- =====================================================
+         HEADER
+    ===================================================== -->
 
     <header class="profile-header">
+
 
         <a
             href="dashboard.html"
             class="back-button"
         >
+
             <i class="fa-solid fa-arrow-left"></i>
-            Dashboard
+
+            <span>
+                Dashboard
+            </span>
+
         </a>
+
 
         <div class="profile-heading">
 
-            <span>ACCOUNT</span>
+            <span>
+                ACCOUNT
+            </span>
 
-            <h1>My Profile</h1>
+            <h1>
+                My Profile
+            </h1>
 
             <p>
                 Manage your GlobalEarn account information.
@@ -72,14 +93,22 @@
 
         </div>
 
+
     </header>
 
 
-    <!-- PROFILE CARD -->
+
+    <!-- =====================================================
+         PROFILE CARD
+    ===================================================== -->
 
     <section class="profile-card">
 
+
+        <!-- PROFILE TOP -->
+
         <div class="profile-top">
+
 
             <div class="profile-avatar">
 
@@ -87,9 +116,12 @@
 
             </div>
 
+
             <div class="profile-name">
 
-                <span>MEMBER PROFILE</span>
+                <span>
+                    MEMBER PROFILE
+                </span>
 
                 <h2 id="profileFullName">
                     Loading...
@@ -101,9 +133,12 @@
 
             </div>
 
+
             <div class="account-status">
 
-                <span>ACCOUNT STATUS</span>
+                <span>
+                    ACCOUNT STATUS
+                </span>
 
                 <strong id="accountStatus">
                     Active
@@ -111,12 +146,17 @@
 
             </div>
 
+
         </div>
 
 
-        <!-- ACCOUNT INFORMATION -->
+
+        <!-- =================================================
+             ACCOUNT INFORMATION
+        ================================================= -->
 
         <div class="profile-section">
+
 
             <div class="section-title">
 
@@ -131,6 +171,7 @@
             </div>
 
 
+
             <div class="profile-info-grid">
 
 
@@ -139,12 +180,17 @@
                 <div class="profile-info-item">
 
                     <div class="profile-info-icon email-icon">
+
                         <i class="fa-solid fa-envelope"></i>
+
                     </div>
+
 
                     <div>
 
-                        <span>Email Address</span>
+                        <span>
+                            Email Address
+                        </span>
 
                         <strong id="profileEmail">
                             Loading...
@@ -155,17 +201,23 @@
                 </div>
 
 
+
                 <!-- COUNTRY -->
 
                 <div class="profile-info-item">
 
                     <div class="profile-info-icon country-icon">
+
                         <i class="fa-solid fa-globe"></i>
+
                     </div>
+
 
                     <div>
 
-                        <span>Country</span>
+                        <span>
+                            Country
+                        </span>
 
                         <strong id="profileCountry">
                             Loading...
@@ -176,17 +228,23 @@
                 </div>
 
 
+
                 <!-- MEMBER SINCE -->
 
                 <div class="profile-info-item">
 
                     <div class="profile-info-icon date-icon">
+
                         <i class="fa-solid fa-calendar-days"></i>
+
                     </div>
+
 
                     <div>
 
-                        <span>Member Since</span>
+                        <span>
+                            Member Since
+                        </span>
 
                         <strong id="memberSince">
                             Loading...
@@ -197,17 +255,23 @@
                 </div>
 
 
+
                 <!-- USERNAME -->
 
                 <div class="profile-info-item">
 
                     <div class="profile-info-icon username-icon">
+
                         <i class="fa-solid fa-at"></i>
+
                     </div>
+
 
                     <div>
 
-                        <span>Username</span>
+                        <span>
+                            Username
+                        </span>
 
                         <strong id="profileUsernameInfo">
                             Loading...
@@ -217,14 +281,20 @@
 
                 </div>
 
+
             </div>
+
 
         </div>
 
 
-        <!-- ACCOUNT SETTINGS -->
+
+        <!-- =================================================
+             ACCOUNT SETTINGS
+        ================================================= -->
 
         <div class="profile-section">
+
 
             <div class="section-title">
 
@@ -239,10 +309,11 @@
             </div>
 
 
+
             <div class="settings-grid">
 
 
-                <!-- CHANGE NAME -->
+                <!-- CHANGE FULL NAME -->
 
                 <button
                     type="button"
@@ -251,10 +322,13 @@
                 >
 
                     <div class="setting-icon">
+
                         <i class="fa-solid fa-user-pen"></i>
+
                     </div>
 
-                    <div>
+
+                    <div class="setting-content">
 
                         <strong>
                             Change Full Name
@@ -266,9 +340,13 @@
 
                     </div>
 
-                    <i class="fa-solid fa-chevron-right setting-arrow"></i>
+
+                    <i
+                        class="fa-solid fa-chevron-right setting-arrow"
+                    ></i>
 
                 </button>
+
 
 
                 <!-- CHANGE PASSWORD -->
@@ -280,10 +358,13 @@
                 >
 
                     <div class="setting-icon password-icon">
+
                         <i class="fa-solid fa-lock"></i>
+
                     </div>
 
-                    <div>
+
+                    <div class="setting-content">
 
                         <strong>
                             Change Password
@@ -295,24 +376,35 @@
 
                     </div>
 
-                    <i class="fa-solid fa-chevron-right setting-arrow"></i>
+
+                    <i
+                        class="fa-solid fa-chevron-right setting-arrow"
+                    ></i>
 
                 </button>
 
+
             </div>
 
+
         </div>
+
 
     </section>
 
 
-    <!-- FOOTER -->
+
+    <!-- =====================================================
+         FOOTER
+    ===================================================== -->
 
     <footer class="profile-footer">
+
 
         <span>
             © 2026 GlobalEarn. All Rights Reserved.
         </span>
+
 
         <div>
 
@@ -330,14 +422,23 @@
 
         </div>
 
+
     </footer>
+
 
 </main>
 
 
-<!-- PROFILE JAVASCRIPT -->
 
-<script type="module" src="profile.js"></script>
+<!-- =====================================================
+     PROFILE JAVASCRIPT
+===================================================== -->
+
+<script
+    type="module"
+    src="profile.js"
+></script>
+
 
 </body>
 
