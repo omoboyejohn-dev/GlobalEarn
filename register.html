@@ -4,52 +4,100 @@
 <head>
 
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Create Account | GlobalEarn</title>
 
+
+    <!-- ================= GOOGLE FONT ================= -->
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
 
     <link
         href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet"
     >
 
+
+    <!-- ================= FONT AWESOME ================= -->
+
     <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
     >
 
-    <link rel="stylesheet" href="register.css">
+
+    <!-- ================= REGISTER CSS ================= -->
+
+    <link
+        rel="stylesheet"
+        href="register.css"
+    >
 
 </head>
 
+
 <body>
 
-    <!-- ================= HEADER ================= -->
+
+    <!-- =================================================
+         HEADER
+    ================================================== -->
 
     <header class="auth-header">
 
-        <a href="index.html" class="auth-logo">
+        <a
+            href="index.html"
+            class="auth-logo"
+        >
 
             <i class="fa-solid fa-globe"></i>
 
             <div>
-                <strong>GlobalEarn</strong>
-                <span>Earn • Grow • Succeed</span>
+
+                <strong>
+                    GlobalEarn
+                </strong>
+
+                <span>
+                    Earn • Grow • Succeed
+                </span>
+
             </div>
 
         </a>
 
-        <a href="login.html" class="back-login">
-            Already have an account? <strong>Login</strong>
+
+        <a
+            href="login.html"
+            class="back-login"
+        >
+
+            Already have an account?
+
+            <strong>
+                Login
+            </strong>
+
         </a>
 
     </header>
 
 
-    <!-- ================= REGISTER ================= -->
+
+    <!-- =================================================
+         REGISTER PAGE
+    ================================================== -->
 
     <main class="register-page">
 
@@ -57,13 +105,24 @@
 
             <div class="register-card">
 
+
+                <!-- =================================================
+                     REGISTER TITLE
+                ================================================== -->
+
                 <div class="register-title">
 
                     <div class="register-icon">
+
                         <i class="fa-solid fa-user-plus"></i>
+
                     </div>
 
-                    <h1>Create Your Account</h1>
+
+                    <h1>
+                        Create Your Account
+                    </h1>
+
 
                     <p>
                         Join GlobalEarn and start your earning journey.
@@ -72,16 +131,30 @@
                 </div>
 
 
-                <!-- MESSAGE -->
 
-                <div id="message" class="message"></div>
+                <!-- =================================================
+                     MESSAGE
+                ================================================== -->
+
+                <div
+                    id="message"
+                    class="message"
+                    role="alert"
+                ></div>
 
 
-                <!-- FORM -->
 
-                <form id="registerForm">
+                <!-- =================================================
+                     REGISTER FORM
+                ================================================== -->
 
-                    <!-- FULL NAME -->
+                <form
+                    id="registerForm"
+                    novalidate
+                >
+
+
+                    <!-- ================= FULL NAME ================= -->
 
                     <div class="input-group">
 
@@ -96,7 +169,9 @@
                             <input
                                 type="text"
                                 id="fullName"
+                                name="fullName"
                                 placeholder="Enter your full name"
+                                autocomplete="name"
                                 required
                             >
 
@@ -105,7 +180,8 @@
                     </div>
 
 
-                    <!-- USERNAME -->
+
+                    <!-- ================= USERNAME ================= -->
 
                     <div class="input-group">
 
@@ -120,7 +196,9 @@
                             <input
                                 type="text"
                                 id="username"
+                                name="username"
                                 placeholder="Choose a username"
+                                autocomplete="username"
                                 required
                             >
 
@@ -129,7 +207,8 @@
                     </div>
 
 
-                    <!-- COUNTRY -->
+
+                    <!-- ================= COUNTRY ================= -->
 
                     <div class="input-group">
 
@@ -141,7 +220,11 @@
 
                             <i class="fa-solid fa-earth-americas"></i>
 
-                            <select id="country" required>
+                            <select
+                                id="country"
+                                name="country"
+                                required
+                            >
 
                                 <option value="">
                                     Select your country
@@ -186,7 +269,8 @@
                     </div>
 
 
-                    <!-- EMAIL -->
+
+                    <!-- ================= EMAIL ================= -->
 
                     <div class="input-group">
 
@@ -201,7 +285,9 @@
                             <input
                                 type="email"
                                 id="email"
+                                name="email"
                                 placeholder="Enter your email"
+                                autocomplete="email"
                                 required
                             >
 
@@ -210,7 +296,8 @@
                     </div>
 
 
-                    <!-- PHONE -->
+
+                    <!-- ================= PHONE ================= -->
 
                     <div class="input-group">
 
@@ -225,7 +312,9 @@
                             <input
                                 type="tel"
                                 id="phone"
+                                name="phone"
                                 placeholder="Enter your phone number"
+                                autocomplete="tel"
                                 required
                             >
 
@@ -234,14 +323,21 @@
                     </div>
 
 
-                    <!-- REFERRAL -->
+
+                    <!-- ================= REFERRAL ================= -->
 
                     <div class="input-group">
 
                         <label for="referralCode">
+
                             Referral Code
-                            <span>(Optional)</span>
+
+                            <span>
+                                (Optional)
+                            </span>
+
                         </label>
+
 
                         <div class="input-box">
 
@@ -250,7 +346,9 @@
                             <input
                                 type="text"
                                 id="referralCode"
+                                name="referralCode"
                                 placeholder="Enter referral code"
+                                autocomplete="off"
                             >
 
                         </div>
@@ -258,7 +356,8 @@
                     </div>
 
 
-                    <!-- PASSWORD -->
+
+                    <!-- ================= PASSWORD ================= -->
 
                     <div class="input-group">
 
@@ -266,23 +365,32 @@
                             Password
                         </label>
 
+
                         <div class="input-box">
 
                             <i class="fa-solid fa-lock"></i>
 
+
                             <input
                                 type="password"
                                 id="password"
+                                name="password"
                                 placeholder="Create a password"
+                                autocomplete="new-password"
+                                minlength="6"
                                 required
                             >
+
 
                             <button
                                 type="button"
                                 class="password-toggle"
                                 data-target="password"
+                                aria-label="Show password"
                             >
+
                                 <i class="fa-solid fa-eye"></i>
+
                             </button>
 
                         </div>
@@ -290,7 +398,8 @@
                     </div>
 
 
-                    <!-- CONFIRM PASSWORD -->
+
+                    <!-- ================= CONFIRM PASSWORD ================= -->
 
                     <div class="input-group">
 
@@ -298,23 +407,32 @@
                             Confirm Password
                         </label>
 
+
                         <div class="input-box">
 
                             <i class="fa-solid fa-lock"></i>
 
+
                             <input
                                 type="password"
                                 id="confirmPassword"
+                                name="confirmPassword"
                                 placeholder="Confirm your password"
+                                autocomplete="new-password"
+                                minlength="6"
                                 required
                             >
+
 
                             <button
                                 type="button"
                                 class="password-toggle"
                                 data-target="confirmPassword"
+                                aria-label="Show password"
                             >
+
                                 <i class="fa-solid fa-eye"></i>
+
                             </button>
 
                         </div>
@@ -322,27 +440,44 @@
                     </div>
 
 
-                    <!-- TERMS -->
+
+                    <!-- =================================================
+                         TERMS AND CONDITIONS
+                    ================================================== -->
 
                     <label class="terms">
 
                         <input
                             type="checkbox"
                             id="terms"
+                            name="terms"
                             required
                         >
 
+
                         <span>
+
                             I agree to the
-                            <a href="#">Terms & Conditions</a>
+
+                            <a href="#">
+                                Terms & Conditions
+                            </a>
+
                             and
-                            <a href="#">Privacy Policy</a>.
+
+                            <a href="#">
+                                Privacy Policy
+                            </a>.
+
                         </span>
 
                     </label>
 
 
-                    <!-- SUBMIT -->
+
+                    <!-- =================================================
+                         REGISTER BUTTON
+                    ================================================== -->
 
                     <button
                         type="submit"
@@ -354,24 +489,38 @@
                             Create Account
                         </span>
 
-                        <span id="buttonLoader" class="button-loader">
+
+                        <span
+                            id="buttonLoader"
+                            class="button-loader"
+                        >
+
                             <i class="fa-solid fa-spinner fa-spin"></i>
+
                         </span>
 
                     </button>
 
+
                 </form>
 
 
-                <!-- BONUS -->
+
+                <!-- =================================================
+                     WELCOME BONUS
+                ================================================== -->
 
                 <div class="welcome-bonus">
 
                     <i class="fa-solid fa-gift"></i>
 
+
                     <div>
 
-                        <strong>$50 Welcome Bonus</strong>
+                        <strong>
+                            $50 Welcome Bonus
+                        </strong>
+
 
                         <p>
                             New members receive a $50 account bonus.
@@ -382,7 +531,10 @@
                 </div>
 
 
-                <!-- LOGIN -->
+
+                <!-- =================================================
+                     LOGIN LINK
+                ================================================== -->
 
                 <div class="login-link">
 
@@ -394,6 +546,7 @@
 
                 </div>
 
+
             </div>
 
         </div>
@@ -401,7 +554,10 @@
     </main>
 
 
-    <!-- ================= FOOTER ================= -->
+
+    <!-- =================================================
+         FOOTER
+    ================================================== -->
 
     <footer class="auth-footer">
 
@@ -412,8 +568,16 @@
     </footer>
 
 
-    <!-- ================= JAVASCRIPT ================= -->
-<script type="module" src="register.js"></script>
+
+    <!-- =================================================
+         REGISTER JAVASCRIPT
+    ================================================== -->
+
+    <script
+        type="module"
+        src="register.js"
+    ></script>
+
 
 </body>
 
