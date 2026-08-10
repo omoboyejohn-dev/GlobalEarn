@@ -8,390 +8,533 @@ import {
     db
 } from "./firebase.js";
 
+
+/* =========================================
+   FIREBASE AUTHENTICATION
+========================================= */
+
 import {
     createUserWithEmailAndPassword,
     updateProfile
-} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/12.17.0/firebase-auth.js";
+
+
+/* =========================================
+   FIRESTORE
+========================================= */
 
 import {
     doc,
     setDoc,
     serverTimestamp
-} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/12.17.0/firebase-firestore.js";
+
 
 
 /* =========================================
    REGISTER FORM
 ========================================= */
 
-const registerForm = document.getElementById("registerForm");
+const registerForm =
+    document.getElementById("registerForm");
+
 
 if (registerForm) {
 
-    registerForm.addEventListener("submit", async function (event) {
+    registerForm.addEventListener(
+        "submit",
+        async function (event) {
 
-        event.preventDefault();
-
-
-        /* =========================================
-           GET FORM VALUES
-        ========================================= */
-
-        const fullName =
-            document.getElementById("fullName")?.value.trim();
-
-        const username =
-            document.getElementById("username")?.value.trim();
-
-        const country =
-            document.getElementById("country")?.value.trim();
-
-        const referral =
-            document.getElementById("referral")?.value.trim();
-
-        const email =
-            document.getElementById("email")?.value.trim();
-
-        const phone =
-            document.getElementById("phone")?.value.trim();
-
-        const password =
-            document.getElementById("password")?.value;
-
-        const confirmPassword =
-            document.getElementById("confirmPassword")?.value;
-
-        const terms =
-            document.getElementById("terms");
+            event.preventDefault();
 
 
-        /* =========================================
-           MESSAGE ELEMENT
-        ========================================= */
+            /* =========================================
+               GET FORM VALUES
+            ========================================= */
 
-        const message =
-            document.getElementById("message");
-
-
-        /* =========================================
-           BUTTON
-        ========================================= */
-
-        const submitButton =
-            document.querySelector(".register-submit");
-
-        const buttonText =
-            document.getElementById("buttonText");
+            const fullName =
+                document
+                    .getElementById("fullName")
+                    ?.value
+                    .trim();
 
 
-        /* =========================================
-           HELPER: SHOW MESSAGE
-        ========================================= */
-
-        function showMessage(text, type = "error") {
-
-            if (!message) return;
-
-            message.textContent = text;
-
-            message.className = "message " + type;
-
-            message.scrollIntoView({
-                behavior: "smooth",
-                block: "center"
-            });
-        }
+            const username =
+                document
+                    .getElementById("username")
+                    ?.value
+                    .trim();
 
 
-        /* =========================================
-           VALIDATION
-        ========================================= */
-
-        if (
-            !fullName ||
-            !username ||
-            !country ||
-            !email ||
-            !phone ||
-            !password ||
-            !confirmPassword
-        ) {
-
-            showMessage(
-                "Please complete all required fields."
-            );
-
-            return;
-        }
+            const country =
+                document
+                    .getElementById("country")
+                    ?.value
+                    .trim();
 
 
-        /* =========================================
-           EMAIL VALIDATION
-        ========================================= */
-
-        const emailPattern =
-            /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-        if (!emailPattern.test(email)) {
-
-            showMessage(
-                "Please enter a valid email address."
-            );
-
-            return;
-        }
+            const email =
+                document
+                    .getElementById("email")
+                    ?.value
+                    .trim()
+                    .toLowerCase();
 
 
-        /* =========================================
-           PASSWORD VALIDATION
-        ========================================= */
-
-        if (password.length < 6) {
-
-            showMessage(
-                "Password must contain at least 6 characters."
-            );
-
-            return;
-        }
+            const phone =
+                document
+                    .getElementById("phone")
+                    ?.value
+                    .trim();
 
 
-        /* =========================================
-           CONFIRM PASSWORD
-        ========================================= */
+            /* IMPORTANT:
+               HTML uses referralCode
+            */
 
-        if (password !== confirmPassword) {
-
-            showMessage(
-                "Passwords do not match."
-            );
-
-            return;
-        }
+            const referralCode =
+                document
+                    .getElementById("referralCode")
+                    ?.value
+                    .trim();
 
 
-        /* =========================================
-           TERMS
-        ========================================= */
-
-        if (terms && !terms.checked) {
-
-            showMessage(
-                "Please accept the Terms & Conditions."
-            );
-
-            return;
-        }
+            const password =
+                document
+                    .getElementById("password")
+                    ?.value;
 
 
-        /* =========================================
-           START LOADING
-        ========================================= */
-
-        if (submitButton) {
-
-            submitButton.disabled = true;
-
-            submitButton.classList.add("loading");
-        }
+            const confirmPassword =
+                document
+                    .getElementById("confirmPassword")
+                    ?.value;
 
 
-        if (buttonText) {
-
-            buttonText.textContent =
-                "Creating Account...";
-        }
+            const terms =
+                document.getElementById("terms");
 
 
-        try {
+
+            /* =========================================
+               MESSAGE ELEMENT
+            ========================================= */
+
+            const message =
+                document.getElementById("message");
+
+
+
+            /* =========================================
+               BUTTON ELEMENTS
+            ========================================= */
+
+            const submitButton =
+                document.getElementById("registerButton");
+
+
+            const buttonText =
+                document.getElementById("buttonText");
+
+
+
+            /* =========================================
+               SHOW MESSAGE
+            ========================================= */
+
+            function showMessage(
+                text,
+                type = "error"
+            ) {
+
+                if (!message) return;
+
+
+                message.textContent = text;
+
+
+                message.className =
+                    "message " + type;
+
+
+                message.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center"
+                });
+
+            }
+
+
+
+            /* =========================================
+               VALIDATE REQUIRED FIELDS
+            ========================================= */
+
+            if (
+                !fullName ||
+                !username ||
+                !country ||
+                !email ||
+                !phone ||
+                !password ||
+                !confirmPassword
+            ) {
+
+                showMessage(
+                    "Please complete all required fields."
+                );
+
+                return;
+
+            }
+
+
+
+            /* =========================================
+               VALIDATE USERNAME
+            ========================================= */
+
+            if (username.length < 3) {
+
+                showMessage(
+                    "Username must contain at least 3 characters."
+                );
+
+                return;
+
+            }
+
+
+
+            /* =========================================
+               VALIDATE EMAIL
+            ========================================= */
+
+            const emailPattern =
+                /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+
+            if (!emailPattern.test(email)) {
+
+                showMessage(
+                    "Please enter a valid email address."
+                );
+
+                return;
+
+            }
+
+
+
+            /* =========================================
+               VALIDATE PASSWORD
+            ========================================= */
+
+            if (password.length < 6) {
+
+                showMessage(
+                    "Password must contain at least 6 characters."
+                );
+
+                return;
+
+            }
+
+
+
+            /* =========================================
+               CONFIRM PASSWORD
+            ========================================= */
+
+            if (password !== confirmPassword) {
+
+                showMessage(
+                    "Passwords do not match."
+                );
+
+                return;
+
+            }
+
+
+
+            /* =========================================
+               TERMS
+            ========================================= */
+
+            if (
+                terms &&
+                !terms.checked
+            ) {
+
+                showMessage(
+                    "Please accept the Terms & Conditions."
+                );
+
+                return;
+
+            }
+
+
+
+            /* =========================================
+               START LOADING
+            ========================================= */
+
+            if (submitButton) {
+
+                submitButton.disabled = true;
+
+                submitButton.classList.add(
+                    "loading"
+                );
+
+            }
+
+
+            if (buttonText) {
+
+                buttonText.textContent =
+                    "Creating Account...";
+
+            }
+
+
 
             /* =========================================
                CREATE FIREBASE ACCOUNT
             ========================================= */
 
-            const userCredential =
-                await createUserWithEmailAndPassword(
-                    auth,
-                    email,
-                    password
+            try {
+
+                const userCredential =
+                    await createUserWithEmailAndPassword(
+                        auth,
+                        email,
+                        password
+                    );
+
+
+                const user =
+                    userCredential.user;
+
+
+
+                /* =========================================
+                   UPDATE FIREBASE PROFILE
+                ========================================= */
+
+                await updateProfile(
+                    user,
+                    {
+                        displayName: fullName
+                    }
                 );
 
 
-            const user =
-                userCredential.user;
+
+                /* =========================================
+                   CREATE USER FIRESTORE DOCUMENT
+                ========================================= */
+
+                await setDoc(
+                    doc(
+                        db,
+                        "users",
+                        user.uid
+                    ),
+                    {
+
+                        uid: user.uid,
+
+                        fullName: fullName,
+
+                        username: username,
+
+                        country: country,
+
+                        email: email,
+
+                        phone: phone,
+
+                        referralCode:
+                            referralCode || null,
+
+                        balance: 50,
+
+                        welcomeBonus: 50,
+
+                        referralEarnings: 0,
+
+                        taskEarnings: 0,
+
+                        totalWithdrawn: 0,
+
+                        accountStatus: "active",
+
+                        createdAt:
+                            serverTimestamp()
+
+                    }
+                );
 
 
-            /* =========================================
-               UPDATE DISPLAY NAME
-            ========================================= */
 
-            await updateProfile(user, {
+                /* =========================================
+                   SUCCESS MESSAGE
+                ========================================= */
 
-                displayName: fullName
+                showMessage(
+                    "Account created successfully! Redirecting to your dashboard...",
+                    "success"
+                );
 
-            });
 
 
-            /* =========================================
-               CREATE USER DATABASE RECORD
-            ========================================= */
+                /* =========================================
+                   REDIRECT TO DASHBOARD
+                ========================================= */
 
-            await setDoc(
-                doc(db, "users", user.uid),
-                {
+                setTimeout(
+                    () => {
 
-                    uid: user.uid,
+                        window.location.href =
+                            "dashboard.html";
 
-                    fullName: fullName,
+                    },
+                    1800
+                );
 
-                    username: username,
 
-                    country: country,
+            } catch (error) {
 
-                    referralCode:
-                        referral || null,
+                console.error(
+                    "Registration error:",
+                    error
+                );
 
-                    email: email,
 
-                    phone: phone,
 
-                    balance: 50,
+                /* =========================================
+                   DEFAULT ERROR
+                ========================================= */
 
-                    welcomeBonus: 50,
+                let errorMessage =
+                    "Unable to create your account. Please try again.";
 
-                    referralEarnings: 0,
 
-                    taskEarnings: 0,
 
-                    totalWithdrawn: 0,
+                /* =========================================
+                   FIREBASE ERROR HANDLING
+                ========================================= */
 
-                    accountStatus: "active",
+                switch (error.code) {
 
-                    createdAt:
-                        serverTimestamp()
+
+                    case "auth/email-already-in-use":
+
+                        errorMessage =
+                            "This email address is already registered.";
+
+                        break;
+
+
+
+                    case "auth/invalid-email":
+
+                        errorMessage =
+                            "Please enter a valid email address.";
+
+                        break;
+
+
+
+                    case "auth/weak-password":
+
+                        errorMessage =
+                            "Your password is too weak. Use at least 6 characters.";
+
+                        break;
+
+
+
+                    case "auth/network-request-failed":
+
+                        errorMessage =
+                            "Network error. Please check your internet connection.";
+
+                        break;
+
+
+
+                    case "auth/operation-not-allowed":
+
+                        errorMessage =
+                            "Email/password registration is not enabled in Firebase.";
+
+                        break;
+
+
+
+                    case "auth/too-many-requests":
+
+                        errorMessage =
+                            "Too many attempts. Please wait and try again.";
+
+                        break;
+
+
+
+                    default:
+
+                        if (error.message) {
+
+                            errorMessage =
+                                error.message;
+
+                        }
 
                 }
-            );
 
 
-            /* =========================================
-               SUCCESS
-            ========================================= */
 
-            showMessage(
-                "Account created successfully! Redirecting to your dashboard...",
-                "success"
-            );
+                showMessage(
+                    errorMessage
+                );
 
 
-            /* =========================================
-               REDIRECT
-            ========================================= */
-
-            setTimeout(() => {
-
-                window.location.href =
-                    "dashboard.html";
-
-            }, 1800);
+            } finally {
 
 
-        } catch (error) {
+                /* =========================================
+                   STOP LOADING
+                ========================================= */
 
-            console.error(
-                "Registration error:",
-                error
-            );
+                if (submitButton) {
 
+                    submitButton.disabled = false;
 
-            /* =========================================
-               FIREBASE ERROR MESSAGES
-            ========================================= */
+                    submitButton.classList.remove(
+                        "loading"
+                    );
 
-            let errorMessage =
-                "Unable to create your account. Please try again.";
-
-
-            switch (error.code) {
-
-                case "auth/email-already-in-use":
-
-                    errorMessage =
-                        "This email address is already registered.";
-
-                    break;
+                }
 
 
-                case "auth/invalid-email":
+                if (buttonText) {
 
-                    errorMessage =
-                        "Please enter a valid email address.";
+                    buttonText.textContent =
+                        "Create Account";
 
-                    break;
-
-
-                case "auth/weak-password":
-
-                    errorMessage =
-                        "Your password is too weak. Use at least 6 characters.";
-
-                    break;
-
-
-                case "auth/network-request-failed":
-
-                    errorMessage =
-                        "Network error. Please check your internet connection.";
-
-                    break;
-
-
-                case "auth/operation-not-allowed":
-
-                    errorMessage =
-                        "Email/password registration is not enabled in Firebase.";
-
-                    break;
-
-
-                default:
-
-                    errorMessage =
-                        error.message ||
-                        errorMessage;
-
-            }
-
-
-            showMessage(errorMessage);
-
-
-        } finally {
-
-            /* =========================================
-               STOP LOADING
-            ========================================= */
-
-            if (submitButton) {
-
-                submitButton.disabled = false;
-
-                submitButton.classList.remove("loading");
-
-            }
-
-            if (buttonText) {
-
-                buttonText.textContent =
-                    "Create Account";
+                }
 
             }
 
         }
-
-    });
+    );
 
 }
+
 
 
 /* =========================================
@@ -402,33 +545,69 @@ document
     .querySelectorAll(".password-toggle")
     .forEach(button => {
 
-        button.addEventListener("click", function () {
-
-            const inputId =
-                this.getAttribute("data-target");
-
-            const input =
-                document.getElementById(inputId);
-
-            if (!input) return;
+        button.addEventListener(
+            "click",
+            function () {
 
 
-            if (input.type === "password") {
+                const inputId =
+                    this.getAttribute(
+                        "data-target"
+                    );
 
-                input.type = "text";
 
-                this.innerHTML =
-                    '<i class="fa-solid fa-eye-slash"></i>';
+                const input =
+                    document.getElementById(
+                        inputId
+                    );
 
-            } else {
 
-                input.type = "password";
+                if (!input) return;
 
-                this.innerHTML =
-                    '<i class="fa-solid fa-eye"></i>';
+
+
+                /* SHOW PASSWORD */
+
+                if (
+                    input.type === "password"
+                ) {
+
+                    input.type = "text";
+
+
+                    this.innerHTML =
+                        '<i class="fa-solid fa-eye-slash"></i>';
+
+
+                    this.setAttribute(
+                        "aria-label",
+                        "Hide password"
+                    );
+
+
+                }
+
+
+                /* HIDE PASSWORD */
+
+                else {
+
+                    input.type = "password";
+
+
+                    this.innerHTML =
+                        '<i class="fa-solid fa-eye"></i>';
+
+
+                    this.setAttribute(
+                        "aria-label",
+                        "Show password"
+                    );
+
+                }
 
             }
 
-        });
+        );
 
     });
