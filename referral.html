@@ -13,10 +13,7 @@
     <title>Referral Program | GlobalEarn</title>
 
     <!-- Google Font -->
-    <link
-        rel="preconnect"
-        href="https://fonts.googleapis.com"
-    >
+    <link rel="preconnect" href="https://fonts.googleapis.com">
 
     <link
         rel="preconnect"
@@ -48,7 +45,10 @@
 
 <main class="referral-page">
 
-    <!-- HEADER -->
+
+    <!-- =========================================
+         HEADER
+    ========================================== -->
 
     <header class="referral-header">
 
@@ -71,11 +71,11 @@
             </span>
 
             <h1>
-                Refer & Earn
+                Invite & Earn
             </h1>
 
             <p>
-                Invite new members and earn $3.50 for every successful referral.
+                Invite friends to GlobalEarn and earn $3.50 for every successful referral.
             </p>
 
         </div>
@@ -84,35 +84,21 @@
 
 
 
-    <!-- REFERRAL SUMMARY -->
+    <!-- =========================================
+         REFERRAL SUMMARY
+    ========================================== -->
 
     <section class="referral-summary">
+
+
+        <!-- EARNED -->
 
         <div class="summary-card">
 
             <div class="summary-icon">
-                <i class="fa-solid fa-users"></i>
-            </div>
 
-            <div>
-
-                <span>
-                    TOTAL REFERRALS
-                </span>
-
-                <strong id="totalReferrals">
-                    0
-                </strong>
-
-            </div>
-
-        </div>
-
-
-        <div class="summary-card">
-
-            <div class="summary-icon earnings-icon">
                 <i class="fa-solid fa-dollar-sign"></i>
+
             </div>
 
             <div>
@@ -130,20 +116,51 @@
         </div>
 
 
+
+        <!-- REFERRALS -->
+
         <div class="summary-card">
 
-            <div class="summary-icon progress-icon">
-                <i class="fa-solid fa-chart-line"></i>
+            <div class="summary-icon users-icon">
+
+                <i class="fa-solid fa-users"></i>
+
             </div>
 
             <div>
 
                 <span>
-                    PROGRESS
+                    SUCCESSFUL REFERRALS
                 </span>
 
-                <strong id="referralProgress">
-                    0 / 10
+                <strong>
+                    <span id="referralCount">0</span>/10
+                </strong>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- PER REFERRAL -->
+
+        <div class="summary-card">
+
+            <div class="summary-icon bonus-icon">
+
+                <i class="fa-solid fa-gift"></i>
+
+            </div>
+
+            <div>
+
+                <span>
+                    EARN PER REFERRAL
+                </span>
+
+                <strong>
+                    $3.50
                 </strong>
 
             </div>
@@ -154,24 +171,31 @@
 
 
 
-    <!-- REFERRAL LINK -->
+    <!-- =========================================
+         REFERRAL LINK CARD
+    ========================================== -->
 
     <section class="referral-card">
 
-        <div class="section-heading">
+        <div class="referral-card-header">
 
-            <span>
-                YOUR REFERRAL LINK
-            </span>
+            <div class="referral-card-icon">
 
-            <h2>
-                Invite Friends
-            </h2>
+                <i class="fa-solid fa-link"></i>
 
-            <p>
-                Share your personal referral link with friends and earn
-                <strong>$3.50</strong> when they successfully join.
-            </p>
+            </div>
+
+            <div>
+
+                <span>
+                    YOUR INVITATION LINK
+                </span>
+
+                <h2>
+                    Share Your Referral Link
+                </h2>
+
+            </div>
 
         </div>
 
@@ -204,154 +228,186 @@
             class="copy-message"
         ></div>
 
+
+        <p class="referral-note">
+
+            <i class="fa-solid fa-circle-info"></i>
+
+            Anyone who registers using your referral link will be connected to your account.
+
+        </p>
+
     </section>
 
 
 
-    <!-- REFERRAL CODE -->
+    <!-- =========================================
+         PROGRESS
+    ========================================== -->
 
-    <section class="referral-card">
+    <section class="progress-card">
 
-        <div class="section-heading">
+        <div class="progress-header">
 
-            <span>
-                REFERRAL CODE
-            </span>
+            <div>
 
-            <h2>
-                Your Code
-            </h2>
+                <span>
+                    REFERRAL PROGRESS
+                </span>
 
-        </div>
+                <h2>
+                    Reach 10 Referrals
+                </h2>
 
+            </div>
 
-        <div class="referral-code-display">
-
-            <strong id="referralCode">
-                Loading...
+            <strong id="progressText">
+                0/10
             </strong>
 
-            <button
-                type="button"
-                id="copyCodeButton"
-            >
+        </div>
 
-                <i class="fa-solid fa-copy"></i>
 
-                Copy
+        <div class="progress-bar">
 
-            </button>
+            <div
+                id="progressFill"
+                class="progress-fill"
+            ></div>
 
         </div>
+
+
+        <p>
+            Earn $3.50 for each successful referral.
+            Complete 10 referrals to earn up to $35.00.
+        </p>
 
     </section>
 
 
 
-    <!-- HOW IT WORKS -->
+    <!-- =========================================
+         HOW IT WORKS
+    ========================================== -->
 
     <section class="how-it-works">
 
-        <div class="section-heading">
+        <div class="section-title">
 
             <span>
-                HOW IT WORKS
+                REFERRAL SYSTEM
             </span>
 
             <h2>
-                Earn With Referrals
+                How It Works
             </h2>
 
         </div>
 
 
-        <div class="steps">
+        <div class="steps-grid">
 
 
-            <div class="step">
+            <!-- STEP 1 -->
+
+            <div class="step-card">
 
                 <div class="step-number">
-                    1
+                    01
                 </div>
 
-                <div>
+                <div class="step-icon">
 
-                    <strong>
-                        Share Your Link
-                    </strong>
-
-                    <p>
-                        Send your personal GlobalEarn referral link
-                        to your friends.
-                    </p>
+                    <i class="fa-solid fa-link"></i>
 
                 </div>
+
+                <h3>
+                    Get Your Link
+                </h3>
+
+                <p>
+                    Copy your unique GlobalEarn referral link.
+                </p>
 
             </div>
 
 
-            <div class="step">
+
+            <!-- STEP 2 -->
+
+            <div class="step-card">
 
                 <div class="step-number">
-                    2
+                    02
                 </div>
 
-                <div>
+                <div class="step-icon">
 
-                    <strong>
-                        They Register
-                    </strong>
-
-                    <p>
-                        Your friend creates a GlobalEarn account
-                        using your referral link.
-                    </p>
+                    <i class="fa-solid fa-share-nodes"></i>
 
                 </div>
+
+                <h3>
+                    Share It
+                </h3>
+
+                <p>
+                    Send your referral link to friends and other people.
+                </p>
 
             </div>
 
 
-            <div class="step">
+
+            <!-- STEP 3 -->
+
+            <div class="step-card">
 
                 <div class="step-number">
-                    3
+                    03
                 </div>
 
-                <div>
+                <div class="step-icon">
 
-                    <strong>
-                        You Earn $3.50
-                    </strong>
-
-                    <p>
-                        Each successful referral earns you
-                        $3.50 in referral earnings.
-                    </p>
+                    <i class="fa-solid fa-user-plus"></i>
 
                 </div>
+
+                <h3>
+                    They Register
+                </h3>
+
+                <p>
+                    Your referral must register using your referral link.
+                </p>
 
             </div>
 
 
-            <div class="step">
+
+            <!-- STEP 4 -->
+
+            <div class="step-card">
 
                 <div class="step-number">
-                    4
+                    04
                 </div>
 
-                <div>
+                <div class="step-icon">
 
-                    <strong>
-                        Reach 10 Referrals
-                    </strong>
-
-                    <p>
-                        10 successful referrals give you
-                        $35.00 in total referral earnings.
-                    </p>
+                    <i class="fa-solid fa-money-bill-transfer"></i>
 
                 </div>
+
+                <h3>
+                    You Earn
+                </h3>
+
+                <p>
+                    You receive $3.50 for each successful referral.
+                </p>
 
             </div>
 
@@ -361,11 +417,13 @@
 
 
 
-    <!-- REFERRAL LIST -->
+    <!-- =========================================
+         REFERRAL LIST
+    ========================================== -->
 
-    <section class="referral-card">
+    <section class="referral-list-card">
 
-        <div class="section-heading">
+        <div class="section-title">
 
             <span>
                 YOUR REFERRALS
@@ -385,7 +443,11 @@
 
             <div class="empty-referrals">
 
-                <i class="fa-solid fa-users"></i>
+                <div class="empty-icon">
+
+                    <i class="fa-solid fa-users"></i>
+
+                </div>
 
                 <strong>
                     No referrals yet
@@ -403,7 +465,9 @@
 
 
 
-    <!-- FOOTER -->
+    <!-- =========================================
+         FOOTER
+    ========================================== -->
 
     <footer class="referral-footer">
 
@@ -429,6 +493,7 @@
         </div>
 
     </footer>
+
 
 </main>
 
