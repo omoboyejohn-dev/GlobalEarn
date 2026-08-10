@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Referral Program | GlobalEarn</title>
+
+    <!-- Google Font -->
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- Font Awesome -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    >
+
+    <!-- Referral CSS -->
+    <link
+        rel="stylesheet"
+        href="referral.css"
+    >
+
+</head>
+
+
+<body>
+
+<main class="referral-page">
+
+    <!-- HEADER -->
+
+    <header class="referral-header">
+
+        <a
+            href="dashboard.html"
+            class="back-button"
+        >
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+            Dashboard
+
+        </a>
+
+
+        <div class="referral-heading">
+
+            <span>
+                REFERRAL PROGRAM
+            </span>
+
+            <h1>
+                Refer & Earn
+            </h1>
+
+            <p>
+                Invite new members and earn $3.50 for every successful referral.
+            </p>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- REFERRAL SUMMARY -->
+
+    <section class="referral-summary">
+
+        <div class="summary-card">
+
+            <div class="summary-icon">
+                <i class="fa-solid fa-users"></i>
+            </div>
+
+            <div>
+
+                <span>
+                    TOTAL REFERRALS
+                </span>
+
+                <strong id="totalReferrals">
+                    0
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-icon earnings-icon">
+                <i class="fa-solid fa-dollar-sign"></i>
+            </div>
+
+            <div>
+
+                <span>
+                    REFERRAL EARNINGS
+                </span>
+
+                <strong id="referralEarnings">
+                    $0.00
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-icon progress-icon">
+                <i class="fa-solid fa-chart-line"></i>
+            </div>
+
+            <div>
+
+                <span>
+                    PROGRESS
+                </span>
+
+                <strong id="referralProgress">
+                    0 / 10
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- REFERRAL LINK -->
+
+    <section class="referral-card">
+
+        <div class="section-heading">
+
+            <span>
+                YOUR REFERRAL LINK
+            </span>
+
+            <h2>
+                Invite Friends
+            </h2>
+
+            <p>
+                Share your personal referral link with friends and earn
+                <strong>$3.50</strong> when they successfully join.
+            </p>
+
+        </div>
+
+
+        <div class="referral-link-box">
+
+            <input
+                type="text"
+                id="referralLink"
+                readonly
+                value="Loading..."
+            >
+
+            <button
+                type="button"
+                id="copyReferralButton"
+            >
+
+                <i class="fa-solid fa-copy"></i>
+
+                Copy
+
+            </button>
+
+        </div>
+
+
+        <div
+            id="copyMessage"
+            class="copy-message"
+        ></div>
+
+    </section>
+
+
+
+    <!-- REFERRAL CODE -->
+
+    <section class="referral-card">
+
+        <div class="section-heading">
+
+            <span>
+                REFERRAL CODE
+            </span>
+
+            <h2>
+                Your Code
+            </h2>
+
+        </div>
+
+
+        <div class="referral-code-display">
+
+            <strong id="referralCode">
+                Loading...
+            </strong>
+
+            <button
+                type="button"
+                id="copyCodeButton"
+            >
+
+                <i class="fa-solid fa-copy"></i>
+
+                Copy
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- HOW IT WORKS -->
+
+    <section class="how-it-works">
+
+        <div class="section-heading">
+
+            <span>
+                HOW IT WORKS
+            </span>
+
+            <h2>
+                Earn With Referrals
+            </h2>
+
+        </div>
+
+
+        <div class="steps">
+
+
+            <div class="step">
+
+                <div class="step-number">
+                    1
+                </div>
+
+                <div>
+
+                    <strong>
+                        Share Your Link
+                    </strong>
+
+                    <p>
+                        Send your personal GlobalEarn referral link
+                        to your friends.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="step">
+
+                <div class="step-number">
+                    2
+                </div>
+
+                <div>
+
+                    <strong>
+                        They Register
+                    </strong>
+
+                    <p>
+                        Your friend creates a GlobalEarn account
+                        using your referral link.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="step">
+
+                <div class="step-number">
+                    3
+                </div>
+
+                <div>
+
+                    <strong>
+                        You Earn $3.50
+                    </strong>
+
+                    <p>
+                        Each successful referral earns you
+                        $3.50 in referral earnings.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="step">
+
+                <div class="step-number">
+                    4
+                </div>
+
+                <div>
+
+                    <strong>
+                        Reach 10 Referrals
+                    </strong>
+
+                    <p>
+                        10 successful referrals give you
+                        $35.00 in total referral earnings.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- REFERRAL LIST -->
+
+    <section class="referral-card">
+
+        <div class="section-heading">
+
+            <span>
+                YOUR REFERRALS
+            </span>
+
+            <h2>
+                Referral History
+            </h2>
+
+        </div>
+
+
+        <div
+            id="referralList"
+            class="referral-list"
+        >
+
+            <div class="empty-referrals">
+
+                <i class="fa-solid fa-users"></i>
+
+                <strong>
+                    No referrals yet
+                </strong>
+
+                <p>
+                    Share your referral link to start earning.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- FOOTER -->
+
+    <footer class="referral-footer">
+
+        <span>
+            © 2026 GlobalEarn. All Rights Reserved.
+        </span>
+
+
+        <div>
+
+            <a href="support.html">
+                Support
+            </a>
+
+            <a href="#">
+                Privacy
+            </a>
+
+            <a href="#">
+                Terms
+            </a>
+
+        </div>
+
+    </footer>
+
+</main>
+
+
+<!-- Referral JavaScript -->
+
+<script
+    type="module"
+    src="referral.js"
+></script>
+
+
+</body>
+
+</html>
