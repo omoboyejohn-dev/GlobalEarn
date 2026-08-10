@@ -1,6 +1,12 @@
 /* =========================================
    GlobalEarn Dashboard
    dashboard.css
+   PART 1 / 3
+========================================= */
+
+
+/* =========================================
+   RESET
 ========================================= */
 
 * {
@@ -18,6 +24,7 @@ body {
     background: #07111f;
     color: #ffffff;
     min-height: 100vh;
+    overflow-x: hidden;
 }
 
 a {
@@ -25,139 +32,358 @@ a {
     color: inherit;
 }
 
-button,
-input {
+button {
     font-family: inherit;
 }
 
 
 /* =========================================
-   SIDEBAR
+   REMOVE SIDEBAR / MOBILE MENU
 ========================================= */
 
-.sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-
-    width: 270px;
-    height: 100vh;
-
-    padding: 25px 18px;
-
-    display: flex;
-    flex-direction: column;
-
-    background: #050c16;
-
-    border-right: 1px solid rgba(255, 255, 255, 0.07);
-
-    z-index: 1000;
-
-    transition: 0.3s ease;
+.sidebar,
+#sidebar,
+.mobile-header,
+#menuButton,
+.menu-button {
+    display: none !important;
 }
 
 
 /* =========================================
-   SIDEBAR LOGO
+   MAIN DASHBOARD
 ========================================= */
 
-.sidebar-logo {
+.dashboard-main {
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
+    padding: 28px 32px;
+
+    background:
+        radial-gradient(
+            circle at 85% 0%,
+            rgba(99, 255, 66, 0.055),
+            transparent 25%
+        ),
+        #07111f;
+}
+
+
+/* =========================================
+   TOP DASHBOARD AREA
+========================================= */
+
+.dashboard-topbar {
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    gap: 24px;
+
+    align-items: stretch;
+
+    margin-bottom: 20px;
+}
+
+
+/* =========================================
+   WELCOME
+========================================= */
+
+.dashboard-topbar > div:first-child {
+    min-height: 150px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    padding: 22px 5px;
+}
+
+.dashboard-label {
+    display: block;
+
+    color: #63ff42;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    letter-spacing: 1.5px;
+
+    margin-bottom: 7px;
+}
+
+.dashboard-topbar h1 {
+    color: #ffffff;
+
+    font-size: 31px;
+    font-weight: 700;
+
+    line-height: 1.25;
+
+    margin-bottom: 7px;
+}
+
+.dashboard-topbar h1 span {
+    color: #63ff42;
+}
+
+.dashboard-topbar p {
+    color: #7f8c9d;
+
+    font-size: 12px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================
+   TOP PROFILE
+========================================= */
+
+.top-profile {
+    display: none;
+}
+
+
+/* =========================================
+   WALLET SECTION
+========================================= */
+
+.wallet-section {
+    width: 100%;
+}
+
+.wallet-card {
+    min-height: 150px;
+
+    padding: 24px;
+
     display: flex;
     align-items: center;
+    justify-content: space-between;
 
-    gap: 12px;
+    background:
+        linear-gradient(
+            135deg,
+            #0d1b2b,
+            #101f30
+        );
 
-    padding: 5px 10px 28px;
+    border: 1px solid rgba(255, 255, 255, 0.07);
 
-    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 17px;
+
+    box-shadow:
+        0 15px 35px rgba(0, 0, 0, 0.18);
 }
 
-.sidebar-logo > i {
-    color: #63ff42;
-    font-size: 37px;
+
+/* =========================================
+   WALLET TOP
+========================================= */
+
+.wallet-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100%;
 }
 
-.sidebar-logo div {
+.wallet-card-top > div:first-child {
     display: flex;
     flex-direction: column;
 }
 
-.sidebar-logo strong {
+.wallet-card-top span {
+    display: block;
+
+    color: #aeb9c7;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    margin-bottom: 5px;
+}
+
+.wallet-card-top h2 {
     color: #63ff42;
-    font-size: 23px;
+
+    font-size: 32px;
+    font-weight: 700;
+
     line-height: 1.2;
 }
 
-.sidebar-logo span {
-    color: #687586;
-    font-size: 10px;
+
+/* =========================================
+   WALLET ICON
+========================================= */
+
+.wallet-icon {
+    width: 55px;
+    height: 55px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 13px;
+
+    background: rgba(99, 255, 66, 0.11);
+
+    color: #63ff42;
+
+    font-size: 25px;
 }
 
 
 /* =========================================
-   SIDEBAR NAV
+   WALLET BOTTOM
 ========================================= */
 
-.sidebar-nav {
+.wallet-card-bottom {
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
 
-    gap: 7px;
+    gap: 18px;
 
-    margin-top: 25px;
+    margin-left: auto;
 }
 
-.nav-item {
-    position: relative;
+.wallet-card-bottom > span {
+    color: #788697;
 
-    min-height: 50px;
+    font-size: 11px;
+}
 
-    padding: 0 15px;
+
+/* =========================================
+   WITHDRAW BUTTON
+========================================= */
+
+.withdraw-button {
+    min-width: 140px;
+
+    padding: 11px 17px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    background: #63ff42;
+
+    color: #07111f;
+
+    border-radius: 9px;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    transition: 0.25s ease;
+}
+
+.withdraw-button:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 8px 22px rgba(99, 255, 66, 0.18);
+}
+
+
+/* =========================================
+   QUICK ACTIONS
+========================================= */
+
+.quick-actions {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(7, minmax(0, 1fr));
+
+    gap: 10px;
+
+    margin: 20px 0;
+}
+
+.quick-action {
+    min-height: 62px;
 
     display: flex;
     align-items: center;
 
-    gap: 14px;
+    gap: 9px;
 
-    border-radius: 11px;
+    padding: 13px;
 
-    color: #8996a7;
+    background: #0c1a29;
 
-    font-size: 13px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
 
-    transition: 0.3s ease;
+    border-radius: 12px;
+
+    color: #dbe3eb;
+
+    font-size: 11px;
+    font-weight: 500;
+
+    transition: 0.25s ease;
 }
 
-.nav-item i {
-    width: 20px;
-
-    text-align: center;
+.quick-action i {
+    flex-shrink: 0;
 
     font-size: 16px;
 }
 
-.nav-item:hover {
-    color: #ffffff;
+.quick-action:hover {
+    transform: translateY(-2px);
 
-    background: rgba(99, 255, 66, 0.06);
+    background: #102234;
+
+    border-color:
+        rgba(99, 255, 66, 0.25);
 }
 
-.nav-item.active {
-    color: #07111f;
 
-    background: #63ff42;
+/* =========================================
+   QUICK ACTION ICON COLORS
+========================================= */
 
-    font-weight: 600;
-
-    box-shadow:
-        0 8px 25px rgba(99, 255, 66, 0.12);
+.quick-action:nth-child(1) i {
+    color: #3ca8ff;
 }
 
-.nav-item.active:hover {
-    color: #07111f;
+.quick-action:nth-child(2) i {
+    color: #a76cff;
+}
 
-    background: #63ff42;
+.quick-action:nth-child(3) i {
+    color: #ffc83d;
+}
+
+.quick-action:nth-child(4) i {
+    color: #63ff42;
+}
+
+.quick-action:nth-child(5) i {
+    color: #f1c33a;
+}
+
+.quick-action:nth-child(6) i {
+    color: #3ca8ff;
+}
+
+.quick-action:nth-child(7) i {
+    color: #ff5f68;
 }
 
 
@@ -166,227 +392,10 @@ input {
 ========================================= */
 
 .notification-badge {
-    margin-left: auto;
-
-    min-width: 21px;
-    height: 21px;
-
-    padding: 0 5px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 20px;
-
-    background: #ff4d67;
-
-    color: #ffffff;
-
-    font-size: 10px;
-}
-
-.nav-item.active .notification-badge {
-    background: #07111f;
-    color: #63ff42;
-}
-
-
-/* =========================================
-   SIDEBAR BOTTOM
-========================================= */
-
-.sidebar-bottom {
-    margin-top: auto;
-
-    padding-top: 20px;
-
-    border-top: 1px solid rgba(255, 255, 255, 0.07);
-}
-
-.logout-button {
-    width: 100%;
-    min-height: 50px;
-
-    display: flex;
-    align-items: center;
-
-    gap: 14px;
-
-    padding: 0 15px;
-
-    border: none;
-    border-radius: 11px;
-
-    background: transparent;
-
-    color: #8996a7;
-
-    font-size: 13px;
-
-    cursor: pointer;
-
-    transition: 0.3s;
-}
-
-.logout-button i {
     width: 20px;
-    text-align: center;
-}
+    height: 20px;
 
-.logout-button:hover {
-    color: #ff7373;
-
-    background: rgba(255, 80, 80, 0.07);
-}
-
-
-/* =========================================
-   MAIN CONTENT
-========================================= */
-
-.main-content {
-    margin-left: 270px;
-
-    min-height: 100vh;
-
-    background:
-        radial-gradient(
-            circle at 80% 5%,
-            rgba(99, 255, 66, 0.05),
-            transparent 25%
-        ),
-        #07111f;
-}
-
-
-/* =========================================
-   DASHBOARD HEADER
-========================================= */
-
-.dashboard-header {
-    height: 85px;
-
-    padding: 0 35px;
-
-    display: flex;
-    align-items: center;
-
-    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-
-    background: rgba(7, 17, 31, 0.88);
-
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-
-    position: sticky;
-    top: 0;
-
-    z-index: 500;
-}
-
-.menu-button {
-    display: none;
-
-    width: 42px;
-    height: 42px;
-
-    margin-right: 15px;
-
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 10px;
-
-    background: #0d1b2b;
-
-    color: #ffffff;
-
-    cursor: pointer;
-}
-
-.header-title h1 {
-    font-size: 21px;
-    font-weight: 700;
-}
-
-.header-title p {
-    margin-top: 2px;
-
-    color: #718092;
-
-    font-size: 11px;
-}
-
-
-/* =========================================
-   HEADER ACTIONS
-========================================= */
-
-.header-actions {
     margin-left: auto;
-
-    display: flex;
-    align-items: center;
-
-    gap: 22px;
-}
-
-.header-icon {
-    position: relative;
-
-    width: 40px;
-    height: 40px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 10px;
-
-    color: #8996a7;
-
-    transition: 0.3s;
-}
-
-.header-icon:hover {
-    color: #63ff42;
-
-    background: rgba(99, 255, 66, 0.06);
-}
-
-.header-badge {
-    position: absolute;
-
-    top: 3px;
-    right: 2px;
-
-    min-width: 17px;
-    height: 17px;
-
-    padding: 0 4px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 20px;
-
-    background: #ff4d67;
-
-    color: #ffffff;
-
-    font-size: 8px;
-}
-
-.user-mini {
-    display: flex;
-    align-items: center;
-
-    gap: 10px;
-}
-
-.user-avatar {
-    width: 40px;
-    height: 40px;
 
     display: flex;
     align-items: center;
@@ -394,207 +403,85 @@ input {
 
     border-radius: 50%;
 
-    background: rgba(99, 255, 66, 0.10);
-
-    border: 1px solid rgba(99, 255, 66, 0.20);
-
-    color: #63ff42;
-}
-
-.user-mini-info {
-    display: flex;
-    flex-direction: column;
-}
-
-.user-mini-info strong {
-    max-width: 130px;
-
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    background: #ff5363;
 
     color: #ffffff;
 
-    font-size: 12px;
-}
-
-.user-mini-info span {
-    color: #687586;
-
     font-size: 9px;
+    font-weight: 700;
 }
 
 
 /* =========================================
-   DASHBOARD BODY
+   QUICK LOGOUT
 ========================================= */
 
-.dashboard-body {
-    padding: 35px;
+.quick-logout {
+    border: 1px solid rgba(255, 95, 104, 0.08);
+
+    background: #0c1a29;
+
+    cursor: pointer;
 }
 
-
-/* =========================================
-   WELCOME SECTION
-========================================= */
-
-.welcome-section {
-    min-height: 145px;
-
-    padding: 30px;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    border: 1px solid rgba(99, 255, 66, 0.12);
-
-    border-radius: 18px;
+.quick-logout:hover {
+    border-color:
+        rgba(255, 95, 104, 0.25);
 
     background:
-        linear-gradient(
-            135deg,
-            rgba(99, 255, 66, 0.08),
-            rgba(10, 23, 38, 0.9)
-        );
-
-    margin-bottom: 25px;
+        rgba(255, 95, 104, 0.06);
 }
-
-.welcome-label {
-    color: #63ff42;
-
-    font-size: 11px;
-
-    font-weight: 600;
-
-    text-transform: uppercase;
-
-    letter-spacing: 1px;
-}
-
-.welcome-section h2 {
-    margin: 5px 0;
-
-    font-size: 27px;
-}
-
-.welcome-section p {
-    color: #8996a7;
-
-    font-size: 12px;
-}
-
-.welcome-icon {
-    width: 75px;
-    height: 75px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 18px;
-
-    background: rgba(99, 255, 66, 0.10);
-
-    color: #63ff42;
-
-    font-size: 30px;
-}
-
-
 /* =========================================
-   BALANCE GRID
+   ACCOUNT SUMMARY
 ========================================= */
 
-.balance-grid {
+.account-summary {
+    width: 100%;
+
     display: grid;
 
     grid-template-columns:
         repeat(4, minmax(0, 1fr));
 
-    gap: 18px;
+    gap: 14px;
 
-    margin-bottom: 35px;
+    margin-bottom: 20px;
 }
 
-
-/* =========================================
-   BALANCE CARD
-================================
-/* =========================================
-   DASHBOARD TASKS
-========================================= */
-
-.dashboard-tasks {
-    margin-top: 30px;
-}
-
-.section-heading {
-    margin-bottom: 25px;
-}
-
-.section-heading span {
-    color: #63ff42;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-}
-
-.section-heading h2 {
-    margin-top: 5px;
-    color: #ffffff;
-    font-size: 20px;
-    font-weight: 600;
-}
-
-.task-section {
-    margin-bottom: 32px;
-}
-
-.task-section > h3 {
-    color: #dce3eb;
-    font-size: 16px;
-    margin-bottom: 14px;
-}
-
-.dashboard-task-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
-}
-
-.dashboard-task-card {
-    position: relative;
+.summary-card {
+    min-height: 105px;
 
     display: flex;
     align-items: center;
-    gap: 13px;
 
-    padding: 19px;
+    gap: 14px;
 
-    background: rgba(16, 28, 42, 0.96);
+    padding: 18px;
 
-    border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 15px;
+    background: #0c1a29;
 
-    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.06);
 
-    transition: 0.3s;
+    border-radius: 14px;
+
+    transition: 0.25s ease;
 }
 
-.dashboard-task-card:hover {
-    transform: translateY(-3px);
+.summary-card:hover {
+    transform: translateY(-2px);
 
-    border-color: rgba(99,255,66,0.3);
-
-    box-shadow:
-        0 12px 30px rgba(0,0,0,0.25);
+    border-color:
+        rgba(255, 255, 255, 0.11);
 }
 
-.dashboard-task-icon {
-    width: 45px;
-    height: 45px;
+
+/* =========================================
+   SUMMARY ICON
+========================================= */
+
+.summary-icon {
+    width: 48px;
+    height: 48px;
 
     flex-shrink: 0;
 
@@ -602,123 +489,336 @@ input {
     align-items: center;
     justify-content: center;
 
-    border-radius: 12px;
+    border-radius: 11px;
 
-    background: rgba(99,255,66,0.09);
+    background: rgba(99, 255, 66, 0.10);
 
+    color: #63ff42;
+
+    font-size: 20px;
+}
+
+.summary-card:nth-child(2) .summary-icon {
+    background: rgba(60, 168, 255, 0.10);
+    color: #3ca8ff;
+}
+
+.summary-card:nth-child(3) .summary-icon {
+    background: rgba(99, 255, 66, 0.10);
     color: #63ff42;
 }
 
-.dashboard-task-content {
-    min-width: 0;
-    flex: 1;
+.summary-card:nth-child(4) .summary-icon {
+    background: rgba(167, 108, 255, 0.10);
+    color: #b478ff;
 }
 
-.dashboard-task-content span {
+
+/* =========================================
+   SUMMARY TEXT
+========================================= */
+
+.summary-card span {
     display: block;
 
-    color: #718092;
+    color: #7f8c9d;
 
-    font-size: 9px;
-    text-transform: uppercase;
-    letter-spacing: 0.7px;
+    font-size: 10px;
 
-    margin-bottom: 3px;
+    margin-bottom: 5px;
 }
 
-.dashboard-task-content h4 {
-    font-size: 14px;
+.summary-card strong {
+    display: block;
+
+    color: #63ff42;
+
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.summary-card:nth-child(2) strong {
+    color: #3ca8ff;
+}
+
+.summary-card:nth-child(3) strong {
+    color: #63ff42;
+}
+
+.summary-card:nth-child(4) strong {
+    color: #b478ff;
+}
+
+
+/* =========================================
+   ACCOUNT INFORMATION
+========================================= */
+
+.account-information {
+    width: 100%;
+
+    margin-bottom: 24px;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    background: #0b1827;
+
+    border: 1px solid rgba(255, 255, 255, 0.06);
+
+    border-radius: 14px;
+
+    overflow: hidden;
+}
+
+
+/* =========================================
+   ACCOUNT HEADER
+========================================= */
+
+.information-header {
+    grid-column: 1 / -1;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 15px 20px;
+
+    border-bottom: 1px solid
+        rgba(255, 255, 255, 0.06);
+}
+
+.information-header span {
+    color: #63ff42;
+
+    font-size: 9px;
+    font-weight: 700;
+
+    letter-spacing: 1.2px;
+}
+
+.information-header h2 {
+    margin-top: 3px;
+
+    color: #ffffff;
+
+    font-size: 16px;
+    font-weight: 600;
+}
+
+
+/* =========================================
+   ACCOUNT STATUS
+========================================= */
+
+.account-status {
+    padding: 6px 12px;
+
+    border-radius: 20px;
+
+    background:
+        rgba(99, 255, 66, 0.09);
+
+    color: #63ff42;
+
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.status-active {
+    color: #63ff42 !important;
+}
+
+
+/* =========================================
+   INFORMATION ITEMS
+========================================= */
+
+.information-grid {
+    grid-column: 1 / -1;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+}
+
+.information-item {
+    min-height: 82px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 13px;
+
+    padding: 17px 20px;
+
+    border-right: 1px solid
+        rgba(255, 255, 255, 0.06);
+}
+
+.information-item:last-child {
+    border-right: none;
+}
+
+
+/* =========================================
+   INFORMATION ICON
+========================================= */
+
+.information-item::before {
+    width: 40px;
+    height: 40px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background:
+        rgba(60, 168, 255, 0.10);
+
+    color: #3ca8ff;
+
+    font-family:
+        "Font Awesome 6 Free";
+
+    font-weight: 900;
+
+    font-size: 15px;
+}
+
+
+/* Email */
+
+.information-item:nth-child(1)::before {
+    content: "\f0e0";
+}
+
+
+/* Country */
+
+.information-item:nth-child(2)::before {
+    content: "\f57d";
+}
+
+
+/* Member Since */
+
+.information-item:nth-child(3)::before {
+    content: "\f133";
+}
+
+
+/* Account status isn't inside information-grid,
+   but this keeps the structure clean. */
+
+
+/* =========================================
+   INFORMATION TEXT
+========================================= */
+
+.information-item > span {
+    display: block;
+
+    color: #7f8c9d;
+
+    font-size: 9px;
+
     margin-bottom: 4px;
 }
 
-.dashboard-task-content strong {
+.information-item > strong {
+    display: block;
+
+    color: #e6edf5;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    word-break: break-word;
+}
+
+
+/* =========================================
+   TASKS CONTAINER
+========================================= */
+
+.dashboard-tasks {
+    width: 100%;
+
+    padding: 22px;
+
+    background: #0a1725;
+
+    border: 1px solid
+        rgba(255, 255, 255, 0.06);
+
+    border-radius: 15px;
+
+    margin-bottom: 20px;
+}
+
+
+/* =========================================
+   TASK HEADING
+========================================= */
+
+.section-heading {
+    margin-bottom: 20px;
+}
+
+.section-heading span {
+    display: block;
+
     color: #63ff42;
-    font-size: 14px;
+
+    font-size: 9px;
+    font-weight: 700;
+
+    letter-spacing: 1.4px;
+
+    margin-bottom: 4px;
 }
 
-.task-arrow {
-    color: #647184;
-    font-size: 12px;
-}
+.section-heading h2 {
+    color: #ffffff;
 
-.vip-task-section > h3 {
-    color: #d9c9ff;
-}
+    font-size: 19px;
 
-.vip-task {
-    border-color: rgba(160, 100, 255, 0.12);
-}
+    font-weight: 600;
 
-.vip-task .dashboard-task-icon {
-    background: rgba(160,100,255,0.10);
-    color: #b88cff;
-}
-
-.vip-task:hover {
-    border-color: rgba(160,100,255,0.35);
-}
-
-.vip-task .dashboard-task-content strong {
-    color: #b88cff;
+    line-height: 1.4;
 }
 
 
 /* =========================================
-   MOBILE
+   TASK SECTION
 ========================================= */
 
-@media (max-width: 800px) {
-
-    .dashboard-task-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .section-heading h2 {
-        font-size: 17px;
-    }
-
+.task-section {
+    margin-bottom: 25px;
 }
 
-@media (max-width: 480px) {
-
-    .dashboard-task-card {
-        padding: 16px;
-    }
-
-}
-/* =========================================
-   FIXED DESKTOP SIDEBAR
-   NO HAMBURGER MENU
-========================================= */
-
-.dashboard-layout {
-    display: flex;
-    min-height: 100vh;
+.task-section:last-child {
+    margin-bottom: 0;
 }
 
-#sidebar,
-.sidebar {
-    position: fixed;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 250px;
-    z-index: 1000;
-}
+.task-section > h3 {
+    color: #63ff42;
 
-/* Main content must stay beside sidebar */
-.dashboard-main {
-    margin-left: 250px;
-    width: calc(100% - 250px);
-    min-width: 0;
-}
+    font-size: 15px;
 
-/* Hide hamburger/menu button */
-#menuButton,
-.menu-button,
-.mobile-menu,
-.hamburger {
-    display: none !important;
+    font-weight: 600;
+
+    margin-bottom: 12px;
 }
 
 
@@ -728,8 +828,352 @@ input {
 
 .dashboard-task-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 14px;
+}
+
+
+/* =========================================
+   TASK CARD
+========================================= */
+
+.dashboard-task-card {
+    position: relative;
+
+    min-height: 105px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 13px;
+
+    padding: 16px;
+
+    background: #0e1d2c;
+
+    border: 1px solid
+        rgba(255, 255, 255, 0.06);
+
+    border-radius: 13px;
+
+    color: #ffffff;
+
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.dashboard-task-card:hover {
+    transform: translateY(-3px);
+
+    border-color:
+        rgba(99, 255, 66, 0.30);
+
+    box-shadow:
+        0 12px 25px
+        rgba(0, 0, 0, 0.20);
+}
+
+
+/* =========================================
+   TASK ICON
+========================================= */
+
+.dashboard-task-icon {
+    width: 48px;
+    height: 48px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 11px;
+
+    background:
+        rgba(99, 255, 66, 0.10);
+
+    color: #63ff42;
+
+    font-size: 20px;
+}
+
+
+/* =========================================
+   TASK CONTENT
+========================================= */
+
+.dashboard-task-content {
+    min-width: 0;
+
+    flex: 1;
+}
+
+.dashboard-task-content span {
+    display: block;
+
+    color: #6e7c8d;
+
+    font-size: 8px;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.5px;
+
+    margin-bottom: 4px;
+}
+
+.dashboard-task-content h4 {
+    color: #ffffff;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    margin-bottom: 3px;
+}
+
+.dashboard-task-content strong {
+    color: #63ff42;
+
+    font-size: 14px;
+
+    font-weight: 700;
+}
+
+
+/* =========================================
+   TASK ARROW
+========================================= */
+
+.task-arrow {
+    flex-shrink: 0;
+
+    color: #607084;
+
+    font-size: 11px;
+}
+
+
+/* =========================================
+   VIP TASKS
+========================================= */
+
+.vip-task-section > h3 {
+    color: #b478ff;
+}
+
+.vip-task {
+    border-color:
+        rgba(167, 108, 255, 0.10);
+}
+
+.vip-task .dashboard-task-icon {
+    background:
+        rgba(167, 108, 255, 0.10);
+
+    color: #b478ff;
+}
+
+.vip-task:hover {
+    border-color:
+        rgba(167, 108, 255, 0.35);
+
+    box-shadow:
+        0 12px 25px
+        rgba(110, 60, 170, 0.12);
+}
+
+.vip-task .dashboard-task-content strong {
+    color: #b478ff;
+               }
+/* =========================================
+   WITHDRAWAL NOTICE
+========================================= */
+
+.dashboard-notice {
+    width: 100%;
+
+    min-height: 90px;
+
+    display: flex;
+    align-items: center;
+
     gap: 15px;
+
+    padding: 18px 22px;
+
+    margin-bottom: 25px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(102, 55, 170, 0.18),
+            rgba(60, 35, 100, 0.15)
+        );
+
+    border: 1px solid
+        rgba(167, 108, 255, 0.12);
+
+    border-radius: 13px;
+}
+
+
+/* =========================================
+   NOTICE ICON
+========================================= */
+
+.notice-icon {
+    width: 43px;
+    height: 43px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background:
+        rgba(167, 108, 255, 0.16);
+
+    color: #b478ff;
+
+    font-size: 19px;
+}
+
+
+/* =========================================
+   NOTICE CONTENT
+========================================= */
+
+.dashboard-notice strong {
+    display: block;
+
+    color: #ffffff;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    margin-bottom: 4px;
+}
+
+.dashboard-notice p {
+    color: #a99bc0;
+
+    font-size: 11px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================
+   FOOTER
+========================================= */
+
+.dashboard-footer {
+    width: 100%;
+
+    min-height: 45px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 5px 2px 15px;
+
+    color: #667487;
+
+    font-size: 10px;
+}
+
+.dashboard-footer p {
+    color: #667487;
+}
+
+.dashboard-footer div {
+    display: flex;
+    align-items: center;
+
+    gap: 18px;
+}
+
+.dashboard-footer a {
+    color: #7d8998;
+
+    transition: 0.2s ease;
+}
+
+.dashboard-footer a:hover {
+    color: #63ff42;
+}
+
+
+/* =========================================
+   LARGE TABLET
+========================================= */
+
+@media (max-width: 1100px) {
+
+    .dashboard-main {
+        padding: 24px;
+    }
+
+
+    /* TOP */
+
+    .dashboard-topbar {
+        grid-template-columns: 1fr;
+    }
+
+
+    /* QUICK ACTIONS */
+
+    .quick-actions {
+        grid-template-columns:
+            repeat(4, minmax(0, 1fr));
+    }
+
+
+    /* SUMMARY */
+
+    .account-summary {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+
+    /* ACCOUNT INFORMATION */
+
+    .information-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .information-item:nth-child(2) {
+        border-right: none;
+    }
+
+    .information-item:nth-child(-n + 2) {
+        border-bottom:
+            1px solid rgba(255, 255, 255, 0.06);
+    }
+
+
+    /* TASKS */
+
+    .dashboard-task-grid {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+    }
+
 }
 
 
@@ -737,56 +1181,535 @@ input {
    TABLET
 ========================================= */
 
-@media (max-width: 1000px) {
+@media (max-width: 850px) {
+
+    .dashboard-main {
+        padding: 20px;
+    }
+
+
+    /* QUICK ACTIONS */
+
+    .quick-actions {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+    }
+
+
+    /* TASKS */
 
     .dashboard-task-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
     }
 
 }
 
 
 /* =========================================
-   PHONE
+   MOBILE
 ========================================= */
 
 @media (max-width: 700px) {
 
-    #sidebar,
-    .sidebar {
-        width: 190px;
+    .dashboard-main {
+        width: 100%;
+
+        margin: 0;
+
+        padding: 16px;
     }
 
-    .dashboard-main {
-        margin-left: 190px;
-        width: calc(100% - 190px);
+
+    /* =====================================
+       TOP
+    ===================================== */
+
+    .dashboard-topbar {
+        display: block;
+
+        margin-bottom: 15px;
     }
+
+    .dashboard-topbar > div:first-child {
+        min-height: auto;
+
+        padding: 8px 0 15px;
+    }
+
+    .dashboard-topbar h1 {
+        font-size: 24px;
+    }
+
+    .dashboard-topbar p {
+        font-size: 10px;
+    }
+
+
+    /* =====================================
+       WALLET
+    ===================================== */
+
+    .wallet-card {
+        min-height: 135px;
+
+        padding: 17px;
+
+        display: block;
+    }
+
+    .wallet-card-top {
+        width: 100%;
+    }
+
+    .wallet-card-top span {
+        font-size: 11px;
+    }
+
+    .wallet-card-top h2 {
+        font-size: 27px;
+    }
+
+    .wallet-icon {
+        width: 43px;
+        height: 43px;
+
+        font-size: 20px;
+    }
+
+    .wallet-card-bottom {
+        margin-top: 13px;
+
+        display: flex;
+
+        justify-content: space-between;
+
+        gap: 10px;
+    }
+
+    .wallet-card-bottom > span {
+        font-size: 9px;
+    }
+
+    .withdraw-button {
+        min-width: 112px;
+
+        padding: 9px 12px;
+
+        font-size: 10px;
+    }
+
+
+    /* =====================================
+       QUICK ACTIONS
+    ===================================== */
+
+    .quick-actions {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 8px;
+
+        margin: 15px 0;
+    }
+
+    .quick-action {
+        min-height: 53px;
+
+        padding: 10px;
+
+        gap: 8px;
+
+        font-size: 10px;
+    }
+
+    .quick-action i {
+        font-size: 14px;
+    }
+
+
+    /* =====================================
+       ACCOUNT SUMMARY
+    ===================================== */
+
+    .account-summary {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 8px;
+
+        margin-bottom: 15px;
+    }
+
+    .summary-card {
+        min-height: 85px;
+
+        padding: 12px;
+
+        gap: 8px;
+    }
+
+    .summary-icon {
+        width: 37px;
+        height: 37px;
+
+        font-size: 15px;
+    }
+
+    .summary-card span {
+        font-size: 8px;
+    }
+
+    .summary-card strong {
+        font-size: 13px;
+    }
+
+
+    /* =====================================
+       ACCOUNT INFORMATION
+    ===================================== */
+
+    .account-information {
+        margin-bottom: 16px;
+    }
+
+    .information-header {
+        padding: 13px 15px;
+    }
+
+    .information-header h2 {
+        font-size: 14px;
+    }
+
+    .account-status {
+        font-size: 9px;
+
+        padding: 5px 9px;
+    }
+
+    .information-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .information-item {
+        min-height: 65px;
+
+        padding: 12px 15px;
+
+        border-right: none;
+
+        border-bottom:
+            1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .information-item:last-child {
+        border-bottom: none;
+    }
+
+    .information-item::before {
+        width: 36px;
+        height: 36px;
+
+        font-size: 13px;
+    }
+
+    .information-item > span {
+        font-size: 8px;
+    }
+
+    .information-item > strong {
+        font-size: 10px;
+    }
+
+
+    /* =====================================
+       TASK CONTAINER
+    ===================================== */
+
+    .dashboard-tasks {
+        padding: 15px;
+
+        margin-bottom: 15px;
+    }
+
+    .section-heading {
+        margin-bottom: 17px;
+    }
+
+    .section-heading span {
+        font-size: 8px;
+    }
+
+    .section-heading h2 {
+        font-size: 15px;
+
+        line-height: 1.5;
+    }
+
+
+    /* =====================================
+       TASK SECTIONS
+    ===================================== */
+
+    .task-section {
+        margin-bottom: 21px;
+    }
+
+    .task-section > h3 {
+        font-size: 13px;
+
+        margin-bottom: 10px;
+    }
+
+
+    /* =====================================
+       TASK GRID
+    ===================================== */
 
     .dashboard-task-grid {
         grid-template-columns: 1fr;
+
+        gap: 9px;
+    }
+
+
+    /* =====================================
+       TASK CARD
+    ===================================== */
+
+    .dashboard-task-card {
+        min-height: 86px;
+
+        padding: 13px;
+
+        gap: 11px;
+    }
+
+    .dashboard-task-icon {
+        width: 43px;
+        height: 43px;
+
+        font-size: 18px;
+    }
+
+    .dashboard-task-content span {
+        font-size: 7px;
+    }
+
+    .dashboard-task-content h4 {
+        font-size: 13px;
+    }
+
+    .dashboard-task-content strong {
+        font-size: 13px;
+    }
+
+    .task-arrow {
+        font-size: 10px;
+    }
+
+
+    /* =====================================
+       NOTICE
+    ===================================== */
+
+    .dashboard-notice {
+        min-height: auto;
+
+        padding: 14px;
+
+        gap: 11px;
+
+        margin-bottom: 17px;
+    }
+
+    .notice-icon {
+        width: 37px;
+        height: 37px;
+
+        font-size: 16px;
+    }
+
+    .dashboard-notice strong {
+        font-size: 12px;
+    }
+
+    .dashboard-notice p {
+        font-size: 9px;
+
+        line-height: 1.5;
+    }
+
+
+    /* =====================================
+       FOOTER
+    ===================================== */
+
+    .dashboard-footer {
+        min-height: auto;
+
+        flex-direction: column;
+
+        gap: 10px;
+
+        text-align: center;
+
+        padding-bottom: 10px;
+    }
+
+    .dashboard-footer div {
+        gap: 12px;
+    }
+
+    .dashboard-footer {
+        font-size: 9px;
     }
 
 }
 
 
 /* =========================================
-   SMALL PHONE
+   SMALL PHONES
 ========================================= */
 
-@media (max-width: 480px) {
-
-    #sidebar,
-    .sidebar {
-        width: 175px;
-    }
+@media (max-width: 400px) {
 
     .dashboard-main {
-        margin-left: 175px;
-        width: calc(100% - 175px);
+        padding: 12px;
     }
 
-    .dashboard-task-card {
+
+    .dashboard-topbar h1 {
+        font-size: 21px;
+    }
+
+
+    .wallet-card {
         padding: 14px;
     }
 
+    .wallet-card-top h2 {
+        font-size: 24px;
+    }
+
+
+    .wallet-card-bottom {
+        gap: 7px;
+    }
+
+    .wallet-card-bottom > span {
+        font-size: 8px;
+    }
+
+    .withdraw-button {
+        min-width: 105px;
+
+        padding: 8px 10px;
+
+        font-size: 9px;
+    }
+
+
+    .quick-action {
+        min-height: 50px;
+
+        padding: 9px;
+
+        font-size: 9px;
+    }
+
+
+    .summary-card {
+        padding: 10px;
+
+        gap: 7px;
+    }
+
+    .summary-icon {
+        width: 34px;
+        height: 34px;
+
+        font-size: 14px;
+    }
+
+    .summary-card span {
+        font-size: 7px;
+    }
+
+    .summary-card strong {
+        font-size: 12px;
+    }
+
+
+    .dashboard-tasks {
+        padding: 12px;
+    }
+
+
+    .dashboard-task-card {
+        min-height: 82px;
+
+        padding: 11px;
+    }
+
+
+    .dashboard-task-icon {
+        width: 40px;
+        height: 40px;
+
+        font-size: 16px;
+    }
+
+
+    .dashboard-task-content h4 {
+        font-size: 12px;
+    }
+
+    .dashboard-task-content strong {
+        font-size: 12px;
+    }
+
+
+    .dashboard-notice {
+        padding: 12px;
+    }
+
 }
+
+
+/* =========================================
+   VERY SMALL PHONES
+========================================= */
+
+@media (max-width: 340px) {
+
+    .dashboard-main {
+        padding: 10px;
+    }
+
+    .quick-actions {
+        gap: 6px;
+    }
+
+    .quick-action {
+        padding: 8px;
+
+        font-size: 8px;
+    }
+
+    .summary-card {
+        min-height: 78px;
+
+        padding: 8px;
+    }
+
+    .summary-icon {
+        width: 30px;
+        height: 30px;
+    }
+
+    .summary-card strong {
+        font-size: 11px;
+    }
+
+       }
