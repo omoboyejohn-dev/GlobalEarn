@@ -1,0 +1,859 @@
+/* =========================================
+   GlobalEarn Referral
+   referral.css
+========================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: "Poppins", sans-serif;
+    background: #07111f;
+    color: #ffffff;
+    min-height: 100vh;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button,
+input {
+    font-family: inherit;
+}
+
+
+/* =========================================
+   PAGE
+========================================= */
+
+.referral-page {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 35px;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.referral-header {
+    margin-bottom: 25px;
+}
+
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    margin-bottom: 25px;
+
+    color: #718092;
+    font-size: 11px;
+
+    transition: 0.25s;
+}
+
+.back-button:hover {
+    color: #63ff42;
+}
+
+.referral-heading > span {
+    color: #63ff42;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    letter-spacing: 1.5px;
+}
+
+.referral-heading h1 {
+    margin-top: 5px;
+
+    color: #ffffff;
+
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.referral-heading p {
+    margin-top: 5px;
+
+    color: #718092;
+
+    font-size: 12px;
+}
+
+
+/* =========================================
+   OVERVIEW
+========================================= */
+
+.referral-overview {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 12px;
+
+    margin-bottom: 15px;
+}
+
+.overview-card {
+    min-height: 100px;
+
+    padding: 18px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 13px;
+
+    background: #0b1928;
+
+    border: 1px solid rgba(255,255,255,0.07);
+
+    border-radius: 15px;
+
+    transition: 0.25s;
+}
+
+.overview-card:hover {
+    transform: translateY(-2px);
+
+    border-color:
+        rgba(99,255,66,0.18);
+}
+
+.overview-icon {
+    width: 45px;
+    height: 45px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 11px;
+
+    background:
+        rgba(99,255,66,0.10);
+
+    color: #63ff42;
+
+    font-size: 17px;
+}
+
+.earnings-icon {
+    background:
+        rgba(60,168,255,0.10);
+
+    color: #3ca8ff;
+}
+
+.remaining-icon {
+    background:
+        rgba(167,108,255,0.10);
+
+    color: #b478ff;
+}
+
+.overview-card span {
+    display: block;
+
+    color: #718092;
+
+    font-size: 8px;
+    font-weight: 600;
+
+    letter-spacing: 0.8px;
+
+    margin-bottom: 4px;
+}
+
+.overview-card strong {
+    display: block;
+
+    color: #ffffff;
+
+    font-size: 18px;
+    font-weight: 700;
+}
+
+
+/* =========================================
+   GENERAL CARD
+========================================= */
+
+.referral-card {
+    margin-bottom: 15px;
+
+    padding: 25px;
+
+    background: #0b1928;
+
+    border: 1px solid rgba(255,255,255,0.07);
+
+    border-radius: 17px;
+
+    box-shadow:
+        0 15px 40px rgba(0,0,0,0.12);
+}
+
+
+/* =========================================
+   CARD TITLE
+========================================= */
+
+.card-title {
+    margin-bottom: 20px;
+}
+
+.card-title > span {
+    display: block;
+
+    color: #63ff42;
+
+    font-size: 9px;
+    font-weight: 700;
+
+    letter-spacing: 1.2px;
+
+    margin-bottom: 4px;
+}
+
+.card-title h2 {
+    color: #ffffff;
+
+    font-size: 17px;
+    font-weight: 600;
+}
+
+.card-title p {
+    margin-top: 5px;
+
+    color: #718092;
+
+    font-size: 10px;
+}
+
+
+/* =========================================
+   PROGRESS
+========================================= */
+
+.progress-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 9px;
+}
+
+.progress-info strong {
+    color: #ffffff;
+
+    font-size: 13px;
+}
+
+.progress-info span {
+    color: #718092;
+
+    font-size: 9px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 10px;
+
+    overflow: hidden;
+
+    background: #07111f;
+
+    border-radius: 20px;
+
+    border: 1px solid rgba(255,255,255,0.05);
+}
+
+.progress-fill {
+    width: 0%;
+    height: 100%;
+
+    background: #63ff42;
+
+    border-radius: inherit;
+
+    transition:
+        width 0.6s ease;
+}
+
+.progress-description {
+    margin-top: 12px;
+
+    color: #718092;
+
+    font-size: 10px;
+}
+
+.progress-description strong {
+    color: #63ff42;
+}
+
+
+/* =========================================
+   REFERRAL LINK
+========================================= */
+
+.referral-link-box {
+    display: flex;
+    align-items: stretch;
+
+    gap: 8px;
+}
+
+.referral-link-box input {
+    flex: 1;
+
+    min-width: 0;
+
+    height: 46px;
+
+    padding: 0 13px;
+
+    outline: none;
+
+    border: 1px solid rgba(255,255,255,0.08);
+
+    border-radius: 9px;
+
+    background: #07111f;
+
+    color: #cbd5df;
+
+    font-size: 10px;
+
+    transition: 0.2s;
+}
+
+.referral-link-box input:focus {
+    border-color:
+        rgba(99,255,66,0.35);
+}
+
+.referral-link-box button {
+    min-width: 85px;
+
+    padding: 0 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    border: none;
+
+    border-radius: 9px;
+
+    background: #63ff42;
+
+    color: #07111f;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.25s;
+}
+
+.referral-link-box button:hover {
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 8px 20px rgba(99,255,66,0.15);
+}
+
+.copy-message {
+    margin-top: 10px;
+
+    padding: 9px 11px;
+
+    border-radius: 8px;
+
+    background:
+        rgba(99,255,66,0.07);
+
+    border: 1px solid
+        rgba(99,255,66,0.13);
+
+    color: #63ff42;
+
+    font-size: 9px;
+}
+
+.copy-message[hidden] {
+    display: none;
+}
+
+
+/* =========================================
+   REFERRAL CODE
+========================================= */
+
+.referral-code-card {
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+}
+
+.referral-code-icon {
+    width: 48px;
+    height: 48px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background:
+        rgba(255,200,61,0.10);
+
+    color: #ffc83d;
+
+    font-size: 19px;
+}
+
+.referral-code-content {
+    min-width: 0;
+    flex: 1;
+}
+
+.referral-code-content span {
+    display: block;
+
+    color: #718092;
+
+    font-size: 8px;
+    font-weight: 600;
+
+    letter-spacing: 1px;
+
+    margin-bottom: 4px;
+}
+
+.referral-code-content strong {
+    display: block;
+
+    color: #ffffff;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    letter-spacing: 1px;
+}
+
+.copy-code-button {
+    width: 40px;
+    height: 40px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid
+        rgba(99,255,66,0.15);
+
+    border-radius: 9px;
+
+    background:
+        rgba(99,255,66,0.06);
+
+    color: #63ff42;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.copy-code-button:hover {
+    background: #63ff42;
+
+    color: #07111f;
+}
+
+
+/* =========================================
+   HOW IT WORKS
+========================================= */
+
+.steps {
+    display: flex;
+    flex-direction: column;
+
+    gap: 12px;
+}
+
+.step {
+    display: flex;
+    align-items: flex-start;
+
+    gap: 13px;
+
+    padding: 14px;
+
+    border-radius: 11px;
+
+    background: #0e1d2c;
+
+    border: 1px solid
+        rgba(255,255,255,0.05);
+
+    transition: 0.2s;
+}
+
+.step:hover {
+    border-color:
+        rgba(99,255,66,0.15);
+
+    transform: translateX(2px);
+}
+
+.step-number {
+    width: 32px;
+    height: 32px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background:
+        rgba(99,255,66,0.10);
+
+    border: 1px solid
+        rgba(99,255,66,0.15);
+
+    color: #63ff42;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.step strong {
+    display: block;
+
+    color: #ffffff;
+
+    font-size: 11px;
+
+    margin-bottom: 3px;
+}
+
+.step p {
+    color: #718092;
+
+    font-size: 9px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================
+   REFERRAL LIST
+========================================= */
+
+.referral-list {
+    display: flex;
+    flex-direction: column;
+
+    gap: 9px;
+}
+
+.empty-referrals {
+    min-height: 150px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    padding: 25px;
+
+    border: 1px dashed
+        rgba(255,255,255,0.08);
+
+    border-radius: 12px;
+
+    background: #0e1d2c;
+}
+
+.empty-referrals i {
+    margin-bottom: 10px;
+
+    color: #526174;
+
+    font-size: 24px;
+}
+
+.empty-referrals strong {
+    color: #cbd5df;
+
+    font-size: 11px;
+
+    margin-bottom: 4px;
+}
+
+.empty-referrals p {
+    color: #667487;
+
+    font-size: 9px;
+}
+
+
+/* =========================================
+   FUTURE REFERRAL ITEM
+========================================= */
+
+.referral-user {
+    min-height: 65px;
+
+    padding: 12px 14px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    background: #0e1d2c;
+
+    border: 1px solid
+        rgba(255,255,255,0.06);
+
+    border-radius: 11px;
+}
+
+.referral-user-avatar {
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background:
+        rgba(99,255,66,0.10);
+
+    color: #63ff42;
+}
+
+.referral-user-info {
+    min-width: 0;
+    flex: 1;
+}
+
+.referral-user-info strong {
+    display: block;
+
+    color: #ffffff;
+
+    font-size: 11px;
+}
+
+.referral-user-info span {
+    display: block;
+
+    margin-top: 2px;
+
+    color: #718092;
+
+    font-size: 8px;
+}
+
+.referral-user-earning {
+    color: #63ff42;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+
+/* =========================================
+   FOOTER
+========================================= */
+
+.referral-footer {
+    padding: 20px 2px 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    color: #596779;
+
+    font-size: 9px;
+}
+
+.referral-footer div {
+    display: flex;
+    align-items: center;
+
+    gap: 18px;
+}
+
+.referral-footer a {
+    color: #687586;
+
+    transition: 0.2s;
+}
+
+.referral-footer a:hover {
+    color: #63ff42;
+}
+
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 700px) {
+
+    .referral-page {
+        padding: 22px;
+    }
+
+    .referral-overview {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .overview-card:last-child {
+        grid-column: 1 / -1;
+    }
+
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 520px) {
+
+    .referral-page {
+        padding: 15px;
+    }
+
+    .referral-heading h1 {
+        font-size: 24px;
+    }
+
+    .referral-overview {
+        grid-template-columns: 1fr;
+    }
+
+    .overview-card:last-child {
+        grid-column: auto;
+    }
+
+    .overview-card {
+        min-height: 85px;
+
+        padding: 15px;
+    }
+
+    .overview-card strong {
+        font-size: 16px;
+    }
+
+    .referral-card {
+        padding: 20px 17px;
+    }
+
+    .referral-link-box {
+        flex-direction: column;
+    }
+
+    .referral-link-box input {
+        width: 100%;
+    }
+
+    .referral-link-box button {
+        width: 100%;
+        height: 43px;
+    }
+
+    .referral-code-card {
+        padding: 17px;
+    }
+
+    .referral-footer {
+        flex-direction: column;
+
+        gap: 12px;
+
+        text-align: center;
+    }
+
+}
+
+
+/* =========================================
+   SMALL PHONE
+========================================= */
+
+@media (max-width: 360px) {
+
+    .referral-page {
+        padding: 12px;
+    }
+
+    .referral-card {
+        padding: 17px 14px;
+    }
+
+    .overview-card {
+        padding: 13px;
+    }
+
+    .overview-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .step {
+        padding: 12px;
+    }
+
+    .referral-code-content strong {
+        font-size: 13px;
+    }
+
+}
