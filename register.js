@@ -8,18 +8,37 @@
    register.html?ref=username
 
    Referral reward:
-   $3.50 per successful referral
+   $3.50 per accepted referral
+
+   IMPORTANT:
+   Registration does NOT automatically
+   add referral money to the referrer's
+   balance.
+
+   The referrer must accept the referral
+   from the Referral page.
 ========================================= */
+
 
 import {
     auth,
     db
 } from "./firebase.js";
 
+
+/* =========================================
+   FIREBASE AUTHENTICATION
+========================================= */
+
 import {
     createUserWithEmailAndPassword,
     updateProfile
 } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-auth.js";
+
+
+/* =========================================
+   FIRESTORE
+========================================= */
 
 import {
     doc,
@@ -33,11 +52,19 @@ import {
 
 
 /* =========================================
+   SETTINGS
+========================================= */
+
+const WELCOME_BONUS = 50;
+
+
+/* =========================================
    ELEMENTS
 ========================================= */
 
 const registerForm =
     document.getElementById("registerForm");
+
 
 const referralInput =
     document.getElementById("referralCode");
@@ -52,6 +79,7 @@ const urlParams =
         window.location.search
     );
 
+
 const referralFromURL =
     urlParams
         .get("ref")
@@ -60,7 +88,7 @@ const referralFromURL =
 
 
 /* =========================================
-   AUTO-FILL REFERRAL USERNAME
+   AUTO-FILL REFERRAL
 ========================================= */
 
 if (
@@ -71,10 +99,10 @@ if (
     referralInput.value =
         referralFromURL;
 
+
     /*
-     * Referral came from a referral link,
-     * so don't allow the visitor to
-     * accidentally change it.
+     * Referral came from a referral link.
+     * Prevent changing the referral owner.
      */
 
     referralInput.readOnly = true;
@@ -96,7 +124,7 @@ if (registerForm) {
 
 
             /* =========================================
-               GET FORM VALUES
+               FORM VALUES
             ========================================= */
 
             const fullName =
@@ -140,7 +168,8 @@ if (registerForm) {
              * Referral username.
              *
              * Priority:
-             * 1. URL ?ref=username
+             *
+             * 1. URL referral
              * 2. Referral input
              */
 
@@ -172,7 +201,7 @@ if (registerForm) {
 
             /* =========================================
                MESSAGE
-            ========================================== */
+            ========================================= */
 
             const message =
                 document.getElementById("message");
@@ -192,7 +221,7 @@ if (registerForm) {
 
             /* =========================================
                SHOW MESSAGE
-            ========================================== */
+            ========================================= */
 
             function showMessage(
                 text,
@@ -201,11 +230,14 @@ if (registerForm) {
 
                 if (!message) return;
 
+
                 message.textContent =
                     text;
 
+
                 message.className =
                     "message " + type;
+
 
                 message.scrollIntoView({
                     behavior: "smooth",
@@ -217,7 +249,7 @@ if (registerForm) {
 
             /* =========================================
                REQUIRED FIELDS
-            ========================================== */
+            ========================================= */
 
             if (
                 !fullName ||
@@ -240,7 +272,7 @@ if (registerForm) {
 
             /* =========================================
                USERNAME VALIDATION
-            ========================================== */
+            ========================================= */
 
             if (
                 username.length < 3
@@ -276,14 +308,16 @@ if (registerForm) {
 
             /* =========================================
                EMAIL VALIDATION
-            ========================================== */
+            ========================================= */
 
             const emailPattern =
                 /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 
             if (
-                !emailPattern.test(email)
+                !emailPattern.test(
+                    email
+                )
             ) {
 
                 showMessage(
@@ -296,8 +330,8 @@ if (registerForm) {
 
 
             /* =========================================
-               PASSWORD
-            ========================================== */
+               PASSWORD VALIDATION
+            ========================================= */
 
             if (
                 password.length < 6
@@ -328,7 +362,7 @@ if (registerForm) {
 
             /* =========================================
                TERMS
-            ========================================== */
+            ========================================= */
 
             if (
                 terms &&
@@ -346,7 +380,7 @@ if (registerForm) {
 
             /* =========================================
                CHECK USERNAME
-            ========================================== */
+            ========================================= */
 
             try {
 
@@ -394,6 +428,7 @@ if (registerForm) {
                     error
                 );
 
+
                 showMessage(
                     "Unable to verify username. Please try again."
                 );
@@ -405,7 +440,7 @@ if (registerForm) {
 
             /* =========================================
                VERIFY REFERRER
-            ========================================== */
+            ========================================= */
 
             let validReferral =
                 null;
@@ -452,9 +487,9 @@ if (registerForm) {
                     }
 
 
-                    /*
-                     * Prevent self-referral.
-                     */
+                    /* =========================================
+                       PREVENT SELF REFERRAL
+                    ========================================= */
 
                     if (
                         referredBy ===
@@ -481,6 +516,7 @@ if (registerForm) {
                         error
                     );
 
+
                     showMessage(
                         "Unable to verify referral. Please try again."
                     );
@@ -494,12 +530,13 @@ if (registerForm) {
 
             /* =========================================
                START LOADING
-            ========================================== */
+            ========================================= */
 
             if (submitButton) {
 
                 submitButton.disabled =
                     true;
+
 
                 submitButton.classList.add(
                     "loading"
@@ -517,8 +554,8 @@ if (registerForm) {
 
 
             /* =========================================
-               CREATE FIREBASE AUTH ACCOUNT
-            ========================================== */
+               CREATE FIREBASE ACCOUNT
+            ========================================= */
 
             try {
 
@@ -548,7 +585,7 @@ if (registerForm) {
 
 
                 /* =========================================
-                   CREATE FIRESTORE USER
+                   CREATE USER DOCUMENT
                 ========================================= */
 
                 await setDoc(
@@ -562,20 +599,26 @@ if (registerForm) {
                         uid:
                             user.uid,
 
+
                         fullName:
                             fullName,
+
 
                         username:
                             username,
 
+
                         country:
                             country,
+
 
                         email:
                             email,
 
+
                         phone:
                             phone,
+
 
                         /*
                          * Username of the person
@@ -585,46 +628,64 @@ if (registerForm) {
                         referredBy:
                             validReferral,
 
+
                         /*
-                         * Keep this field for
-                         * compatibility with
-                         * existing data.
+                         * Compatibility field.
                          */
 
                         referralCode:
                             validReferral,
 
-                        /*
-                         * Referral system.
-                         */
+
+                        /* =====================================
+                           REFERRAL DATA
+                        ===================================== */
 
                         referralCount:
                             0,
 
+
                         referralEarnings:
                             0,
 
+
                         /*
-                         * Account earnings.
+                         * No referral money is added
+                         * during registration.
                          */
 
+
+                        /* =====================================
+                           ACCOUNT BALANCE
+                        ===================================== */
+
                         balance:
-                            50,
+                            WELCOME_BONUS,
+
 
                         welcomeBonus:
-                            50,
+                            WELCOME_BONUS,
+
 
                         taskEarnings:
                             0,
 
+
                         totalWithdrawn:
                             0,
+
+
+                        /* =====================================
+                           ACCOUNT STATUS
+                        ===================================== */
 
                         accountStatus:
                             "active",
 
+
                         createdAt:
                             serverTimestamp(),
+
 
                         updatedAt:
                             serverTimestamp()
@@ -666,9 +727,14 @@ if (registerForm) {
                     "Unable to create your account. Please try again.";
 
 
+                /* =========================================
+                   FIREBASE ERRORS
+                ========================================= */
+
                 switch (
                     error.code
                 ) {
+
 
                     case "auth/email-already-in-use":
 
@@ -739,10 +805,15 @@ if (registerForm) {
 
             } finally {
 
+                /* =========================================
+                   STOP LOADING
+                ========================================= */
+
                 if (submitButton) {
 
                     submitButton.disabled =
                         false;
+
 
                     submitButton.classList.remove(
                         "loading"
@@ -796,6 +867,10 @@ document
                     if (!input) return;
 
 
+                    /* =====================================
+                       SHOW PASSWORD
+                    ===================================== */
+
                     if (
                         input.type ===
                         "password"
@@ -814,7 +889,14 @@ document
                             "Hide password"
                         );
 
-                    } else {
+                    }
+
+
+                    /* =====================================
+                       HIDE PASSWORD
+                    ===================================== */
+
+                    else {
 
                         input.type =
                             "password";
