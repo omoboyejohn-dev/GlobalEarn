@@ -2,22 +2,18 @@
    GlobalEarn Referral
    referral.js
 
-   Username Referral System
+   Referral System
 
    Flow:
    1. User shares referral link
    2. New user registers
-   3. Referral appears as PENDING
-   4. Referrer clicks "Accept $3.50"
-   5. $3.50 is added to the referrer's balance
-   6. Referral becomes ACCEPTED
-
-   Reward:
-   $3.50 per accepted referral
+   3. Referral appears as Pending
+   4. Referrer clicks Accept $3.50
+   5. $3.50 is added to balance
+   6. Referral becomes Accepted
 
    Maximum:
    10 accepted referrals
-   Maximum earnings: $35.00
 ========================================= */
 
 import {
@@ -25,19 +21,9 @@ import {
     db
 } from "./firebase.js";
 
-
-/* =========================================
-   FIREBASE AUTH
-========================================= */
-
 import {
     onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-auth.js";
-
-
-/* =========================================
-   FIRESTORE
-========================================= */
 
 import {
     doc,
@@ -57,7 +43,7 @@ import {
 
 const REFERRAL_REWARD = 3.50;
 
-const REFERRAL_LIMIT = 10;
+const REFERRAL_GOAL = 10;
 
 
 /* =========================================
@@ -65,28 +51,59 @@ const REFERRAL_LIMIT = 10;
 ========================================= */
 
 const referralCount =
-    document.getElementById("referralCount");
+    document.getElementById(
+        "referralCount"
+    );
 
 const referralEarnings =
-    document.getElementById("referralEarnings");
+    document.getElementById(
+        "referralEarnings"
+    );
+
+const referralsRemaining =
+    document.getElementById(
+        "referralsRemaining"
+    );
 
 const progressText =
-    document.getElementById("progressText");
+    document.getElementById(
+        "progressText"
+    );
 
 const progressFill =
-    document.getElementById("progressFill");
+    document.getElementById(
+        "progressFill"
+    );
 
 const referralLink =
-    document.getElementById("referralLink");
+    document.getElementById(
+        "referralLink"
+    );
 
 const copyReferralButton =
-    document.getElementById("copyReferralButton");
+    document.getElementById(
+        "copyReferralButton"
+    );
 
 const copyMessage =
-    document.getElementById("copyMessage");
+    document.getElementById(
+        "copyMessage"
+    );
+
+const myReferralCode =
+    document.getElementById(
+        "myReferralCode"
+    );
+
+const copyCodeButton =
+    document.getElementById(
+        "copyCodeButton"
+    );
 
 const referralList =
-    document.getElementById("referralList");
+    document.getElementById(
+        "referralList"
+    );
 
 
 /* =========================================
@@ -97,18 +114,7 @@ let currentUser = null;
 
 
 /* =========================================
-   MONEY FORMAT
-========================================= */
-
-function formatMoney(value) {
-
-    return `$${Number(value || 0).toFixed(2)}`;
-
-}
-
-
-/* =========================================
-   DATE FORMAT
+   FORMAT DATE
 ========================================= */
 
 function formatDate(timestamp) {
@@ -119,19 +125,40 @@ function formatDate(timestamp) {
 
     try {
 
-        const date =
-            typeof timestamp.toDate === "function"
-                ? timestamp.toDate()
-                : new Date(timestamp);
+        if (
+            typeof timestamp.toDate ===
+            "function"
+        ) {
 
-        return date.toLocaleDateString(
-            "en-US",
-            {
-                month: "short",
-                day: "numeric",
-                year: "numeric"
-            }
-        );
+            return timestamp
+                .toDate()
+                .toLocaleDateString(
+                    "en-US",
+                    {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric"
+                    }
+                );
+
+        }
+
+
+        if (
+            timestamp instanceof Date
+        ) {
+
+            return timestamp
+                .toLocaleDateString(
+                    "en-US",
+                    {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric"
+                    }
+                );
+
+        }
 
     } catch (error) {
 
@@ -140,25 +167,40 @@ function formatDate(timestamp) {
             error
         );
 
-        return "Date unavailable";
-
     }
+
+    return "Date unavailable";
 
 }
 
 
 /* =========================================
-   HTML ESCAPE
+   ESCAPE HTML
 ========================================= */
 
 function escapeHTML(value) {
 
     return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 
 }
 
@@ -172,18 +214,31 @@ function updateProgress(
     earnings
 ) {
 
-    const acceptedCount =
+    const safeCount =
         Math.min(
             Number(count) || 0,
-            REFERRAL_LIMIT
+            REFERRAL_GOAL
         );
 
-    const acceptedEarnings =
+
+    const safeEarnings =
         Number(earnings) || 0;
+
+
+    const remaining =
+        Math.max(
+            REFERRAL_GOAL -
+            safeCount,
+            0
+        );
+
 
     const percentage =
         Math.min(
-            (acceptedCount / REFERRAL_LIMIT) * 100,
+            (
+                safeCount /
+                REFERRAL_GOAL
+            ) * 100,
             100
         );
 
@@ -191,7 +246,7 @@ function updateProgress(
     if (referralCount) {
 
         referralCount.textContent =
-            acceptedCount;
+            safeCount;
 
     }
 
@@ -199,9 +254,15 @@ function updateProgress(
     if (referralEarnings) {
 
         referralEarnings.textContent =
-            formatMoney(
-                acceptedEarnings
-            );
+            `$${safeEarnings.toFixed(2)}`;
+
+    }
+
+
+    if (referralsRemaining) {
+
+        referralsRemaining.textContent =
+            remaining;
 
     }
 
@@ -209,7 +270,7 @@ function updateProgress(
     if (progressText) {
 
         progressText.textContent =
-            `${acceptedCount}/${REFERRAL_LIMIT}`;
+            `${safeCount}/${REFERRAL_GOAL}`;
 
     }
 
@@ -259,29 +320,392 @@ function showEmptyReferrals() {
 
 
 /* =========================================
-   SHOW ERROR
+   ACCEPT REFERRAL
 ========================================= */
 
-function showReferralError(message) {
+async function acceptReferral(
+    referralUserId,
+    button
+) {
 
-    console.error(
-        "Referral error:",
-        message
-    );
+    if (!currentUser) {
+
+        return;
+
+    }
+
+
+    if (!referralUserId) {
+
+        return;
+
+    }
+
+
+    try {
+
+        button.disabled =
+            true;
+
+
+        button.innerHTML = `
+
+            <i class="fa-solid fa-spinner fa-spin"></i>
+
+            Processing...
+
+        `;
+
+
+        await runTransaction(
+            db,
+            async transaction => {
+
+                /* =====================================
+                   REFERRER
+                ===================================== */
+
+                const referrerRef =
+                    doc(
+                        db,
+                        "users",
+                        currentUser.uid
+                    );
+
+
+                /* =====================================
+                   REFERRAL USER
+                ===================================== */
+
+                const referralUserRef =
+                    doc(
+                        db,
+                        "users",
+                        referralUserId
+                    );
+
+
+                /* =====================================
+                   REFERRAL RECORD
+                ===================================== */
+
+                const referralRecordRef =
+                    doc(
+                        db,
+                        "referrals",
+                        referralUserId
+                    );
+
+
+                const referrerSnapshot =
+                    await transaction.get(
+                        referrerRef
+                    );
+
+
+                const referralUserSnapshot =
+                    await transaction.get(
+                        referralUserRef
+                    );
+
+
+                const referralRecordSnapshot =
+                    await transaction.get(
+                        referralRecordRef
+                    );
+
+
+                if (
+                    !referrerSnapshot.exists()
+                ) {
+
+                    throw new Error(
+                        "Your account could not be found."
+                    );
+
+                }
+
+
+                if (
+                    !referralUserSnapshot.exists()
+                ) {
+
+                    throw new Error(
+                        "Referral user could not be found."
+                    );
+
+                }
+
+
+                /* =====================================
+                   GET DATA
+                ===================================== */
+
+                const referrer =
+                    referrerSnapshot.data();
+
+
+                const referralUser =
+                    referralUserSnapshot.data();
+
+
+                const referralRecord =
+                    referralRecordSnapshot.exists()
+                        ? referralRecordSnapshot.data()
+                        : null;
+
+
+                /* =====================================
+                   VERIFY REFERRAL
+                ===================================== */
+
+                const referredBy =
+                    String(
+                        referralUser.referredBy ||
+                        ""
+                    )
+                    .trim()
+                    .toLowerCase();
+
+
+                const referrerUsername =
+                    String(
+                        referrer.username ||
+                        ""
+                    )
+                    .trim()
+                    .toLowerCase();
+
+
+                if (
+                    referredBy !==
+                    referrerUsername
+                ) {
+
+                    throw new Error(
+                        "This user was not referred by you."
+                    );
+
+                }
+
+
+                /* =====================================
+                   CHECK IF ALREADY ACCEPTED
+                ===================================== */
+
+                if (
+                    referralRecord &&
+                    referralRecord.status ===
+                    "accepted"
+                ) {
+
+                    throw new Error(
+                        "This referral has already been accepted."
+                    );
+
+                }
+
+
+                /* =====================================
+                   REFERRAL LIMIT
+                ===================================== */
+
+                const currentCount =
+                    Number(
+                        referrer.referralCount ||
+                        0
+                    );
+
+
+                if (
+                    currentCount >=
+                    REFERRAL_GOAL
+                ) {
+
+                    throw new Error(
+                        "You have already reached the maximum of 10 accepted referrals."
+                    );
+
+                }
+
+
+                /* =====================================
+                   CURRENT BALANCE
+                ===================================== */
+
+                const currentBalance =
+                    Number(
+                        referrer.balance ||
+                        0
+                    );
+
+
+                /* =====================================
+                   CURRENT REFERRAL EARNINGS
+                ===================================== */
+
+                const currentReferralEarnings =
+                    Number(
+                        referrer.referralEarnings ||
+                        0
+                    );
+
+
+                /* =====================================
+                   NEW VALUES
+                ===================================== */
+
+                const newBalance =
+                    currentBalance +
+                    REFERRAL_REWARD;
+
+
+                const newReferralEarnings =
+                    currentReferralEarnings +
+                    REFERRAL_REWARD;
+
+
+                const newReferralCount =
+                    currentCount + 1;
+
+
+                /* =====================================
+                   UPDATE REFERRER
+                ===================================== */
+
+                transaction.update(
+                    referrerRef,
+                    {
+
+                        balance:
+                            newBalance,
+
+                        referralEarnings:
+                            newReferralEarnings,
+
+                        referralCount:
+                            newReferralCount,
+
+                        updatedAt:
+                            serverTimestamp()
+
+                    }
+                );
+
+
+                /* =====================================
+                   CREATE / UPDATE REFERRAL RECORD
+                ===================================== */
+
+                transaction.set(
+                    referralRecordRef,
+                    {
+
+                        referralId:
+                            referralUserId,
+
+                        referrerId:
+                            currentUser.uid,
+
+                        referrerUsername:
+                            referrerUsername,
+
+                        referredUsername:
+                            referralUser.username ||
+                            "username",
+
+                        reward:
+                            REFERRAL_REWARD,
+
+                        status:
+                            "accepted",
+
+                        acceptedAt:
+                            serverTimestamp(),
+
+                        createdAt:
+                            referralRecord?.createdAt ||
+                            serverTimestamp()
+
+                    }
+                );
+
+            }
+        );
+
+
+        /* =========================================
+           SUCCESS
+        ========================================= */
+
+        button.innerHTML = `
+
+            <i class="fa-solid fa-check"></i>
+
+            Accepted +$3.50
+
+        `;
+
+
+        button.classList.add(
+            "accepted"
+        );
+
+
+        /*
+         * Reload referral data so
+         * balance/referral numbers update.
+         */
+
+        await loadReferralData(
+            currentUser
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Accept referral error:",
+            error
+        );
+
+
+        alert(
+            error.message ||
+            "Unable to accept referral."
+        );
+
+
+        button.disabled =
+            false;
+
+
+        button.innerHTML = `
+
+            <i class="fa-solid fa-check"></i>
+
+            Accept $3.50
+
+        `;
+
+    }
 
 }
 
 
 /* =========================================
-   CREATE REFERRAL CARD
+   CREATE REFERRAL ELEMENT
 ========================================= */
 
 function createReferralElement(
-    referral
+    data,
+    referralUserId
 ) {
 
     const item =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
 
     item.className =
@@ -289,29 +713,35 @@ function createReferralElement(
 
 
     const fullName =
-        referral.fullName ||
-        referral.name ||
+        data.fullName ||
+        data.name ||
         "GlobalEarn Member";
 
 
     const username =
-        referral.username ||
+        data.username ||
         "username";
 
 
     const createdAt =
         formatDate(
-            referral.createdAt
+            data.createdAt
         );
 
 
+    /*
+     * Existing referral record status
+     * is supplied separately.
+     */
+
     const status =
-        referral.referralStatus ||
+        data.referralStatus ||
         "pending";
 
 
     const isAccepted =
-        status === "accepted";
+        status ===
+        "accepted";
 
 
     item.innerHTML = `
@@ -331,7 +761,7 @@ function createReferralElement(
 
             <span>
                 @${escapeHTML(username)}
-                • Joined ${escapeHTML(createdAt)}
+                • Joined ${createdAt}
             </span>
 
         </div>
@@ -342,24 +772,22 @@ function createReferralElement(
             ${
                 isAccepted
 
-                ? `
-
-                    <div class="referral-accepted">
-
-                        <i class="fa-solid fa-circle-check"></i>
-
-                        Accepted
-
-                    </div>
+                ?
 
                 `
+                    <span class="referral-status accepted">
+                        <i class="fa-solid fa-circle-check"></i>
+                        Accepted
+                    </span>
+                `
 
-                : `
+                :
 
+                `
                     <button
                         type="button"
                         class="accept-referral-button"
-                        data-user-id="${escapeHTML(referral.uid)}"
+                        data-user-id="${escapeHTML(referralUserId)}"
                     >
 
                         <i class="fa-solid fa-check"></i>
@@ -367,7 +795,6 @@ function createReferralElement(
                         Accept $3.50
 
                     </button>
-
                 `
 
             }
@@ -377,41 +804,34 @@ function createReferralElement(
     `;
 
 
-    return item;
+    /*
+     * Accept button
+     */
 
-}
-
-
-/* =========================================
-   LOAD CURRENT USER
-========================================= */
-
-async function getCurrentUserData() {
-
-    const userRef =
-        doc(
-            db,
-            "users",
-            currentUser.uid
+    const button =
+        item.querySelector(
+            ".accept-referral-button"
         );
 
 
-    const snapshot =
-        await getDoc(
-            userRef
-        );
+    if (button) {
 
+        button.addEventListener(
+            "click",
+            () => {
 
-    if (!snapshot.exists()) {
+                acceptReferral(
+                    referralUserId,
+                    button
+                );
 
-        throw new Error(
-            "Your user account could not be found."
+            }
         );
 
     }
 
 
-    return snapshot.data();
+    return item;
 
 }
 
@@ -421,6 +841,7 @@ async function getCurrentUserData() {
 ========================================= */
 
 async function loadReferrals(
+    user,
     username
 ) {
 
@@ -428,12 +849,21 @@ async function loadReferrals(
 
         if (!username) {
 
+            updateProgress(
+                0,
+                0
+            );
+
             showEmptyReferrals();
 
             return;
 
         }
 
+
+        /* =====================================
+           FIND USERS REFERRED BY USERNAME
+        ===================================== */
 
         const usersRef =
             collection(
@@ -462,32 +892,91 @@ async function loadReferrals(
         const referrals = [];
 
 
-        snapshot.forEach(
-            documentSnapshot => {
+        /* =====================================
+           GET REFERRAL RECORDS
+        ===================================== */
+
+        for (
+            const documentSnapshot
+            of snapshot.docs
+        ) {
+
+            /*
+             * Don't count current account.
+             */
+
+            if (
+                documentSnapshot.id ===
+                user.uid
+            ) {
+
+                continue;
+
+            }
+
+
+            const referralUser =
+                documentSnapshot.data();
+
+
+            const referralRecordRef =
+                doc(
+                    db,
+                    "referrals",
+                    documentSnapshot.id
+                );
+
+
+            const referralRecordSnapshot =
+                await getDoc(
+                    referralRecordRef
+                );
+
+
+            let referralStatus =
+                "pending";
+
+
+            if (
+                referralRecordSnapshot.exists()
+            ) {
+
+                const record =
+                    referralRecordSnapshot.data();
+
 
                 if (
-                    documentSnapshot.id !==
-                    currentUser.uid
+                    record.status ===
+                    "accepted"
                 ) {
 
-                    referrals.push({
-
-                        uid:
-                            documentSnapshot.id,
-
-                        ...documentSnapshot.data()
-
-                    });
+                    referralStatus =
+                        "accepted";
 
                 }
 
             }
-        );
 
 
-        /* =========================================
+            referrals.push({
+
+                ...referralUser,
+
+                referralStatus:
+
+                    referralStatus,
+
+                referralUserId:
+                    documentSnapshot.id
+
+            });
+
+        }
+
+
+        /* =====================================
            SORT NEWEST FIRST
-        ========================================= */
+        ===================================== */
 
         referrals.sort(
             (a, b) => {
@@ -497,10 +986,12 @@ async function loadReferrals(
                         ? a.createdAt.toMillis()
                         : 0;
 
+
                 const dateB =
                     b.createdAt?.toMillis
                         ? b.createdAt.toMillis()
                         : 0;
+
 
                 return dateB - dateA;
 
@@ -508,8 +999,43 @@ async function loadReferrals(
         );
 
 
+        /* =====================================
+           ACCEPTED REFERRALS
+        ===================================== */
+
+        const acceptedReferrals =
+            referrals.filter(
+                referral =>
+                    referral.referralStatus ===
+                    "accepted"
+            );
+
+
+        const acceptedCount =
+            Math.min(
+                acceptedReferrals.length,
+                REFERRAL_GOAL
+            );
+
+
+        const acceptedEarnings =
+            acceptedCount *
+            REFERRAL_REWARD;
+
+
+        updateProgress(
+            acceptedCount,
+            acceptedEarnings
+        );
+
+
+        /* =====================================
+           EMPTY
+        ===================================== */
+
         if (
-            referrals.length === 0
+            referrals.length ===
+            0
         ) {
 
             showEmptyReferrals();
@@ -519,54 +1045,36 @@ async function loadReferrals(
         }
 
 
-        if (!referralList) return;
+        if (!referralList) {
+            return;
+        }
 
 
-        referralList.innerHTML = "";
+        referralList.innerHTML =
+            "";
 
 
-        referrals.forEach(
-            referral => {
+        /* =====================================
+           DISPLAY REFERRALS
+        ===================================== */
 
-                const element =
-                    createReferralElement(
-                        referral
-                    );
-
-
-                referralList.appendChild(
-                    element
-                );
-
-            }
-        );
-
-
-        /* =========================================
-           ACCEPT BUTTONS
-        ========================================= */
-
-        document
-            .querySelectorAll(
-                ".accept-referral-button"
+        referrals
+            .slice(
+                0,
+                50
             )
             .forEach(
-                button => {
+                referral => {
 
-                    button.addEventListener(
-                        "click",
-                        async function () {
+                    const element =
+                        createReferralElement(
+                            referral,
+                            referral.referralUserId
+                        );
 
-                            const referredUserId =
-                                this.dataset.userId;
 
-
-                            await acceptReferral(
-                                referredUserId,
-                                this
-                            );
-
-                        }
+                    referralList.appendChild(
+                        element
                     );
 
                 }
@@ -581,6 +1089,12 @@ async function loadReferrals(
         );
 
 
+        updateProgress(
+            0,
+            0
+        );
+
+
         showEmptyReferrals();
 
     }
@@ -589,447 +1103,49 @@ async function loadReferrals(
 
 
 /* =========================================
-   ACCEPT REFERRAL
+   LOAD USER REFERRAL DATA
 ========================================= */
 
-async function acceptReferral(
-    referredUserId,
-    button
+async function loadReferralData(
+    user
 ) {
 
-    if (!currentUser) {
-        return;
-    }
-
-
-    if (!referredUserId) {
-
-        alert(
-            "Invalid referral."
-        );
-
-        return;
-
-    }
-
-
-    /* =========================================
-       CONFIRM
-    ========================================= */
-
-    const confirmed =
-        window.confirm(
-            "Accept this referral and add $3.50 to your balance?"
-        );
-
-
-    if (!confirmed) {
-
-        return;
-
-    }
-
-
-    /* =========================================
-       LOADING
-    ========================================= */
-
-    const originalButtonHTML =
-        button.innerHTML;
-
-
-    button.disabled =
-        true;
-
-
-    button.innerHTML = `
-
-        <i class="fa-solid fa-spinner fa-spin"></i>
-
-        Processing...
-
-    `;
-
-
     try {
 
-        const referrerRef =
+        const userRef =
             doc(
                 db,
                 "users",
-                currentUser.uid
+                user.uid
             );
 
 
-        const referredUserRef =
-            doc(
-                db,
-                "users",
-                referredUserId
+        const snapshot =
+            await getDoc(
+                userRef
             );
 
 
-        const referralRecordRef =
-            doc(
-                db,
-                "referrals",
-                `${currentUser.uid}_${referredUserId}`
+        if (
+            !snapshot.exists()
+        ) {
+
+            console.error(
+                "User profile was not found."
             );
 
+            return;
 
-        await runTransaction(
-            db,
-            async transaction => {
+        }
 
-                /* =========================================
-                   GET DOCUMENTS
-                ========================================= */
 
-                const referrerSnapshot =
-                    await transaction.get(
-                        referrerRef
-                    );
-
-
-                const referredUserSnapshot =
-                    await transaction.get(
-                        referredUserRef
-                    );
-
-
-                const referralRecordSnapshot =
-                    await transaction.get(
-                        referralRecordRef
-                    );
-
-
-                if (
-                    !referrerSnapshot.exists()
-                ) {
-
-                    throw new Error(
-                        "Your account could not be found."
-                    );
-
-                }
-
-
-                if (
-                    !referredUserSnapshot.exists()
-                ) {
-
-                    throw new Error(
-                        "The referred account could not be found."
-                    );
-
-                }
-
-
-                /* =========================================
-                   REFERRER DATA
-                ========================================= */
-
-                const referrer =
-                    referrerSnapshot.data();
-
-
-                /* =========================================
-                   REFERRED USER DATA
-                ========================================= */
-
-                const referredUser =
-                    referredUserSnapshot.data();
-
-
-                /* =========================================
-                   VERIFY REFERRER
-                ========================================= */
-
-                const referredBy =
-                    String(
-                        referredUser.referredBy ||
-                        ""
-                    )
-                    .trim()
-                    .toLowerCase();
-
-
-                const referrerUsername =
-                    String(
-                        referrer.username ||
-                        ""
-                    )
-                    .trim()
-                    .toLowerCase();
-
-
-                if (
-                    !referredBy ||
-                    referredBy !==
-                    referrerUsername
-                ) {
-
-                    throw new Error(
-                        "This user is not linked to your referral account."
-                    );
-
-                }
-
-
-                /* =========================================
-                   CHECK IF ALREADY ACCEPTED
-                ========================================= */
-
-                if (
-                    referredUser.referralStatus ===
-                    "accepted"
-                ) {
-
-                    throw new Error(
-                        "This referral has already been accepted."
-                    );
-
-                }
-
-
-                if (
-                    referralRecordSnapshot.exists()
-                ) {
-
-                    const referralRecord =
-                        referralRecordSnapshot.data();
-
-
-                    if (
-                        referralRecord.status ===
-                        "accepted"
-                    ) {
-
-                        throw new Error(
-                            "This referral has already been accepted."
-                        );
-
-                    }
-
-                }
-
-
-                /* =========================================
-                   REFERRAL COUNT
-                ========================================= */
-
-                const currentReferralCount =
-                    Number(
-                        referrer.referralCount ||
-                        0
-                    );
-
-
-                if (
-                    currentReferralCount >=
-                    REFERRAL_LIMIT
-                ) {
-
-                    throw new Error(
-                        "You have already reached your 10-referral limit."
-                    );
-
-                }
-
-
-                /* =========================================
-                   CURRENT BALANCE
-                ========================================= */
-
-                const currentBalance =
-                    Number(
-                        referrer.balance ||
-                        0
-                    );
-
-
-                /* =========================================
-                   CURRENT REFERRAL EARNINGS
-                ========================================= */
-
-                const currentReferralEarnings =
-                    Number(
-                        referrer.referralEarnings ||
-                        0
-                    );
-
-
-                /* =========================================
-                   NEW VALUES
-                ========================================= */
-
-                const newBalance =
-                    currentBalance +
-                    REFERRAL_REWARD;
-
-
-                const newReferralEarnings =
-                    currentReferralEarnings +
-                    REFERRAL_REWARD;
-
-
-                const newReferralCount =
-                    currentReferralCount +
-                    1;
-
-
-                /* =========================================
-                   UPDATE REFERRER
-                ========================================= */
-
-                transaction.update(
-                    referrerRef,
-                    {
-
-                        balance:
-                            newBalance,
-
-                        referralEarnings:
-                            newReferralEarnings,
-
-                        referralCount:
-                            newReferralCount,
-
-                        updatedAt:
-                            serverTimestamp()
-
-                    }
-                );
-
-
-                /* =========================================
-                   UPDATE REFERRED USER
-                ========================================= */
-
-                transaction.update(
-                    referredUserRef,
-                    {
-
-                        referralStatus:
-                            "accepted",
-
-                        referralAcceptedAt:
-                            serverTimestamp(),
-
-                        referralAcceptedBy:
-                            currentUser.uid
-
-                    }
-                );
-
-
-                /* =========================================
-                   CREATE / UPDATE REFERRAL RECORD
-                ========================================= */
-
-                transaction.set(
-                    referralRecordRef,
-                    {
-
-                        referrerId:
-                            currentUser.uid,
-
-                        referrerUsername:
-                            referrerUsername,
-
-                        referredUserId:
-                            referredUserId,
-
-                        referredUsername:
-                            referredUser.username ||
-                            "",
-
-                        reward:
-                            REFERRAL_REWARD,
-
-                        status:
-                            "accepted",
-
-                        acceptedAt:
-                            serverTimestamp(),
-
-                        createdAt:
-                            referralRecordSnapshot.exists()
-
-                                ? referralRecordSnapshot
-                                    .data()
-                                    .createdAt ||
-                                    serverTimestamp()
-
-                                : serverTimestamp()
-
-                    },
-                    {
-                        merge: true
-                    }
-                );
-
-            }
-        );
-
-
-        /* =========================================
-           SUCCESS
-        ========================================= */
-
-        alert(
-            "Referral accepted! $3.50 has been added to your balance."
-        );
-
-
-        /*
-         * Reload referral information.
-         */
-
-        await initializeReferralPage();
-
-
-    } catch (error) {
-
-        console.error(
-            "Accept referral error:",
-            error
-        );
-
-
-        alert(
-            error.message ||
-            "Unable to accept this referral."
-        );
-
-
-        button.disabled =
-            false;
-
-
-        button.innerHTML =
-            originalButtonHTML;
-
-    }
-
-}
-
-
-/* =========================================
-   LOAD REFERRAL PAGE
-========================================= */
-
-async function initializeReferralPage() {
-
-    try {
-
-        const userData =
-            await getCurrentUserData();
+        const data =
+            snapshot.data();
 
 
         const username =
             String(
-                userData.username ||
+                data.username ||
                 ""
             )
             .trim()
@@ -1038,18 +1154,33 @@ async function initializeReferralPage() {
 
         if (!username) {
 
-            showReferralError(
-                "Username is not available."
-            );
+            if (referralLink) {
+
+                referralLink.value =
+                    "Username unavailable";
+
+            }
 
             return;
 
         }
 
 
-        /* =========================================
-           REFERRAL LINK
-        ========================================= */
+        /* =====================================
+           REFERRAL CODE
+        ===================================== */
+
+        if (myReferralCode) {
+
+            myReferralCode.textContent =
+                username;
+
+        }
+
+
+        /* =====================================
+           BUILD REFERRAL URL
+        ===================================== */
 
         const registerURL =
             new URL(
@@ -1072,27 +1203,37 @@ async function initializeReferralPage() {
         }
 
 
-        /* =========================================
-           EXISTING EARNINGS
-        ========================================= */
+        /* =====================================
+           IMPORTANT
+           Use Firestore values for earnings.
+        ===================================== */
+
+        const count =
+            Number(
+                data.referralCount ||
+                0
+            );
+
+
+        const earnings =
+            Number(
+                data.referralEarnings ||
+                0
+            );
+
 
         updateProgress(
-            Number(
-                userData.referralCount ||
-                0
-            ),
-            Number(
-                userData.referralEarnings ||
-                0
-            )
+            count,
+            earnings
         );
 
 
-        /* =========================================
+        /* =====================================
            LOAD REFERRALS
-        ========================================= */
+        ===================================== */
 
         await loadReferrals(
+            user,
             username
         );
 
@@ -1100,12 +1241,8 @@ async function initializeReferralPage() {
     } catch (error) {
 
         console.error(
-            "Referral page initialization error:",
+            "Referral data error:",
             error
-        );
-
-        showReferralError(
-            "Unable to load referral information."
         );
 
     }
@@ -1132,7 +1269,8 @@ copyReferralButton?.addEventListener(
 
         if (
             !link ||
-            link === "Loading..."
+            link ===
+            "Loading..."
         ) {
 
             return;
@@ -1197,7 +1335,7 @@ copyReferralButton?.addEventListener(
         } catch (error) {
 
             console.error(
-                "Copy referral link error:",
+                "Copy failed:",
                 error
             );
 
@@ -1212,7 +1350,9 @@ copyReferralButton?.addEventListener(
                     "copy"
                 );
 
-            } catch (fallbackError) {
+            } catch (
+                fallbackError
+            ) {
 
                 console.error(
                     "Fallback copy failed:",
@@ -1220,6 +1360,65 @@ copyReferralButton?.addEventListener(
                 );
 
             }
+
+        }
+
+    }
+);
+
+
+/* =========================================
+   COPY USERNAME
+========================================= */
+
+copyCodeButton?.addEventListener(
+    "click",
+    async () => {
+
+        if (!myReferralCode) {
+            return;
+        }
+
+
+        const username =
+            myReferralCode
+                .textContent
+                .trim();
+
+
+        if (!username) {
+            return;
+        }
+
+
+        try {
+
+            await navigator.clipboard.writeText(
+                username
+            );
+
+
+            copyCodeButton.innerHTML =
+                '<i class="fa-solid fa-check"></i>';
+
+
+            setTimeout(
+                () => {
+
+                    copyCodeButton.innerHTML =
+                        '<i class="fa-solid fa-copy"></i>';
+
+                },
+                1800
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Username copy failed:",
+                error
+            );
 
         }
 
@@ -1249,7 +1448,18 @@ onAuthStateChanged(
             user;
 
 
-        await initializeReferralPage();
+        await loadReferralData(
+            user
+        );
 
     }
+);
+
+
+/* =========================================
+   PAGE READY
+========================================= */
+
+document.documentElement.classList.add(
+    "referral-ready"
 );
