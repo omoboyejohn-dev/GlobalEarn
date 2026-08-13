@@ -22,11 +22,14 @@ import {
    ELEMENTS
 ========================================= */
 
-const profileName =
-    document.getElementById("profileName");
+const profileFullName =
+    document.getElementById("profileFullName");
 
-const profileStatus =
-    document.getElementById("profileStatus");
+const profileUsername =
+    document.getElementById("profileUsername");
+
+const profileUsernameInfo =
+    document.getElementById("profileUsernameInfo");
 
 const profileEmail =
     document.getElementById("profileEmail");
@@ -34,11 +37,141 @@ const profileEmail =
 const profileCountry =
     document.getElementById("profileCountry");
 
-const profileMemberSince =
-    document.getElementById("profileMemberSince");
+const memberSince =
+    document.getElementById("memberSince");
 
-const profileUsername =
-    document.getElementById("profileUsername");
+const accountStatus =
+    document.getElementById("accountStatus");
+
+
+/* =========================================
+   DEFAULT VALUES
+========================================= */
+
+const DEFAULT_NAME =
+    "GlobalEarn Member";
+
+const DEFAULT_VALUE =
+    "Unavailable";
+
+
+/* =========================================
+   FORMAT MEMBER DATE
+========================================= */
+
+function formatDate(date) {
+
+    if (!date) {
+        return DEFAULT_VALUE;
+    }
+
+    try {
+
+        return date.toLocaleDateString(
+            "en-US",
+            {
+                year: "numeric",
+                month: "long",
+                day: "numeric"
+            }
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Date formatting error:",
+            error
+        );
+
+        return DEFAULT_VALUE;
+    }
+
+}
+
+
+/* =========================================
+   CONVERT FIRESTORE DATE
+========================================= */
+
+function getFirestoreDate(value) {
+
+    if (!value) {
+        return null;
+    }
+
+
+    /* Firestore Timestamp */
+
+    if (
+        typeof value.toDate ===
+        "function"
+    ) {
+
+        return value.toDate();
+
+    }
+
+
+    /* JavaScript Date */
+
+    if (
+        value instanceof Date
+    ) {
+
+        return value;
+
+    }
+
+
+    /* Number timestamp */
+
+    if (
+        typeof value ===
+        "number"
+    ) {
+
+        const date =
+            new Date(value);
+
+        if (
+            !isNaN(
+                date.getTime()
+            )
+        ) {
+
+            return date;
+
+        }
+
+    }
+
+
+    /* String date */
+
+    if (
+        typeof value ===
+        "string"
+    ) {
+
+        const date =
+            new Date(value);
+
+        if (
+            !isNaN(
+                date.getTime()
+            )
+        ) {
+
+            return date;
+
+        }
+
+    }
+
+
+    return null;
+
+}
 
 
 /* =========================================
@@ -49,122 +182,179 @@ async function loadProfile(user) {
 
     try {
 
-        const userRef = doc(
-            db,
-            "users",
-            user.uid
+        console.log(
+            "Loading GlobalEarn profile..."
         );
-
-        const snapshot =
-            await getDoc(userRef);
 
 
         /* =====================================
-           DEFAULT AUTH INFORMATION
+           FIRESTORE USER DOCUMENT
+        ===================================== */
+
+        const userRef =
+            doc(
+                db,
+                "users",
+                user.uid
+            );
+
+
+        const snapshot =
+            await getDoc(
+                userRef
+            );
+
+
+        /* =====================================
+           DEFAULT AUTH DATA
         ===================================== */
 
         let fullName =
-            user.displayName || "GlobalEarn Member";
+            user.displayName ||
+            DEFAULT_NAME;
+
 
         let email =
-            user.email || "Unavailable";
+            user.email ||
+            DEFAULT_VALUE;
+
 
         let username =
-            "Unavailable";
+            DEFAULT_VALUE;
+
 
         let country =
-            "Unavailable";
+            DEFAULT_VALUE;
 
-        let memberSince =
-            "Unavailable";
+
+        let registrationDate =
+            null;
 
 
         /* =====================================
            FIRESTORE DATA
         ===================================== */
 
-        if (snapshot.exists()) {
+        if (
+            snapshot.exists()
+        ) {
 
             const data =
                 snapshot.data();
 
 
+            console.log(
+                "Firestore user data:",
+                data
+            );
+
+
+            /* FULL NAME */
+
             fullName =
                 data.fullName ||
                 data.name ||
                 user.displayName ||
-                "GlobalEarn Member";
+                DEFAULT_NAME;
 
+
+            /* EMAIL */
 
             email =
                 data.email ||
                 user.email ||
-                "Unavailable";
+                DEFAULT_VALUE;
 
+
+            /* USERNAME */
 
             username =
                 data.username ||
-                "Unavailable";
+                data.userName ||
+                DEFAULT_VALUE;
 
+
+            /* COUNTRY */
 
             country =
                 data.country ||
-                "Unavailable";
+                DEFAULT_VALUE;
 
 
             /* =================================
-               MEMBER SINCE
+               REGISTRATION DATE
             ================================= */
 
-            const createdAt =
+            registrationDate =
                 data.createdAt ||
                 data.created_at ||
-                data.registrationDate;
-
-
-            if (
-                createdAt &&
-                typeof createdAt.toDate === "function"
-            ) {
-
-                memberSince =
-                    formatDate(
-                        createdAt.toDate()
-                    );
-
-            } else if (
-                createdAt instanceof Date
-            ) {
-
-                memberSince =
-                    formatDate(createdAt);
-
-            }
+                data.registrationDate ||
+                data.registeredAt ||
+                data.dateCreated ||
+                null;
 
         }
 
 
         /* =====================================
-           UPDATE PAGE
+           MEMBER SINCE
         ===================================== */
 
-        if (profileName) {
+        const date =
+            getFirestoreDate(
+                registrationDate
+            );
 
-            profileName.textContent =
+
+        const formattedMemberSince =
+            date
+                ? formatDate(date)
+                : DEFAULT_VALUE;
+
+
+        /* =====================================
+           UPDATE PROFILE HEADER
+        ===================================== */
+
+        if (
+            profileFullName
+        ) {
+
+            profileFullName.textContent =
                 fullName;
 
         }
 
 
-        if (profileStatus) {
+        if (
+            profileUsername
+        ) {
 
-            profileStatus.textContent =
+            profileUsername.textContent =
+                username !== DEFAULT_VALUE
+                    ? `@${username}`
+                    : "@username";
+
+        }
+
+
+        if (
+            accountStatus
+        ) {
+
+            accountStatus.textContent =
                 "Active";
 
         }
 
 
-        if (profileEmail) {
+        /* =====================================
+           UPDATE PERSONAL DETAILS
+        ===================================== */
+
+        if (
+            profileEmail
+        ) {
 
             profileEmail.textContent =
                 email;
@@ -172,7 +362,9 @@ async function loadProfile(user) {
         }
 
 
-        if (profileCountry) {
+        if (
+            profileCountry
+        ) {
 
             profileCountry.textContent =
                 country;
@@ -180,86 +372,115 @@ async function loadProfile(user) {
         }
 
 
-        if (profileUsername) {
+        if (
+            memberSince
+        ) {
 
-            profileUsername.textContent =
+            memberSince.textContent =
+                formattedMemberSince;
+
+        }
+
+
+        if (
+            profileUsernameInfo
+        ) {
+
+            profileUsernameInfo.textContent =
                 username;
 
         }
 
 
-        if (profileMemberSince) {
-
-            profileMemberSince.textContent =
-                memberSince;
-
-        }
-
-
         console.log(
-            "GlobalEarn profile loaded:",
-            {
-                fullName,
-                email,
-                username,
-                country,
-                memberSince
-            }
+            "GlobalEarn profile successfully loaded."
         );
 
 
     } catch (error) {
 
         console.error(
-            "Profile loading error:",
+            "GlobalEarn profile loading error:",
             error
         );
 
 
-        if (profileName) {
+        /* =====================================
+           FALLBACK TO FIREBASE AUTH
+        ===================================== */
 
-            profileName.textContent =
+        if (
+            profileFullName
+        ) {
+
+            profileFullName.textContent =
                 user.displayName ||
-                "GlobalEarn Member";
+                DEFAULT_NAME;
 
         }
 
 
-        if (profileEmail) {
+        if (
+            profileUsername
+        ) {
+
+            profileUsername.textContent =
+                "@username";
+
+        }
+
+
+        if (
+            profileEmail
+        ) {
 
             profileEmail.textContent =
                 user.email ||
-                "Unavailable";
+                DEFAULT_VALUE;
 
         }
 
 
-        if (profileStatus) {
+        if (
+            profileCountry
+        ) {
 
-            profileStatus.textContent =
+            profileCountry.textContent =
+                DEFAULT_VALUE;
+
+        }
+
+
+        if (
+            memberSince
+        ) {
+
+            memberSince.textContent =
+                DEFAULT_VALUE;
+
+        }
+
+
+        if (
+            profileUsernameInfo
+        ) {
+
+            profileUsernameInfo.textContent =
+                DEFAULT_VALUE;
+
+        }
+
+
+        if (
+            accountStatus
+        ) {
+
+            accountStatus.textContent =
                 "Active";
 
         }
 
     }
-
-}
-
-
-/* =========================================
-   FORMAT DATE
-========================================= */
-
-function formatDate(date) {
-
-    return date.toLocaleDateString(
-        "en-US",
-        {
-            year: "numeric",
-            month: "long",
-            day: "numeric"
-        }
-    );
 
 }
 
@@ -272,6 +493,18 @@ onAuthStateChanged(
     auth,
     async (user) => {
 
+        console.log(
+            "Authentication state:",
+            user
+                ? user.uid
+                : "No user"
+        );
+
+
+        /* =====================================
+           USER NOT LOGGED IN
+        ===================================== */
+
         if (!user) {
 
             window.location.href =
@@ -282,7 +515,67 @@ onAuthStateChanged(
         }
 
 
-        await loadProfile(user);
+        /* =====================================
+           LOAD USER PROFILE
+        ===================================== */
+
+        await loadProfile(
+            user
+        );
 
     }
 );
+
+
+/* =========================================
+   CHANGE NAME BUTTON
+========================================= */
+
+const changeNameButton =
+    document.getElementById(
+        "changeNameButton"
+    );
+
+
+if (
+    changeNameButton
+) {
+
+    changeNameButton.addEventListener(
+        "click",
+        () => {
+
+            window.location.href =
+                "settings.html#name";
+
+        }
+    );
+
+}
+
+
+/* =========================================
+   CHANGE PASSWORD BUTTON
+========================================= */
+
+const changePasswordButton =
+    document.getElementById(
+        "changePasswordButton"
+    );
+
+
+if (
+    changePasswordButton
+) {
+
+    changePasswordButton.addEventListener(
+        "click",
+        () => {
+
+            window.location.href =
+                "settings.html#password";
+
+        }
+    );
+
+}
