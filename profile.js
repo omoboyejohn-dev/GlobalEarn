@@ -3,30 +3,30 @@
    profile.js
 ========================================= */
 
-import { auth, db } from "./firebase.js";
+import {
+    auth,
+    db
+} from "./firebase.js";
 
 import {
     onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/12.17.0/firebase-auth.js";
 
 import {
     doc,
     getDoc
-} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/12.17.0/firebase-firestore.js";
 
 
 /* =========================================
    ELEMENTS
 ========================================= */
 
-const profileFullName =
-    document.getElementById("profileFullName");
+const profileName =
+    document.getElementById("profileName");
 
-const profileUsername =
-    document.getElementById("profileUsername");
-
-const profileUsernameInfo =
-    document.getElementById("profileUsernameInfo");
+const profileStatus =
+    document.getElementById("profileStatus");
 
 const profileEmail =
     document.getElementById("profileEmail");
@@ -34,44 +34,11 @@ const profileEmail =
 const profileCountry =
     document.getElementById("profileCountry");
 
-const memberSince =
-    document.getElementById("memberSince");
+const profileMemberSince =
+    document.getElementById("profileMemberSince");
 
-const accountStatus =
-    document.getElementById("accountStatus");
-
-const changeNameButton =
-    document.getElementById("changeNameButton");
-
-const changePasswordButton =
-    document.getElementById("changePasswordButton");
-
-
-/* =========================================
-   LOADING
-========================================= */
-
-function showLoading() {
-
-    if (profileFullName)
-        profileFullName.textContent = "Loading...";
-
-    if (profileUsername)
-        profileUsername.textContent = "@username";
-
-    if (profileUsernameInfo)
-        profileUsernameInfo.textContent = "Loading...";
-
-    if (profileEmail)
-        profileEmail.textContent = "Loading...";
-
-    if (profileCountry)
-        profileCountry.textContent = "Loading...";
-
-    if (memberSince)
-        memberSince.textContent = "Loading...";
-
-}
+const profileUsername =
+    document.getElementById("profileUsername");
 
 
 /* =========================================
@@ -82,128 +49,95 @@ async function loadProfile(user) {
 
     try {
 
-        showLoading();
+        const userRef = doc(
+            db,
+            "users",
+            user.uid
+        );
 
-
-        const userRef =
-            doc(db, "users", user.uid);
-
-        const userSnapshot =
+        const snapshot =
             await getDoc(userRef);
 
 
-        if (!userSnapshot.exists()) {
+        /* =====================================
+           DEFAULT AUTH INFORMATION
+        ===================================== */
 
-            console.error(
-                "User profile was not found in Firestore."
-            );
+        let fullName =
+            user.displayName || "GlobalEarn Member";
 
-            profileFullName.textContent =
-                user.displayName || "User";
+        let email =
+            user.email || "Unavailable";
 
-            profileUsername.textContent =
-                "@username";
+        let username =
+            "Unavailable";
 
-            profileUsernameInfo.textContent =
-                "Not available";
+        let country =
+            "Unavailable";
 
-            profileEmail.textContent =
-                user.email || "Not available";
-
-            profileCountry.textContent =
-                "Not available";
-
-            memberSince.textContent =
-                "Not available";
-
-            accountStatus.textContent =
-                "Active";
-
-            return;
-
-        }
-
-
-        const data =
-            userSnapshot.data();
+        let memberSince =
+            "Unavailable";
 
 
         /* =====================================
-           USER INFORMATION
+           FIRESTORE DATA
         ===================================== */
 
-        const fullName =
-            data.fullName ||
-            data.name ||
-            user.displayName ||
-            "User";
+        if (snapshot.exists()) {
+
+            const data =
+                snapshot.data();
 
 
-        const username =
-            data.username ||
-            "username";
+            fullName =
+                data.fullName ||
+                data.name ||
+                user.displayName ||
+                "GlobalEarn Member";
 
 
-        const email =
-            data.email ||
-            user.email ||
-            "Not available";
+            email =
+                data.email ||
+                user.email ||
+                "Unavailable";
 
 
-        const country =
-            data.country ||
-            "Not available";
+            username =
+                data.username ||
+                "Unavailable";
 
 
-        const status =
-            data.status ||
-            data.accountStatus ||
-            "Active";
+            country =
+                data.country ||
+                "Unavailable";
 
 
-        /* =====================================
-           MEMBER SINCE
-        ===================================== */
+            /* =================================
+               MEMBER SINCE
+            ================================= */
 
-        let joinedDate =
-            "Not available";
+            const createdAt =
+                data.createdAt ||
+                data.created_at ||
+                data.registrationDate;
 
-
-        if (data.createdAt) {
 
             if (
-                typeof data.createdAt.toDate ===
-                "function"
+                createdAt &&
+                typeof createdAt.toDate === "function"
             ) {
 
-                joinedDate =
-                    data.createdAt
-                        .toDate()
-                        .toLocaleDateString(
-                            "en-US",
-                            {
-                                month: "short",
-                                day: "numeric",
-                                year: "numeric"
-                            }
-                        );
+                memberSince =
+                    formatDate(
+                        createdAt.toDate()
+                    );
 
-            }
-
-            else if (
-                data.createdAt instanceof Date
+            } else if (
+                createdAt instanceof Date
             ) {
 
-                joinedDate =
-                    data.createdAt
-                        .toLocaleDateString(
-                            "en-US",
-                            {
-                                month: "short",
-                                day: "numeric",
-                                year: "numeric"
-                            }
-                        );
+                memberSince =
+                    formatDate(createdAt);
 
             }
 
@@ -211,40 +145,70 @@ async function loadProfile(user) {
 
 
         /* =====================================
-           DISPLAY DATA
+           UPDATE PAGE
         ===================================== */
 
-        profileFullName.textContent =
-            fullName;
+        if (profileName) {
+
+            profileName.textContent =
+                fullName;
+
+        }
 
 
-        profileUsername.textContent =
-            `@${username}`;
+        if (profileStatus) {
+
+            profileStatus.textContent =
+                "Active";
+
+        }
 
 
-        profileUsernameInfo.textContent =
-            username;
+        if (profileEmail) {
+
+            profileEmail.textContent =
+                email;
+
+        }
 
 
-        profileEmail.textContent =
-            email;
+        if (profileCountry) {
+
+            profileCountry.textContent =
+                country;
+
+        }
 
 
-        profileCountry.textContent =
-            country;
+        if (profileUsername) {
+
+            profileUsername.textContent =
+                username;
+
+        }
 
 
-        memberSince.textContent =
-            joinedDate;
+        if (profileMemberSince) {
+
+            profileMemberSince.textContent =
+                memberSince;
+
+        }
 
 
-        accountStatus.textContent =
-            status;
+        console.log(
+            "GlobalEarn profile loaded:",
+            {
+                fullName,
+                email,
+                username,
+                country,
+                memberSince
+            }
+        );
 
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         console.error(
             "Profile loading error:",
@@ -252,26 +216,30 @@ async function loadProfile(user) {
         );
 
 
-        profileFullName.textContent =
-            "Unable to load profile";
+        if (profileName) {
 
-        profileUsername.textContent =
-            "";
+            profileName.textContent =
+                user.displayName ||
+                "GlobalEarn Member";
 
-        profileUsernameInfo.textContent =
-            "Unavailable";
+        }
 
-        profileEmail.textContent =
-            user.email || "Unavailable";
 
-        profileCountry.textContent =
-            "Unavailable";
+        if (profileEmail) {
 
-        memberSince.textContent =
-            "Unavailable";
+            profileEmail.textContent =
+                user.email ||
+                "Unavailable";
 
-        accountStatus.textContent =
-            "Active";
+        }
+
+
+        if (profileStatus) {
+
+            profileStatus.textContent =
+                "Active";
+
+        }
 
     }
 
@@ -279,7 +247,25 @@ async function loadProfile(user) {
 
 
 /* =========================================
-   AUTH CHECK
+   FORMAT DATE
+========================================= */
+
+function formatDate(date) {
+
+    return date.toLocaleDateString(
+        "en-US",
+        {
+            year: "numeric",
+            month: "long",
+            day: "numeric"
+        }
+    );
+
+}
+
+
+/* =========================================
+   AUTH STATE
 ========================================= */
 
 onAuthStateChanged(
@@ -297,36 +283,6 @@ onAuthStateChanged(
 
 
         await loadProfile(user);
-
-    }
-);
-
-
-/* =========================================
-   CHANGE FULL NAME
-========================================= */
-
-changeNameButton?.addEventListener(
-    "click",
-    () => {
-
-        window.location.href =
-            "settings.html#name";
-
-    }
-);
-
-
-/* =========================================
-   CHANGE PASSWORD
-========================================= */
-
-changePasswordButton?.addEventListener(
-    "click",
-    () => {
-
-        window.location.href =
-            "settings.html#password";
 
     }
 );
