@@ -1,16 +1,6 @@
 /* =========================================
    GlobalEarn Settings
    settings.js
-
-   Editable:
-   - Full Name
-   - Password
-
-   Locked:
-   - Username
-   - Email
-   - Country
-   - Phone
 ========================================= */
 
 import {
@@ -34,6 +24,79 @@ import {
 
 
 /* =========================================
+   ELEMENTS
+========================================= */
+
+/* Account information */
+
+const settingsEmail =
+    document.getElementById("settingsEmail");
+
+const settingsUsername =
+    document.getElementById("settingsUsername");
+
+const settingsCountry =
+    document.getElementById("settingsCountry");
+
+
+/* Name */
+
+const editNameButton =
+    document.getElementById("editNameButton");
+
+const nameModal =
+    document.getElementById("nameModal");
+
+const closeNameModal =
+    document.getElementById("closeNameModal");
+
+const nameForm =
+    document.getElementById("nameForm");
+
+const newFullName =
+    document.getElementById("newFullName");
+
+const saveNameButton =
+    document.getElementById("saveNameButton");
+
+const nameMessage =
+    document.getElementById("nameMessage");
+
+
+/* Password */
+
+const editPasswordButton =
+    document.getElementById("editPasswordButton");
+
+const passwordModal =
+    document.getElementById("passwordModal");
+
+const closePasswordModal =
+    document.getElementById("closePasswordModal");
+
+const passwordForm =
+    document.getElementById("passwordForm");
+
+const newPassword =
+    document.getElementById("newPassword");
+
+const confirmPassword =
+    document.getElementById("confirmPassword");
+
+const savePasswordButton =
+    document.getElementById("savePasswordButton");
+
+const passwordMessage =
+    document.getElementById("passwordMessage");
+
+
+/* Logout */
+
+const logoutButton =
+    document.getElementById("logoutButton");
+
+
+/* =========================================
    CURRENT USER
 ========================================= */
 
@@ -41,166 +104,33 @@ let currentUser = null;
 
 
 /* =========================================
-   HELPERS
-========================================= */
-
-function getElement(...ids) {
-
-    for (const id of ids) {
-
-        const element =
-            document.getElementById(id);
-
-        if (element) {
-            return element;
-        }
-
-    }
-
-    return null;
-}
-
-
-function setElementValue(element, value) {
-
-    if (!element) return;
-
-    const safeValue =
-        value ?? "";
-
-
-    /*
-     * Input / textarea / select
-     */
-
-    if (
-        "value" in element
-    ) {
-
-        element.value =
-            safeValue;
-
-        return;
-
-    }
-
-
-    /*
-     * Normal text element
-     */
-
-    element.textContent =
-        safeValue;
-
-}
-
-
-/* =========================================
-   ELEMENTS
-========================================= */
-
-/* Profile */
-
-const fullNameInput =
-    getElement(
-        "fullName"
-    );
-
-const usernameInput =
-    getElement(
-        "username"
-    );
-
-const emailInput =
-    getElement(
-        "email"
-    );
-
-const countryInput =
-    getElement(
-        "country"
-    );
-
-const phoneInput =
-    getElement(
-        "phone"
-    );
-
-const saveProfileButton =
-    getElement(
-        "saveProfileButton"
-    );
-
-const profileMessage =
-    getElement(
-        "profileMessage"
-    );
-
-
-/* Password */
-
-const passwordForm =
-    getElement(
-        "passwordForm"
-    );
-
-const newPasswordInput =
-    getElement(
-        "newPassword"
-    );
-
-const confirmPasswordInput =
-    getElement(
-        "confirmPassword"
-    );
-
-const savePasswordButton =
-    getElement(
-        "savePasswordButton"
-    );
-
-const passwordMessage =
-    getElement(
-        "passwordMessage"
-    );
-
-
-/* Logout */
-
-const logoutButton =
-    getElement(
-        "logoutButton"
-    );
-
-
-/* =========================================
    MESSAGE HELPERS
 ========================================= */
 
-function showProfileMessage(
+function showNameMessage(
     message,
     type = "error"
 ) {
 
-    if (!profileMessage) return;
+    if (!nameMessage) return;
 
-    profileMessage.textContent =
+    nameMessage.textContent =
         message;
 
-    profileMessage.className =
-        `settings-message ${type}`;
+    nameMessage.className =
+        `modal-message ${type}`;
 
-    profileMessage.hidden =
+    nameMessage.hidden =
         false;
 
 }
 
 
-function hideProfileMessage() {
+function hideNameMessage() {
 
-    if (!profileMessage) return;
+    if (!nameMessage) return;
 
-    profileMessage.hidden =
+    nameMessage.hidden =
         true;
 
 }
@@ -236,159 +166,7 @@ function hidePasswordMessage() {
 
 
 /* =========================================
-   DISPLAY USER INFORMATION
-========================================= */
-
-function displayUserInformation(
-    userData,
-    user
-) {
-
-    /*
-     * Full Name
-     */
-
-    const fullName =
-        userData.fullName ||
-        user.displayName ||
-        "";
-
-
-    /*
-     * Username
-     */
-
-    const username =
-        userData.username ||
-        "";
-
-
-    /*
-     * Email
-     */
-
-    const email =
-        userData.email ||
-        user.email ||
-        "";
-
-
-    /*
-     * Country
-     */
-
-    const country =
-        userData.country ||
-        "";
-
-
-    /*
-     * Phone
-     */
-
-    const phone =
-        userData.phone ||
-        "";
-
-
-    /* =====================================
-       FULL NAME
-    ===================================== */
-
-    setElementValue(
-        fullNameInput,
-        fullName
-    );
-
-
-    /* =====================================
-       USERNAME
-    ===================================== */
-
-    setElementValue(
-        usernameInput,
-        username
-    );
-
-
-    if (
-        usernameInput &&
-        "readOnly" in usernameInput
-    ) {
-
-        usernameInput.readOnly =
-            true;
-
-    }
-
-
-    /* =====================================
-       EMAIL
-    ===================================== */
-
-    setElementValue(
-        emailInput,
-        email
-    );
-
-
-    if (
-        emailInput &&
-        "readOnly" in emailInput
-    ) {
-
-        emailInput.readOnly =
-            true;
-
-    }
-
-
-    /* =====================================
-       COUNTRY
-    ===================================== */
-
-    setElementValue(
-        countryInput,
-        country
-    );
-
-
-    if (
-        countryInput &&
-        "readOnly" in countryInput
-    ) {
-
-        countryInput.readOnly =
-            true;
-
-    }
-
-
-    /* =====================================
-       PHONE
-    ===================================== */
-
-    setElementValue(
-        phoneInput,
-        phone
-    );
-
-
-    if (
-        phoneInput &&
-        "readOnly" in phoneInput
-    ) {
-
-        phoneInput.readOnly =
-            true;
-
-    }
-
-}
-
-
-/* =========================================
-   LOAD USER DATA
+   LOAD ACCOUNT INFORMATION
 ========================================= */
 
 async function loadUserData(user) {
@@ -404,18 +182,29 @@ async function loadUserData(user) {
 
 
         const userSnapshot =
-            await getDoc(
-                userRef
+            await getDoc(userRef);
+
+
+        if (!userSnapshot.exists()) {
+
+            console.error(
+                "User document not found."
             );
 
+            if (settingsEmail) {
+                settingsEmail.textContent =
+                    "Unavailable";
+            }
 
-        if (
-            !userSnapshot.exists()
-        ) {
+            if (settingsUsername) {
+                settingsUsername.textContent =
+                    "Unavailable";
+            }
 
-            showProfileMessage(
-                "Your account information could not be found."
-            );
+            if (settingsCountry) {
+                settingsCountry.textContent =
+                    "Unavailable";
+            }
 
             return;
 
@@ -426,23 +215,90 @@ async function loadUserData(user) {
             userSnapshot.data();
 
 
-        displayUserInformation(
-            userData,
-            user
-        );
+        /* =====================================
+           EMAIL
+        ===================================== */
+
+        if (settingsEmail) {
+
+            settingsEmail.textContent =
+                userData.email ||
+                user.email ||
+                "Not available";
+
+        }
+
+
+        /* =====================================
+           USERNAME
+        ===================================== */
+
+        if (settingsUsername) {
+
+            settingsUsername.textContent =
+                userData.username ||
+                "Not available";
+
+        }
+
+
+        /* =====================================
+           COUNTRY
+        ===================================== */
+
+        if (settingsCountry) {
+
+            settingsCountry.textContent =
+                userData.country ||
+                "Not available";
+
+        }
+
+
+        /* =====================================
+           FULL NAME
+        ===================================== */
+
+        if (newFullName) {
+
+            newFullName.value =
+                userData.fullName ||
+                user.displayName ||
+                "";
+
+        }
 
 
     } catch (error) {
 
         console.error(
-            "Load settings error:",
+            "Settings load error:",
             error
         );
 
 
-        showProfileMessage(
-            "Unable to load your account information."
-        );
+        if (settingsEmail) {
+
+            settingsEmail.textContent =
+                "Unable to load";
+
+        }
+
+
+        if (settingsUsername) {
+
+            settingsUsername.textContent =
+                "Unable to load";
+
+        }
+
+
+        if (settingsCountry) {
+
+            settingsCountry.textContent =
+                "Unable to load";
+
+        }
 
     }
 
@@ -480,24 +336,106 @@ onAuthStateChanged(
 
 
 /* =========================================
+   OPEN NAME MODAL
+========================================= */
+
+if (editNameButton) {
+
+    editNameButton.addEventListener(
+        "click",
+        () => {
+
+            hideNameMessage();
+
+
+            if (nameModal) {
+
+                nameModal.hidden =
+                    false;
+
+            }
+
+
+            newFullName?.focus();
+
+        }
+    );
+
+}
+
+
+/* =========================================
+   CLOSE NAME MODAL
+========================================= */
+
+if (closeNameModal) {
+
+    closeNameModal.addEventListener(
+        "click",
+        () => {
+
+            if (nameModal) {
+
+                nameModal.hidden =
+                    true;
+
+            }
+
+            hideNameMessage();
+
+        }
+    );
+
+}
+
+
+/* =========================================
+   CLOSE NAME MODAL
+   CLICK OUTSIDE
+========================================= */
+
+if (nameModal) {
+
+    nameModal.addEventListener(
+        "click",
+        (event) => {
+
+            if (
+                event.target ===
+                nameModal
+            ) {
+
+                nameModal.hidden =
+                    true;
+
+                hideNameMessage();
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================
    SAVE FULL NAME
 ========================================= */
 
-if (saveProfileButton) {
+if (nameForm) {
 
-    saveProfileButton.addEventListener(
-        "click",
-        async function (event) {
+    nameForm.addEventListener(
+        "submit",
+        async (event) => {
 
             event.preventDefault();
 
-
-            hideProfileMessage();
+            hideNameMessage();
 
 
             if (!currentUser) {
 
-                showProfileMessage(
+                showNameMessage(
                     "Please log in again."
                 );
 
@@ -507,7 +445,7 @@ if (saveProfileButton) {
 
 
             const fullName =
-                fullNameInput?.value
+                newFullName?.value
                     ?.trim() ||
                 "";
 
@@ -518,11 +456,11 @@ if (saveProfileButton) {
 
             if (!fullName) {
 
-                showProfileMessage(
+                showNameMessage(
                     "Please enter your full name."
                 );
 
-                fullNameInput?.focus();
+                newFullName?.focus();
 
                 return;
 
@@ -533,11 +471,11 @@ if (saveProfileButton) {
                 fullName.length < 2
             ) {
 
-                showProfileMessage(
+                showNameMessage(
                     "Your full name must contain at least 2 characters."
                 );
 
-                fullNameInput?.focus();
+                newFullName?.focus();
 
                 return;
 
@@ -548,13 +486,10 @@ if (saveProfileButton) {
                LOADING
             ================================= */
 
-            saveProfileButton.disabled =
+            saveNameButton.disabled =
                 true;
 
-            const originalText =
-                saveProfileButton.textContent;
-
-            saveProfileButton.textContent =
+            saveNameButton.textContent =
                 "Saving...";
 
 
@@ -599,33 +534,143 @@ if (saveProfileButton) {
                 );
 
 
-                showProfileMessage(
+                showNameMessage(
                     "Your full name has been updated successfully.",
                     "success"
+                );
+
+
+                /*
+                 * Close after success.
+                 */
+
+                setTimeout(
+                    () => {
+
+                        if (nameModal) {
+
+                            nameModal.hidden =
+                                true;
+
+                        }
+
+
+                        hideNameMessage();
+
+                    },
+                    1200
                 );
 
 
             } catch (error) {
 
                 console.error(
-                    "Profile update error:",
+                    "Name update error:",
                     error
                 );
 
 
-                showProfileMessage(
+                showNameMessage(
                     "Unable to update your full name. Please try again."
                 );
 
-
             } finally {
 
-                saveProfileButton.disabled =
+                saveNameButton.disabled =
                     false;
 
-                saveProfileButton.textContent =
-                    originalText ||
+                saveNameButton.textContent =
                     "Save Changes";
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================
+   OPEN PASSWORD MODAL
+========================================= */
+
+if (editPasswordButton) {
+
+    editPasswordButton.addEventListener(
+        "click",
+        () => {
+
+            hidePasswordMessage();
+
+
+            if (passwordForm) {
+
+                passwordForm.reset();
+
+            }
+
+
+            if (passwordModal) {
+
+                passwordModal.hidden =
+                    false;
+
+            }
+
+
+            newPassword?.focus();
+
+        }
+    );
+
+}
+
+
+/* =========================================
+   CLOSE PASSWORD MODAL
+========================================= */
+
+if (closePasswordModal) {
+
+    closePasswordModal.addEventListener(
+        "click",
+        () => {
+
+            if (passwordModal) {
+
+                passwordModal.hidden =
+                    true;
+
+            }
+
+            hidePasswordMessage();
+
+        }
+    );
+
+}
+
+
+/* =========================================
+   CLOSE PASSWORD MODAL
+   CLICK OUTSIDE
+========================================= */
+
+if (passwordModal) {
+
+    passwordModal.addEventListener(
+        "click",
+        (event) => {
+
+            if (
+                event.target ===
+                passwordModal
+            ) {
+
+                passwordModal.hidden =
+                    true;
+
+                hidePasswordMessage();
 
             }
 
@@ -643,10 +688,9 @@ if (passwordForm) {
 
     passwordForm.addEventListener(
         "submit",
-        async function (event) {
+        async (event) => {
 
             event.preventDefault();
-
 
             hidePasswordMessage();
 
@@ -662,13 +706,13 @@ if (passwordForm) {
             }
 
 
-            const newPassword =
-                newPasswordInput?.value ||
+            const password =
+                newPassword?.value ||
                 "";
 
 
-            const confirmPassword =
-                confirmPasswordInput?.value ||
+            const confirm =
+                confirmPassword?.value ||
                 "";
 
 
@@ -676,13 +720,13 @@ if (passwordForm) {
                VALIDATION
             ================================= */
 
-            if (!newPassword) {
+            if (!password) {
 
                 showPasswordMessage(
                     "Please enter your new password."
                 );
 
-                newPasswordInput?.focus();
+                newPassword?.focus();
 
                 return;
 
@@ -690,14 +734,14 @@ if (passwordForm) {
 
 
             if (
-                newPassword.length < 6
+                password.length < 6
             ) {
 
                 showPasswordMessage(
                     "Password must contain at least 6 characters."
                 );
 
-                newPasswordInput?.focus();
+                newPassword?.focus();
 
                 return;
 
@@ -705,15 +749,15 @@ if (passwordForm) {
 
 
             if (
-                newPassword !==
-                confirmPassword
+                password !==
+                confirm
             ) {
 
                 showPasswordMessage(
                     "Passwords do not match."
                 );
 
-                confirmPasswordInput?.focus();
+                confirmPassword?.focus();
 
                 return;
 
@@ -727,9 +771,6 @@ if (passwordForm) {
             savePasswordButton.disabled =
                 true;
 
-            const originalText =
-                savePasswordButton.textContent;
-
             savePasswordButton.textContent =
                 "Updating...";
 
@@ -738,7 +779,7 @@ if (passwordForm) {
 
                 await updatePassword(
                     currentUser,
-                    newPassword
+                    password
                 );
 
 
@@ -748,37 +789,40 @@ if (passwordForm) {
                 );
 
 
-                /*
-                 * Clear password fields.
-                 */
+                if (newPassword) {
 
-                if (newPasswordInput) {
-
-                    newPasswordInput.value =
+                    newPassword.value =
                         "";
 
                 }
 
 
-                if (confirmPasswordInput) {
+                if (confirmPassword) {
 
-                    confirmPasswordInput.value =
+                    confirmPassword.value =
                         "";
 
                 }
 
 
                 /*
-                 * Hide success message.
+                 * Close modal after success.
                  */
 
                 setTimeout(
                     () => {
 
+                        if (passwordModal) {
+
+                            passwordModal.hidden =
+                                true;
+
+                        }
+
                         hidePasswordMessage();
 
                     },
-                    3000
+                    1500
                 );
 
 
@@ -822,33 +866,18 @@ if (passwordForm) {
                         break;
 
 
-                    case "auth/user-token-expired":
+                    case "auth/user-disabled":
 
                         message =
-                            "Your session has expired. Please log in again.";
+                            "This account has been disabled.";
 
                         break;
 
 
                     default:
 
-                        /*
-                         * Don't expose unnecessary
-                         * Firebase internal errors.
-                         */
-
-                        if (
-                            error.message &&
-                            error.code ===
-                            "auth/invalid-credential"
-                        ) {
-
-                            message =
-                                "Your current session is no longer valid. Please log in again.";
-
-                        }
-
-                        break;
+                        message =
+                            "Unable to update your password. Please try again.";
 
                 }
 
@@ -864,7 +893,6 @@ if (passwordForm) {
                     false;
 
                 savePasswordButton.textContent =
-                    originalText ||
                     "Update Password";
 
             }
@@ -949,6 +977,51 @@ document
 
 
 /* =========================================
+   ESC KEY - CLOSE MODALS
+========================================= */
+
+document.addEventListener(
+    "keydown",
+    (event) => {
+
+        if (
+            event.key !==
+            "Escape"
+        ) {
+            return;
+        }
+
+
+        if (
+            nameModal &&
+            !nameModal.hidden
+        ) {
+
+            nameModal.hidden =
+                true;
+
+            hideNameMessage();
+
+        }
+
+
+        if (
+            passwordModal &&
+            !passwordModal.hidden
+        ) {
+
+            passwordModal.hidden =
+                true;
+
+            hidePasswordMessage();
+
+        }
+
+    }
+);
+
+
+/* =========================================
    LOGOUT
 ========================================= */
 
@@ -956,13 +1029,19 @@ if (logoutButton) {
 
     logoutButton.addEventListener(
         "click",
-        async function (event) {
+        async (event) => {
 
             event.preventDefault();
 
 
             logoutButton.disabled =
                 true;
+
+
+            logoutButton.innerHTML = `
+                <i class="fa-solid fa-spinner fa-spin"></i>
+                Logging out...
+            `;
 
 
             try {
@@ -986,6 +1065,12 @@ if (logoutButton) {
 
                 logoutButton.disabled =
                     false;
+
+
+                logoutButton.innerHTML = `
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    Logout
+                `;
 
             }
 
