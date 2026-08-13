@@ -2,12 +2,13 @@
    GlobalEarn Withdrawal System
    withdraw.js
 
-   Rules:
+   Features:
+   - Reads real balance from Firestore
+   - Displays current balance
    - Minimum withdrawal: $200
-   - Uses Firestore "balance" field
-   - Cannot withdraw more than available balance
-   - Deducts balance when request is submitted
-   - Creates a pending withdrawal record
+   - Prevents withdrawal above balance
+   - Creates withdrawal request only when valid
+   - Deducts balance only after valid request
 ========================================= */
 
 import {
@@ -22,10 +23,18 @@ import {
 import {
     doc,
     getDoc,
+    updateDoc,
+    addDoc,
     collection,
-    runTransaction,
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-firestore.js";
+
+
+/* =========================================
+   SETTINGS
+========================================= */
+
+const MINIMUM_WITHDRAWAL = 200;
 
 
 /* =========================================
@@ -44,6 +53,9 @@ const walletInput =
 const withdrawButton =
     document.getElementById("withdrawButton");
 
+const withdrawBalance =
+    document.getElementById("withdrawBalance");
+
 const errorMessage =
     document.getElementById("withdrawError");
 
@@ -53,31 +65,25 @@ const errorText =
 const successMessage =
     document.getElementById("withdrawSuccess");
 
-
-/* =========================================
-   SETTINGS
-========================================= */
-
-const MINIMUM_WITHDRAWAL = 200;
+const successText =
+    document.getElementById("withdrawSuccessText");
 
 
 /* =========================================
-   USER BALANCE
+   CURRENT USER BALANCE
 ========================================= */
-
-let currentUser = null;
 
 let currentBalance = 0;
+let currentUser = null;
 
 
 /* =========================================
-   MONEY FORMAT
+   FORMAT MONEY
 ========================================= */
 
-function formatMoney(value) {
+function formatMoney(amount) {
 
-    return "$" +
-        Number(value || 0).toFixed(2);
+    return Number(amount || 0).toFixed(2);
 
 }
 
@@ -86,49 +92,15 @@ function formatMoney(value) {
    UPDATE BALANCE ON PAGE
 ========================================= */
 
-function updateBalanceDisplay(balance) {
+function displayBalance(balance) {
 
     currentBalance =
-        Number(balance) || 0;
+        Number(balance || 0);
 
+    if (withdrawBalance) {
 
-    /*
-     * Your withdraw.html should have
-     * an element with id="availableBalance".
-     */
-
-    const balanceElement =
-        document.getElementById(
-            "availableBalance"
-        );
-
-
-    if (balanceElement) {
-
-        balanceElement.textContent =
-            formatMoney(currentBalance);
-
-    }
-
-
-    /*
-     * Also support walletBalance
-     * if that ID exists on the page.
-     */
-
-    const walletBalance =
-        document.getElementById(
-            "walletBalance"
-        );
-
-
-    if (
-        walletBalance &&
-        walletBalance !== balanceElement
-    ) {
-
-        walletBalance.textContent =
-            formatMoney(currentBalance);
+        withdrawBalance.textContent =
+            `$${formatMoney(currentBalance)}`;
 
     }
 
@@ -141,19 +113,19 @@ function updateBalanceDisplay(balance) {
 
 function showError(message) {
 
-    if (
-        errorMessage &&
-        errorText
-    ) {
+    if (errorText) {
 
         errorText.textContent =
             message;
+
+    }
+
+    if (errorMessage) {
 
         errorMessage.hidden =
             false;
 
     }
-
 
     if (successMessage) {
 
@@ -171,32 +143,24 @@ function showError(message) {
 
 function showSuccess(message) {
 
-    if (errorMessage) {
+    if (successText) {
 
-        errorMessage.hidden =
-            true;
+        successText.textContent =
+            message;
 
     }
-
 
     if (successMessage) {
 
         successMessage.hidden =
             false;
 
+    }
 
-        const successText =
-            successMessage.querySelector(
-                "span"
-            );
+    if (errorMessage) {
 
-
-        if (successText) {
-
-            successText.textContent =
-                message;
-
-        }
+        errorMessage.hidden =
+            true;
 
     }
 
@@ -215,7 +179,6 @@ function hideMessages() {
             true;
 
     }
-
 
     if (successMessage) {
 
@@ -243,50 +206,30 @@ async function loadUserBalance(user) {
             );
 
 
-        const snapshot =
+        const userSnapshot =
             await getDoc(userRef);
 
 
-        if (!snapshot.exists()) {
+        if (!userSnapshot.exists()) {
 
             showError(
                 "Your account information could not be found."
             );
 
-            return false;
+            displayBalance(0);
+
+            return;
 
         }
 
 
         const userData =
-            snapshot.data();
+            userSnapshot.data();
 
 
-        /*
-         * IMPORTANT:
-         *
-         * We use "balance",
-         * NOT "welcomeBonus".
-         */
-
-        const balance =
-            Number(
-                userData.balance
-            ) || 0;
-
-
-        updateBalanceDisplay(
-            balance
+        displayBalance(
+            userData.balance || 0
         );
-
-
-        console.log(
-            "GlobalEarn withdrawal balance:",
-            balance
-        );
-
-
-        return true;
 
 
     } catch (error) {
@@ -301,21 +244,18 @@ async function loadUserBalance(user) {
             "Unable to load your available balance. Please refresh the page."
         );
 
-
-        return false;
-
     }
 
 }
 
 
 /* =========================================
-   AUTH STATE
+   AUTHENTICATION
 ========================================= */
 
 onAuthStateChanged(
     auth,
-    async (user) => {
+    async function (user) {
 
         if (!user) {
 
@@ -331,9 +271,7 @@ onAuthStateChanged(
             user;
 
 
-        await loadUserBalance(
-            user
-        );
+        await loadUserBalance(user);
 
     }
 );
@@ -362,7 +300,7 @@ if (withdrawForm) {
             if (!currentUser) {
 
                 showError(
-                    "Please login to continue."
+                    "Please log in before making a withdrawal."
                 );
 
                 return;
@@ -397,9 +335,13 @@ if (withdrawForm) {
 
             const amount =
                 Number(
-                    amountInput?.value
+                    amountInput.value
                 );
 
+
+            /* =====================================
+               CHECK AMOUNT
+            ===================================== */
 
             if (
                 !Number.isFinite(amount) ||
@@ -427,7 +369,7 @@ if (withdrawForm) {
             ) {
 
                 showError(
-                    "You can only withdraw $200 or more."
+                    "Minimum withdrawal is $200.00."
                 );
 
                 amountInput.focus();
@@ -441,22 +383,13 @@ if (withdrawForm) {
                CHECK AVAILABLE BALANCE
             ===================================== */
 
-            /*
-             * Example:
-             *
-             * Balance = $71
-             * Request  = $200
-             *
-             * This must be rejected.
-             */
-
             if (
                 amount >
                 currentBalance
             ) {
 
                 showError(
-                    `Insufficient balance. Your available balance is ${formatMoney(currentBalance)}. You cannot withdraw ${formatMoney(amount)}.`
+                    `Insufficient balance. Your available balance is $${formatMoney(currentBalance)}. You cannot withdraw $${formatMoney(amount)}.`
                 );
 
                 amountInput.focus();
@@ -471,8 +404,7 @@ if (withdrawForm) {
             ===================================== */
 
             const walletAddress =
-                walletInput?.value
-                    .trim();
+                walletInput.value.trim();
 
 
             if (!walletAddress) {
@@ -508,25 +440,25 @@ if (withdrawForm) {
                DISABLE BUTTON
             ===================================== */
 
-            if (withdrawButton) {
-
-                withdrawButton.disabled =
-                    true;
+            withdrawButton.disabled =
+                true;
 
 
-                withdrawButton.innerHTML = `
-                    <i class="fa-solid fa-spinner fa-spin"></i>
-                    <span>Processing...</span>
-                `;
+            withdrawButton.innerHTML = `
+                <i class="fa-solid fa-spinner fa-spin"></i>
+                <span>Processing...</span>
+            `;
 
-            }
-
-
-            /* =====================================
-               FIRESTORE TRANSACTION
-            ===================================== */
 
             try {
+
+                /* =====================================
+                   GET FRESH BALANCE FROM FIRESTORE
+
+                   Important:
+                   Do not rely only on the balance
+                   displayed on the screen.
+                ===================================== */
 
                 const userRef =
                     doc(
@@ -536,180 +468,129 @@ if (withdrawForm) {
                     );
 
 
-                /*
-                 * Create a new withdrawal
-                 * document with an automatic ID.
-                 */
+                const userSnapshot =
+                    await getDoc(userRef);
 
-                const withdrawalRef =
-                    doc(
-                        collection(
-                            db,
-                            "withdrawals"
-                        )
+
+                if (!userSnapshot.exists()) {
+
+                    throw new Error(
+                        "USER_NOT_FOUND"
                     );
 
-
-                await runTransaction(
-                    db,
-                    async (transaction) => {
-
-                        /*
-                         * Read the latest balance
-                         * INSIDE the transaction.
-                         *
-                         * This prevents an old
-                         * browser balance from being
-                         * trusted.
-                         */
-
-                        const userSnapshot =
-                            await transaction.get(
-                                userRef
-                            );
+                }
 
 
-                        if (
-                            !userSnapshot.exists()
-                        ) {
-
-                            throw new Error(
-                                "ACCOUNT_NOT_FOUND"
-                            );
-
-                        }
+                const userData =
+                    userSnapshot.data();
 
 
-                        const userData =
-                            userSnapshot.data();
-
-
-                        const latestBalance =
-                            Number(
-                                userData.balance
-                            ) || 0;
-
-
-                        /*
-                         * FINAL SERVER-SIDE
-                         * TRANSACTION CHECK
-                         */
-
-                        if (
-                            amount >
-                            latestBalance
-                        ) {
-
-                            throw new Error(
-                                "INSUFFICIENT_BALANCE"
-                            );
-
-                        }
-
-
-                        if (
-                            latestBalance <
-                            MINIMUM_WITHDRAWAL
-                        ) {
-
-                            throw new Error(
-                                "BALANCE_BELOW_MINIMUM"
-                            );
-
-                        }
-
-
-                        /*
-                         * Calculate new balance.
-                         */
-
-                        const newBalance =
-                            Number(
-                                (
-                                    latestBalance -
-                                    amount
-                                ).toFixed(2)
-                            );
-
-
-                        /*
-                         * Deduct the withdrawal
-                         * amount from balance.
-                         */
-
-                        transaction.update(
-                            userRef,
-                            {
-
-                                balance:
-                                    newBalance,
-
-                                updatedAt:
-                                    serverTimestamp()
-
-                            }
-                        );
-
-
-                        /*
-                         * Create withdrawal request.
-                         */
-
-                        transaction.set(
-                            withdrawalRef,
-                            {
-
-                                uid:
-                                    currentUser.uid,
-
-                                email:
-                                    currentUser.email ||
-                                    userData.email ||
-                                    "",
-
-                                username:
-                                    userData.username ||
-                                    "",
-
-                                amount:
-                                    amount,
-
-                                cryptocurrency:
-                                    selectedCrypto.value,
-
-                                walletAddress:
-                                    walletAddress,
-
-                                status:
-                                    "pending",
-
-                                createdAt:
-                                    serverTimestamp(),
-
-                                updatedAt:
-                                    serverTimestamp()
-
-                            }
-                        );
-
-                    }
-                );
+                const freshBalance =
+                    Number(
+                        userData.balance || 0
+                    );
 
 
                 /* =====================================
                    UPDATE PAGE BALANCE
                 ===================================== */
 
-                const newBalance =
-                    Number(
-                        (
-                            currentBalance -
-                            amount
-                        ).toFixed(2)
+                displayBalance(
+                    freshBalance
+                );
+
+
+                /* =====================================
+                   FRESH BALANCE CHECK
+                ===================================== */
+
+                if (
+                    amount >
+                    freshBalance
+                ) {
+
+                    showError(
+                        `Insufficient balance. Your available balance is $${formatMoney(freshBalance)}.`
                     );
 
+                    return;
 
-                updateBalanceDisplay(
+                }
+
+
+                /* =====================================
+                   CALCULATE NEW BALANCE
+                ===================================== */
+
+                const newBalance =
+                    freshBalance -
+                    amount;
+
+
+                /* =====================================
+                   CREATE WITHDRAWAL REQUEST
+                ===================================== */
+
+                await addDoc(
+                    collection(
+                        db,
+                        "withdrawals"
+                    ),
+                    {
+
+                        userId:
+                            currentUser.uid,
+
+                        email:
+                            currentUser.email || "",
+
+                        cryptocurrency:
+                            selectedCrypto.value,
+
+                        amount:
+                            amount,
+
+                        walletAddress:
+                            walletAddress,
+
+                        status:
+                            "pending",
+
+                        createdAt:
+                            serverTimestamp()
+
+                    }
+                );
+
+
+                /* =====================================
+                   DEDUCT BALANCE
+                ===================================== */
+
+                await updateDoc(
+                    userRef,
+                    {
+
+                        balance:
+                            newBalance,
+
+                        totalWithdrawn:
+                            Number(
+                                userData.totalWithdrawn || 0
+                            ) + amount,
+
+                        updatedAt:
+                            serverTimestamp()
+
+                    }
+                );
+
+
+                /* =====================================
+                   UPDATE LOCAL BALANCE
+                ===================================== */
+
+                displayBalance(
                     newBalance
                 );
 
@@ -719,47 +600,31 @@ if (withdrawForm) {
                 ===================================== */
 
                 showSuccess(
-                    `Your ${selectedCrypto.value} withdrawal request for ${formatMoney(amount)} has been submitted successfully and is pending review.`
+                    `Your ${selectedCrypto.value} withdrawal request for $${formatMoney(amount)} has been submitted successfully.`
                 );
 
 
                 /* =====================================
-                   BUTTON
+                   CLEAR FORM
                 ===================================== */
 
-                if (withdrawButton) {
+                amountInput.value =
+                    "";
 
-                    withdrawButton.disabled =
-                        true;
-
-
-                    withdrawButton.innerHTML = `
-                        <i class="fa-solid fa-circle-check"></i>
-                        <span>Withdrawal Submitted</span>
-                    `;
-
-                }
+                walletInput.value =
+                    "";
 
 
-                /*
-                 * Prevent submitting the
-                 * same form again.
-                 */
-
-                if (amountInput) {
-
-                    amountInput.value =
-                        "";
-
-                }
-
-
-                if (walletInput) {
-
-                    walletInput.value =
-                        "";
-
-                }
+                document
+                    .querySelectorAll(
+                        'input[name="paymentMethod"]'
+                    )
+                    .forEach(
+                        radio => {
+                            radio.checked =
+                                false;
+                        }
+                    );
 
 
             } catch (error) {
@@ -770,41 +635,9 @@ if (withdrawForm) {
                 );
 
 
-                /* =====================================
-                   SPECIFIC ERRORS
-                ===================================== */
-
                 if (
                     error.message ===
-                    "INSUFFICIENT_BALANCE"
-                ) {
-
-                    /*
-                     * Refresh balance before
-                     * showing the final message.
-                     */
-
-                    await loadUserBalance(
-                        currentUser
-                    );
-
-
-                    showError(
-                        `Insufficient balance. Your available balance is ${formatMoney(currentBalance)}.`
-                    );
-
-                } else if (
-                    error.message ===
-                    "BALANCE_BELOW_MINIMUM"
-                ) {
-
-                    showError(
-                        "Your balance is below the $200 minimum withdrawal requirement."
-                    );
-
-                } else if (
-                    error.message ===
-                    "ACCOUNT_NOT_FOUND"
+                    "USER_NOT_FOUND"
                 ) {
 
                     showError(
@@ -819,45 +652,20 @@ if (withdrawForm) {
 
                 }
 
+            } finally {
 
-                /* =====================================
-                   RESTORE BUTTON
-                ===================================== */
-
-                if (withdrawButton) {
-
-                    withdrawButton.disabled =
-                        false;
+                withdrawButton.disabled =
+                    false;
 
 
-                    withdrawButton.innerHTML = `
-                        <i class="fa-solid fa-money-bill-transfer"></i>
-                        <span>Withdraw Funds</span>
-                    `;
-
-                }
+                withdrawButton.innerHTML = `
+                    <i class="fa-solid fa-money-bill-transfer"></i>
+                    <span>Withdraw Funds</span>
+                `;
 
             }
 
         }
     );
 
-}
-
-
-/* =========================================
-   INITIAL BALANCE STATE
-========================================= */
-
-const balanceElement =
-    document.getElementById(
-        "availableBalance"
-    );
-
-
-if (balanceElement) {
-
-    balanceElement.textContent =
-        "$0.00";
-
-}
+           }
