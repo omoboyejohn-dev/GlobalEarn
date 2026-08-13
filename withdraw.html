@@ -129,8 +129,15 @@
                     AVAILABLE BALANCE
                 </span>
 
+
+                <!--
+                    IMPORTANT:
+                    Firebase will replace this
+                    with the user's actual balance.
+                -->
+
                 <strong id="withdrawBalance">
-                    $50.00
+                    $0.00
                 </strong>
 
             </div>
@@ -180,12 +187,13 @@
         <div>
 
             <strong>
-                You can only withdraw $200+
+                Minimum withdrawal is $200
             </strong>
 
             <p>
                 Your withdrawal amount must be at least
-                $200.00.
+                $200.00 and cannot exceed your available
+                balance.
             </p>
 
         </div>
@@ -225,7 +233,6 @@
             id="withdrawForm"
             novalidate
         >
-
 
 
             <!-- =========================================
@@ -428,7 +435,7 @@
 
                 <small class="input-help">
 
-                    Minimum withdrawal amount:
+                    Minimum withdrawal:
                     <strong>$200.00</strong>
 
                 </small>
@@ -473,8 +480,10 @@
                     id="walletHelp"
                     class="input-help"
                 >
+
                     Select a cryptocurrency above and enter
                     the correct wallet address.
+
                 </small>
 
 
@@ -532,7 +541,7 @@
                 <div>
 
                     <strong>
-                        Withdrawal Successful
+                        Withdrawal Submitted
                     </strong>
 
                     <span id="withdrawSuccessText">
@@ -595,8 +604,9 @@
 
             <p>
                 The minimum withdrawal amount is $200.00.
-                Always make sure your cryptocurrency and
-                wallet address are correct before submitting.
+                Your available balance must also be enough
+                to cover the requested withdrawal amount.
+                Withdrawals are reviewed before processing.
             </p>
 
 
@@ -647,7 +657,10 @@
      WITHDRAW JAVASCRIPT
 ===================================================== -->
 
-<script type="module" src="withdraw.js"></script>
+<script
+    type="module"
+    src="withdraw.js"
+></script>
 
 
 </body>
