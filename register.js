@@ -2,17 +2,13 @@
    GlobalEarn Register
    register.js
 
-   USERNAME-BASED REFERRAL SYSTEM
+   Username Referral System
 
-   Referral link example:
-   register.html?ref=john123
+   Referral link:
+   register.html?ref=username
 
-   When a new user registers:
-   referredBy = "john123"
-
-   Reward:
+   Referral reward:
    $3.50 per successful referral
-   Maximum: 10 referrals
 ========================================= */
 
 import {
@@ -20,170 +16,68 @@ import {
     db
 } from "./firebase.js";
 
-
-/* =========================================
-   FIREBASE AUTHENTICATION
-========================================= */
-
 import {
     createUserWithEmailAndPassword,
     updateProfile
 } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-auth.js";
 
-
-/* =========================================
-   FIRESTORE
-========================================= */
-
 import {
     doc,
     setDoc,
-    getDocs,
+    serverTimestamp,
     collection,
     query,
     where,
-    serverTimestamp
+    getDocs
 } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-firestore.js";
 
 
 /* =========================================
-   REFERRAL SETTINGS
+   ELEMENTS
 ========================================= */
 
-const REFERRAL_REWARD = 3.50;
-
-const REFERRAL_LIMIT = 10;
-
-
-/* =========================================
-   GET REFERRER FROM URL
-========================================= */
-
-function getReferralUsername() {
-
-    const params =
-        new URLSearchParams(
-            window.location.search
-        );
-
-
-    const ref =
-        params.get("ref");
-
-
-    if (!ref) {
-        return "";
-    }
-
-
-    return ref
-        .trim()
-        .toLowerCase();
-
-}
-
-
-/* =========================================
-   REFERRAL USERNAME
-========================================= */
-
-const referralUsername =
-    getReferralUsername();
-
-
-/* =========================================
-   AUTO-FILL REFERRAL FIELD
-========================================= */
+const registerForm =
+    document.getElementById("registerForm");
 
 const referralInput =
-    document.getElementById(
-        "referralCode"
+    document.getElementById("referralCode");
+
+
+/* =========================================
+   GET REFERRAL FROM URL
+========================================= */
+
+const urlParams =
+    new URLSearchParams(
+        window.location.search
     );
 
+const referralFromURL =
+    urlParams
+        .get("ref")
+        ?.trim()
+        .toLowerCase();
+
+
+/* =========================================
+   AUTO-FILL REFERRAL USERNAME
+========================================= */
 
 if (
     referralInput &&
-    referralUsername
+    referralFromURL
 ) {
 
     referralInput.value =
-        referralUsername;
+        referralFromURL;
 
-}
+    /*
+     * Referral came from a referral link,
+     * so don't allow the visitor to
+     * accidentally change it.
+     */
 
-
-/* =========================================
-   CHECK REFERRER
-========================================= */
-
-async function validateReferrer(
-    username
-) {
-
-    if (!username) {
-        return null;
-    }
-
-
-    try {
-
-        const usersRef =
-            collection(
-                db,
-                "users"
-            );
-
-
-        const referralQuery =
-            query(
-                usersRef,
-                where(
-                    "username",
-                    "==",
-                    username
-                )
-            );
-
-
-        const snapshot =
-            await getDocs(
-                referralQuery
-            );
-
-
-        if (
-            snapshot.empty
-        ) {
-
-            return null;
-
-        }
-
-
-        const referrerDoc =
-            snapshot.docs[0];
-
-
-        return {
-            id:
-                referrerDoc.id,
-
-            data:
-                referrerDoc.data()
-
-        };
-
-
-    } catch (error) {
-
-        console.error(
-            "Referrer validation error:",
-            error
-        );
-
-        return null;
-
-    }
+    referralInput.readOnly = true;
 
 }
 
@@ -191,12 +85,6 @@ async function validateReferrer(
 /* =========================================
    REGISTER FORM
 ========================================= */
-
-const registerForm =
-    document.getElementById(
-        "registerForm"
-    );
-
 
 if (registerForm) {
 
@@ -249,24 +137,21 @@ if (registerForm) {
 
 
             /*
-             * Referral username can come from:
+             * Referral username.
              *
-             * 1. URL
+             * Priority:
+             * 1. URL ?ref=username
              * 2. Referral input
              */
 
-            const enteredReferral =
-                document
-                    .getElementById("referralCode")
-                    ?.value
-                    .trim()
-                    .toLowerCase();
-
-
             const referredBy =
-                enteredReferral ||
-                referralUsername ||
-                "";
+                (
+                    referralFromURL ||
+                    referralInput?.value ||
+                    ""
+                )
+                .trim()
+                .toLowerCase();
 
 
             const password =
@@ -277,31 +162,21 @@ if (registerForm) {
 
             const confirmPassword =
                 document
-                    .getElementById(
-                        "confirmPassword"
-                    )
+                    .getElementById("confirmPassword")
                     ?.value;
 
 
             const terms =
-                document.getElementById(
-                    "terms"
-                );
+                document.getElementById("terms");
 
 
             /* =========================================
                MESSAGE
-            ========================================= */
+            ========================================== */
 
             const message =
-                document.getElementById(
-                    "message"
-                );
+                document.getElementById("message");
 
-
-            /* =========================================
-               BUTTON
-            ========================================= */
 
             const submitButton =
                 document.getElementById(
@@ -317,25 +192,20 @@ if (registerForm) {
 
             /* =========================================
                SHOW MESSAGE
-            ========================================= */
+            ========================================== */
 
             function showMessage(
                 text,
                 type = "error"
             ) {
 
-                if (!message) {
-                    return;
-                }
-
+                if (!message) return;
 
                 message.textContent =
                     text;
 
-
                 message.className =
                     "message " + type;
-
 
                 message.scrollIntoView({
                     behavior: "smooth",
@@ -347,7 +217,7 @@ if (registerForm) {
 
             /* =========================================
                REQUIRED FIELDS
-            ========================================= */
+            ========================================== */
 
             if (
                 !fullName ||
@@ -370,7 +240,7 @@ if (registerForm) {
 
             /* =========================================
                USERNAME VALIDATION
-            ========================================= */
+            ========================================== */
 
             if (
                 username.length < 3
@@ -385,13 +255,6 @@ if (registerForm) {
             }
 
 
-            /*
-             * Only allow:
-             * letters
-             * numbers
-             * underscore
-             */
-
             const usernamePattern =
                 /^[a-z0-9_]+$/;
 
@@ -403,7 +266,7 @@ if (registerForm) {
             ) {
 
                 showMessage(
-                    "Username can only contain letters, numbers, and underscores."
+                    "Username can only contain letters, numbers and underscores."
                 );
 
                 return;
@@ -413,16 +276,14 @@ if (registerForm) {
 
             /* =========================================
                EMAIL VALIDATION
-            ========================================= */
+            ========================================== */
 
             const emailPattern =
                 /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 
             if (
-                !emailPattern.test(
-                    email
-                )
+                !emailPattern.test(email)
             ) {
 
                 showMessage(
@@ -435,8 +296,8 @@ if (registerForm) {
 
 
             /* =========================================
-               PASSWORD VALIDATION
-            ========================================= */
+               PASSWORD
+            ========================================== */
 
             if (
                 password.length < 6
@@ -450,10 +311,6 @@ if (registerForm) {
 
             }
 
-
-            /* =========================================
-               CONFIRM PASSWORD
-            ========================================= */
 
             if (
                 password !==
@@ -471,7 +328,7 @@ if (registerForm) {
 
             /* =========================================
                TERMS
-            ========================================= */
+            ========================================== */
 
             if (
                 terms &&
@@ -488,57 +345,10 @@ if (registerForm) {
 
 
             /* =========================================
-               PREVENT SELF REFERRAL
-            ========================================= */
-
-            if (
-                referredBy &&
-                referredBy === username
-            ) {
-
-                showMessage(
-                    "You cannot use your own username as a referral."
-                );
-
-                return;
-
-            }
-
-
-            /* =========================================
-               START LOADING
-            ========================================= */
-
-            if (submitButton) {
-
-                submitButton.disabled =
-                    true;
-
-                submitButton.classList.add(
-                    "loading"
-                );
-
-            }
-
-
-            if (buttonText) {
-
-                buttonText.textContent =
-                    "Creating Account...";
-
-            }
-
-
-            /* =========================================
-               CREATE ACCOUNT
-            ========================================= */
+               CHECK USERNAME
+            ========================================== */
 
             try {
-
-                /*
-                 * Check whether username
-                 * already exists.
-                 */
 
                 const usersRef =
                     collection(
@@ -577,22 +387,61 @@ if (registerForm) {
                 }
 
 
-                /* =========================================
-                   VALIDATE REFERRER
-                ========================================= */
+            } catch (error) {
 
-                let referrer = null;
+                console.error(
+                    "Username check error:",
+                    error
+                );
+
+                showMessage(
+                    "Unable to verify username. Please try again."
+                );
+
+                return;
+
+            }
 
 
-                if (referredBy) {
+            /* =========================================
+               VERIFY REFERRER
+            ========================================== */
 
-                    referrer =
-                        await validateReferrer(
-                            referredBy
+            let validReferral =
+                null;
+
+
+            if (referredBy) {
+
+                try {
+
+                    const usersRef =
+                        collection(
+                            db,
+                            "users"
                         );
 
 
-                    if (!referrer) {
+                    const referrerQuery =
+                        query(
+                            usersRef,
+                            where(
+                                "username",
+                                "==",
+                                referredBy
+                            )
+                        );
+
+
+                    const referrerSnapshot =
+                        await getDocs(
+                            referrerQuery
+                        );
+
+
+                    if (
+                        referrerSnapshot.empty
+                    ) {
 
                         showMessage(
                             "The referral username does not exist."
@@ -602,12 +451,76 @@ if (registerForm) {
 
                     }
 
+
+                    /*
+                     * Prevent self-referral.
+                     */
+
+                    if (
+                        referredBy ===
+                        username
+                    ) {
+
+                        showMessage(
+                            "You cannot refer yourself."
+                        );
+
+                        return;
+
+                    }
+
+
+                    validReferral =
+                        referredBy;
+
+
+                } catch (error) {
+
+                    console.error(
+                        "Referral verification error:",
+                        error
+                    );
+
+                    showMessage(
+                        "Unable to verify referral. Please try again."
+                    );
+
+                    return;
+
                 }
 
+            }
 
-                /* =========================================
-                   CREATE FIREBASE AUTH ACCOUNT
-                ========================================= */
+
+            /* =========================================
+               START LOADING
+            ========================================== */
+
+            if (submitButton) {
+
+                submitButton.disabled =
+                    true;
+
+                submitButton.classList.add(
+                    "loading"
+                );
+
+            }
+
+
+            if (buttonText) {
+
+                buttonText.textContent =
+                    "Creating Account...";
+
+            }
+
+
+            /* =========================================
+               CREATE FIREBASE AUTH ACCOUNT
+            ========================================== */
+
+            try {
 
                 const userCredential =
                     await createUserWithEmailAndPassword(
@@ -635,7 +548,7 @@ if (registerForm) {
 
 
                 /* =========================================
-                   CREATE USER DOCUMENT
+                   CREATE FIRESTORE USER
                 ========================================= */
 
                 await setDoc(
@@ -670,27 +583,36 @@ if (registerForm) {
                          */
 
                         referredBy:
-                            referredBy || null,
+                            validReferral,
 
                         /*
-                         * Each user's own username
-                         * is their referral identifier.
+                         * Keep this field for
+                         * compatibility with
+                         * existing data.
                          */
 
-                        myReferralCode:
-                            username,
+                        referralCode:
+                            validReferral,
+
+                        /*
+                         * Referral system.
+                         */
+
+                        referralCount:
+                            0,
+
+                        referralEarnings:
+                            0,
+
+                        /*
+                         * Account earnings.
+                         */
 
                         balance:
                             50,
 
                         welcomeBonus:
                             50,
-
-                        referralEarnings:
-                            0,
-
-                        referralCount:
-                            0,
 
                         taskEarnings:
                             0,
@@ -702,6 +624,9 @@ if (registerForm) {
                             "active",
 
                         createdAt:
+                            serverTimestamp(),
+
+                        updatedAt:
                             serverTimestamp()
 
                     }
@@ -709,20 +634,14 @@ if (registerForm) {
 
 
                 /* =========================================
-                   SUCCESS MESSAGE
+                   SUCCESS
                 ========================================= */
 
                 showMessage(
-                    referredBy
-                        ? "Account created successfully! Your referral has been recorded."
-                        : "Account created successfully! Redirecting to your dashboard...",
+                    "Account created successfully! Redirecting to your dashboard...",
                     "success"
                 );
 
-
-                /* =========================================
-                   REDIRECT
-                ========================================= */
 
                 setTimeout(
                     () => {
@@ -743,17 +662,9 @@ if (registerForm) {
                 );
 
 
-                /* =========================================
-                   DEFAULT ERROR
-                ========================================= */
-
                 let errorMessage =
                     "Unable to create your account. Please try again.";
 
-
-                /* =========================================
-                   FIREBASE ERRORS
-                ========================================= */
 
                 switch (
                     error.code
@@ -828,10 +739,6 @@ if (registerForm) {
 
             } finally {
 
-                /* =========================================
-                   STOP LOADING
-                ========================================= */
-
                 if (submitButton) {
 
                     submitButton.disabled =
@@ -886,12 +793,8 @@ document
                         );
 
 
-                    if (!input) {
-                        return;
-                    }
+                    if (!input) return;
 
-
-                    /* SHOW */
 
                     if (
                         input.type ===
@@ -911,12 +814,7 @@ document
                             "Hide password"
                         );
 
-                    }
-
-
-                    /* HIDE */
-
-                    else {
+                    } else {
 
                         input.type =
                             "password";
