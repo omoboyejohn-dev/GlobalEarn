@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
 
     <meta
@@ -12,9 +11,6 @@
 
     <title>Notifications | GlobalEarn</title>
 
-
-    <!-- Google Font -->
-
     <link
         rel="preconnect"
         href="https://fonts.googleapis.com"
@@ -22,7 +18,7 @@
 
     <link
         rel="preconnect"
-        href="https://fonts.gstatic.com"
+        href="https://fonts.googleapis.com"
         crossorigin
     >
 
@@ -31,57 +27,35 @@
         rel="stylesheet"
     >
 
-
-    <!-- Font Awesome -->
-
     <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
     >
 
-
-    <!-- Notifications CSS -->
-
-    <link
-        rel="stylesheet"
-        href="notifications.css"
-    >
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="notifications.css">
 
 </head>
 
-
 <body>
-
 
 <main class="notifications-page">
 
-
-    <!-- =========================================
-         HEADER
-    ========================================== -->
+    <!-- HEADER -->
 
     <header class="notifications-header">
-
 
         <a
             href="dashboard.html"
             class="back-button"
         >
-
             <i class="fa-solid fa-arrow-left"></i>
-
-            <span>
-                Dashboard
-            </span>
-
+            <span>Dashboard</span>
         </a>
 
+        <div class="notifications-title">
 
-        <div class="notifications-heading">
-
-            <span>
-                ACCOUNT CENTER
-            </span>
+            <span>ACCOUNT CENTER</span>
 
             <h1>
                 Notifications
@@ -93,29 +67,20 @@
 
         </div>
 
-
     </header>
 
 
-
-    <!-- =========================================
-         NOTIFICATION SUMMARY
-    ========================================== -->
+    <!-- SUMMARY -->
 
     <section class="notification-summary">
-
 
         <div class="summary-card">
 
             <div class="summary-icon">
-
                 <i class="fa-solid fa-bell"></i>
-
             </div>
 
-
             <div>
-
                 <span>
                     TOTAL NOTIFICATIONS
                 </span>
@@ -123,24 +88,18 @@
                 <strong id="totalNotifications">
                     0
                 </strong>
-
             </div>
 
         </div>
 
 
-
         <div class="summary-card">
 
             <div class="summary-icon unread-icon">
-
                 <i class="fa-solid fa-envelope"></i>
-
             </div>
 
-
             <div>
-
                 <span>
                     UNREAD
                 </span>
@@ -148,37 +107,30 @@
                 <strong id="unreadNotifications">
                     0
                 </strong>
-
             </div>
 
         </div>
 
-
     </section>
 
 
+    <!-- CONTROLS -->
 
-    <!-- =========================================
-         NOTIFICATION ACTIONS
-    ========================================== -->
+    <section class="notification-controls">
 
-    <section class="notification-actions">
-
-
-        <div class="filter-buttons">
+        <div class="notification-tabs">
 
             <button
                 type="button"
-                class="filter-button active"
+                class="notification-tab active"
                 data-filter="all"
             >
                 All
             </button>
 
-
             <button
                 type="button"
-                class="filter-button"
+                class="notification-tab"
                 data-filter="unread"
             >
                 Unread
@@ -189,94 +141,98 @@
 
         <button
             type="button"
-            id="markAllReadButton"
-            class="mark-all-button"
+            id="markAllRead"
+            class="mark-read-button"
         >
 
             <i class="fa-solid fa-check-double"></i>
 
-            Mark all as read
+            <span>
+                Mark all as read
+            </span>
 
         </button>
 
     </section>
 
 
+    <!-- NOTIFICATION LIST -->
 
-    <!-- =========================================
-         NOTIFICATION LIST
-    ========================================== -->
+    <section class="notification-container">
 
-    <section class="notifications-container">
+        <div
+            id="loadingNotifications"
+            class="notification-loading"
+        >
+
+            <i class="fa-solid fa-spinner fa-spin"></i>
+
+            <span>
+                Loading notifications...
+            </span>
+
+        </div>
+
+
+        <div
+            id="notificationError"
+            class="notification-message notification-error"
+            hidden
+        >
+
+            <i class="fa-solid fa-circle-exclamation"></i>
+
+            <div>
+
+                <strong>
+                    Unable to load notifications
+                </strong>
+
+                <span id="notificationErrorText">
+                    Please refresh the page and try again.
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="emptyNotifications"
+            class="empty-notifications"
+            hidden
+        >
+
+            <div class="empty-icon">
+                <i class="fa-regular fa-bell-slash"></i>
+            </div>
+
+            <h3>
+                No notifications
+            </h3>
+
+            <p>
+                You don't have any notifications yet.
+            </p>
+
+        </div>
 
 
         <div
             id="notificationList"
             class="notification-list"
-        >
-
-
-            <!-- Loading -->
-
-            <div class="notification-loading">
-
-                <i class="fa-solid fa-spinner fa-spin"></i>
-
-                <span>
-                    Loading notifications...
-                </span>
-
-            </div>
-
-
-        </div>
-
+        ></div>
 
     </section>
 
 
-
-    <!-- =========================================
-         EMPTY STATE
-    ========================================== -->
-
-    <section
-        id="emptyNotifications"
-        class="empty-notifications"
-        hidden
-    >
-
-        <div class="empty-icon">
-
-            <i class="fa-solid fa-bell-slash"></i>
-
-        </div>
-
-
-        <h2>
-            No notifications
-        </h2>
-
-
-        <p>
-            You're all caught up. New account activity will
-            appear here.
-        </p>
-
-    </section>
-
-
-
-    <!-- =========================================
-         FOOTER
-    ========================================== -->
+    <!-- FOOTER -->
 
     <footer class="notifications-footer">
 
         <span>
             © 2026 GlobalEarn. All Rights Reserved.
         </span>
-
 
         <div>
 
@@ -296,21 +252,13 @@
 
     </footer>
 
-
 </main>
 
-
-
-<!-- =========================================
-     NOTIFICATION JAVASCRIPT
-========================================== -->
 
 <script
     type="module"
     src="notifications.js"
 ></script>
 
-
 </body>
-
 </html>
