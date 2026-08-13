@@ -1,6 +1,16 @@
 /* =========================================
    GlobalEarn Settings
    settings.js
+
+   Editable:
+   - Full Name
+   - Password
+
+   Locked:
+   - Username
+   - Email
+   - Country
+   - Phone
 ========================================= */
 
 import {
@@ -11,7 +21,8 @@ import {
 import {
     onAuthStateChanged,
     updatePassword,
-    updateProfile
+    updateProfile,
+    signOut
 } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-auth.js";
 
 import {
@@ -23,54 +34,143 @@ import {
 
 
 /* =========================================
-   ELEMENTS
-========================================= */
-
-const fullNameInput =
-    document.getElementById("fullName");
-
-const usernameInput =
-    document.getElementById("username");
-
-const emailInput =
-    document.getElementById("email");
-
-const countryInput =
-    document.getElementById("country");
-
-const phoneInput =
-    document.getElementById("phone");
-
-const saveProfileButton =
-    document.getElementById("saveProfileButton");
-
-const profileMessage =
-    document.getElementById("profileMessage");
-
-
-/* PASSWORD */
-
-const passwordForm =
-    document.getElementById("passwordForm");
-
-const newPasswordInput =
-    document.getElementById("newPassword");
-
-const confirmPasswordInput =
-    document.getElementById("confirmPassword");
-
-const savePasswordButton =
-    document.getElementById("savePasswordButton");
-
-const passwordMessage =
-    document.getElementById("passwordMessage");
-
-
-/* =========================================
    CURRENT USER
 ========================================= */
 
 let currentUser = null;
+
+
+/* =========================================
+   HELPERS
+========================================= */
+
+function getElement(...ids) {
+
+    for (const id of ids) {
+
+        const element =
+            document.getElementById(id);
+
+        if (element) {
+            return element;
+        }
+
+    }
+
+    return null;
+}
+
+
+function setElementValue(element, value) {
+
+    if (!element) return;
+
+    const safeValue =
+        value ?? "";
+
+
+    /*
+     * Input / textarea / select
+     */
+
+    if (
+        "value" in element
+    ) {
+
+        element.value =
+            safeValue;
+
+        return;
+
+    }
+
+
+    /*
+     * Normal text element
+     */
+
+    element.textContent =
+        safeValue;
+
+}
+
+
+/* =========================================
+   ELEMENTS
+========================================= */
+
+/* Profile */
+
+const fullNameInput =
+    getElement(
+        "fullName"
+    );
+
+const usernameInput =
+    getElement(
+        "username"
+    );
+
+const emailInput =
+    getElement(
+        "email"
+    );
+
+const countryInput =
+    getElement(
+        "country"
+    );
+
+const phoneInput =
+    getElement(
+        "phone"
+    );
+
+const saveProfileButton =
+    getElement(
+        "saveProfileButton"
+    );
+
+const profileMessage =
+    getElement(
+        "profileMessage"
+    );
+
+
+/* Password */
+
+const passwordForm =
+    getElement(
+        "passwordForm"
+    );
+
+const newPasswordInput =
+    getElement(
+        "newPassword"
+    );
+
+const confirmPasswordInput =
+    getElement(
+        "confirmPassword"
+    );
+
+const savePasswordButton =
+    getElement(
+        "savePasswordButton"
+    );
+
+const passwordMessage =
+    getElement(
+        "passwordMessage"
+    );
+
+
+/* Logout */
+
+const logoutButton =
+    getElement(
+        "logoutButton"
+    );
 
 
 /* =========================================
@@ -90,7 +190,19 @@ function showProfileMessage(
     profileMessage.className =
         `settings-message ${type}`;
 
-    profileMessage.hidden = false;
+    profileMessage.hidden =
+        false;
+
+}
+
+
+function hideProfileMessage() {
+
+    if (!profileMessage) return;
+
+    profileMessage.hidden =
+        true;
+
 }
 
 
@@ -107,7 +219,171 @@ function showPasswordMessage(
     passwordMessage.className =
         `modal-message ${type}`;
 
-    passwordMessage.hidden = false;
+    passwordMessage.hidden =
+        false;
+
+}
+
+
+function hidePasswordMessage() {
+
+    if (!passwordMessage) return;
+
+    passwordMessage.hidden =
+        true;
+
+}
+
+
+/* =========================================
+   DISPLAY USER INFORMATION
+========================================= */
+
+function displayUserInformation(
+    userData,
+    user
+) {
+
+    /*
+     * Full Name
+     */
+
+    const fullName =
+        userData.fullName ||
+        user.displayName ||
+        "";
+
+
+    /*
+     * Username
+     */
+
+    const username =
+        userData.username ||
+        "";
+
+
+    /*
+     * Email
+     */
+
+    const email =
+        userData.email ||
+        user.email ||
+        "";
+
+
+    /*
+     * Country
+     */
+
+    const country =
+        userData.country ||
+        "";
+
+
+    /*
+     * Phone
+     */
+
+    const phone =
+        userData.phone ||
+        "";
+
+
+    /* =====================================
+       FULL NAME
+    ===================================== */
+
+    setElementValue(
+        fullNameInput,
+        fullName
+    );
+
+
+    /* =====================================
+       USERNAME
+    ===================================== */
+
+    setElementValue(
+        usernameInput,
+        username
+    );
+
+
+    if (
+        usernameInput &&
+        "readOnly" in usernameInput
+    ) {
+
+        usernameInput.readOnly =
+            true;
+
+    }
+
+
+    /* =====================================
+       EMAIL
+    ===================================== */
+
+    setElementValue(
+        emailInput,
+        email
+    );
+
+
+    if (
+        emailInput &&
+        "readOnly" in emailInput
+    ) {
+
+        emailInput.readOnly =
+            true;
+
+    }
+
+
+    /* =====================================
+       COUNTRY
+    ===================================== */
+
+    setElementValue(
+        countryInput,
+        country
+    );
+
+
+    if (
+        countryInput &&
+        "readOnly" in countryInput
+    ) {
+
+        countryInput.readOnly =
+            true;
+
+    }
+
+
+    /* =====================================
+       PHONE
+    ===================================== */
+
+    setElementValue(
+        phoneInput,
+        phone
+    );
+
+
+    if (
+        phoneInput &&
+        "readOnly" in phoneInput
+    ) {
+
+        phoneInput.readOnly =
+            true;
+
+    }
+
 }
 
 
@@ -126,11 +402,16 @@ async function loadUserData(user) {
                 user.uid
             );
 
+
         const userSnapshot =
-            await getDoc(userRef);
+            await getDoc(
+                userRef
+            );
 
 
-        if (!userSnapshot.exists()) {
+        if (
+            !userSnapshot.exists()
+        ) {
 
             showProfileMessage(
                 "Your account information could not be found."
@@ -145,69 +426,10 @@ async function loadUserData(user) {
             userSnapshot.data();
 
 
-        /* =====================================
-           PROFILE FIELDS
-        ===================================== */
-
-        if (fullNameInput) {
-
-            fullNameInput.value =
-                userData.fullName ||
-                user.displayName ||
-                "";
-
-        }
-
-
-        if (usernameInput) {
-
-            usernameInput.value =
-                userData.username ||
-                "";
-
-            /*
-             * Username cannot be changed.
-             */
-
-            usernameInput.readOnly =
-                true;
-
-        }
-
-
-        if (emailInput) {
-
-            emailInput.value =
-                userData.email ||
-                user.email ||
-                "";
-
-            /*
-             * Email cannot be changed here.
-             */
-
-            emailInput.readOnly =
-                true;
-
-        }
-
-
-        if (countryInput) {
-
-            countryInput.value =
-                userData.country ||
-                "";
-
-        }
-
-
-        if (phoneInput) {
-
-            phoneInput.value =
-                userData.phone ||
-                "";
-
-        }
+        displayUserInformation(
+            userData,
+            user
+        );
 
 
     } catch (error) {
@@ -216,6 +438,7 @@ async function loadUserData(user) {
             "Load settings error:",
             error
         );
+
 
         showProfileMessage(
             "Unable to load your account information."
@@ -257,7 +480,7 @@ onAuthStateChanged(
 
 
 /* =========================================
-   SAVE PROFILE
+   SAVE FULL NAME
 ========================================= */
 
 if (saveProfileButton) {
@@ -267,6 +490,9 @@ if (saveProfileButton) {
         async function (event) {
 
             event.preventDefault();
+
+
+            hideProfileMessage();
 
 
             if (!currentUser) {
@@ -281,15 +507,8 @@ if (saveProfileButton) {
 
 
             const fullName =
-                fullNameInput?.value.trim() ||
-                "";
-
-            const country =
-                countryInput?.value.trim() ||
-                "";
-
-            const phone =
-                phoneInput?.value.trim() ||
+                fullNameInput?.value
+                    ?.trim() ||
                 "";
 
 
@@ -310,10 +529,12 @@ if (saveProfileButton) {
             }
 
 
-            if (fullName.length < 2) {
+            if (
+                fullName.length < 2
+            ) {
 
                 showProfileMessage(
-                    "Your full name is too short."
+                    "Your full name must contain at least 2 characters."
                 );
 
                 fullNameInput?.focus();
@@ -330,6 +551,9 @@ if (saveProfileButton) {
             saveProfileButton.disabled =
                 true;
 
+            const originalText =
+                saveProfileButton.textContent;
+
             saveProfileButton.textContent =
                 "Saving...";
 
@@ -345,7 +569,7 @@ if (saveProfileButton) {
 
 
                 /* =================================
-                   UPDATE FIRESTORE
+                   FIRESTORE
                 ================================= */
 
                 await updateDoc(
@@ -355,12 +579,6 @@ if (saveProfileButton) {
                         fullName:
                             fullName,
 
-                        country:
-                            country,
-
-                        phone:
-                            phone,
-
                         updatedAt:
                             serverTimestamp()
 
@@ -369,7 +587,7 @@ if (saveProfileButton) {
 
 
                 /* =================================
-                   UPDATE FIREBASE AUTH NAME
+                   FIREBASE AUTH
                 ================================= */
 
                 await updateProfile(
@@ -382,7 +600,7 @@ if (saveProfileButton) {
 
 
                 showProfileMessage(
-                    "Your profile has been updated successfully.",
+                    "Your full name has been updated successfully.",
                     "success"
                 );
 
@@ -396,8 +614,9 @@ if (saveProfileButton) {
 
 
                 showProfileMessage(
-                    "Unable to update your profile. Please try again."
+                    "Unable to update your full name. Please try again."
                 );
+
 
             } finally {
 
@@ -405,6 +624,7 @@ if (saveProfileButton) {
                     false;
 
                 saveProfileButton.textContent =
+                    originalText ||
                     "Save Changes";
 
             }
@@ -428,6 +648,9 @@ if (passwordForm) {
             event.preventDefault();
 
 
+            hidePasswordMessage();
+
+
             if (!currentUser) {
 
                 showPasswordMessage(
@@ -442,6 +665,7 @@ if (passwordForm) {
             const newPassword =
                 newPasswordInput?.value ||
                 "";
+
 
             const confirmPassword =
                 confirmPasswordInput?.value ||
@@ -465,7 +689,9 @@ if (passwordForm) {
             }
 
 
-            if (newPassword.length < 6) {
+            if (
+                newPassword.length < 6
+            ) {
 
                 showPasswordMessage(
                     "Password must contain at least 6 characters."
@@ -501,6 +727,9 @@ if (passwordForm) {
             savePasswordButton.disabled =
                 true;
 
+            const originalText =
+                savePasswordButton.textContent;
+
             savePasswordButton.textContent =
                 "Updating...";
 
@@ -520,31 +749,33 @@ if (passwordForm) {
 
 
                 /*
-                 * Clear password fields
+                 * Clear password fields.
                  */
 
-                newPasswordInput.value =
-                    "";
+                if (newPasswordInput) {
 
-                confirmPasswordInput.value =
-                    "";
+                    newPasswordInput.value =
+                        "";
+
+                }
+
+
+                if (confirmPasswordInput) {
+
+                    confirmPasswordInput.value =
+                        "";
+
+                }
 
 
                 /*
-                 * Reset button after success
+                 * Hide success message.
                  */
 
                 setTimeout(
                     () => {
 
-                        if (
-                            passwordMessage
-                        ) {
-
-                            passwordMessage.hidden =
-                                true;
-
-                        }
+                        hidePasswordMessage();
 
                     },
                     3000
@@ -591,16 +822,33 @@ if (passwordForm) {
                         break;
 
 
+                    case "auth/user-token-expired":
+
+                        message =
+                            "Your session has expired. Please log in again.";
+
+                        break;
+
+
                     default:
 
+                        /*
+                         * Don't expose unnecessary
+                         * Firebase internal errors.
+                         */
+
                         if (
-                            error.message
+                            error.message &&
+                            error.code ===
+                            "auth/invalid-credential"
                         ) {
 
                             message =
-                                error.message;
+                                "Your current session is no longer valid. Please log in again.";
 
                         }
+
+                        break;
 
                 }
 
@@ -609,12 +857,14 @@ if (passwordForm) {
                     message
                 );
 
+
             } finally {
 
                 savePasswordButton.disabled =
                     false;
 
                 savePasswordButton.textContent =
+                    originalText ||
                     "Update Password";
 
             }
@@ -667,10 +917,12 @@ document
                         this.innerHTML =
                             '<i class="fa-solid fa-eye-slash"></i>';
 
+
                         this.setAttribute(
                             "aria-label",
                             "Hide password"
                         );
+
 
                     } else {
 
@@ -680,6 +932,7 @@ document
 
                         this.innerHTML =
                             '<i class="fa-solid fa-eye"></i>';
+
 
                         this.setAttribute(
                             "aria-label",
@@ -699,26 +952,20 @@ document
    LOGOUT
 ========================================= */
 
-const logoutButton =
-    document.getElementById(
-        "logoutButton"
-    );
-
-
 if (logoutButton) {
 
     logoutButton.addEventListener(
         "click",
-        async function () {
+        async function (event) {
+
+            event.preventDefault();
+
+
+            logoutButton.disabled =
+                true;
+
 
             try {
-
-                const {
-                    signOut
-                } = await import(
-                    "https://www.gstatic.com/firebasejs/12.17.0/firebase-auth.js"
-                );
-
 
                 await signOut(
                     auth
@@ -735,6 +982,10 @@ if (logoutButton) {
                     "Logout error:",
                     error
                 );
+
+
+                logoutButton.disabled =
+                    false;
 
             }
 
