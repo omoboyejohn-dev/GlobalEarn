@@ -1,6 +1,8 @@
 /* =========================================
    GlobalEarn Dashboard
    dashboard.js
+
+   Real-time Firestore balance updates
 ========================================= */
 
 import {
@@ -8,14 +10,24 @@ import {
     db
 } from "./firebase.js";
 
+
+/* =========================================
+   FIREBASE AUTH
+========================================= */
+
 import {
     onAuthStateChanged,
     signOut
 } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-auth.js";
 
+
+/* =========================================
+   FIRESTORE
+========================================= */
+
 import {
     doc,
-    getDoc
+    onSnapshot
 } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-firestore.js";
 
 
@@ -24,7 +36,9 @@ import {
 ========================================= */
 
 function getElement(id) {
+
     return document.getElementById(id);
+
 }
 
 
@@ -34,7 +48,8 @@ function getElement(id) {
 
 function formatMoney(value) {
 
-    const amount = Number(value) || 0;
+    const amount =
+        Number(value) || 0;
 
     return "$" + amount.toFixed(2);
 
@@ -48,14 +63,19 @@ function formatMoney(value) {
 function formatDate(timestamp) {
 
     if (!timestamp) {
+
         return "—";
+
     }
+
 
     try {
 
-        const date = timestamp.toDate
-            ? timestamp.toDate()
-            : new Date(timestamp);
+        const date =
+            timestamp.toDate
+                ? timestamp.toDate()
+                : new Date(timestamp);
+
 
         return date.toLocaleDateString(
             "en-US",
@@ -74,21 +94,26 @@ function formatDate(timestamp) {
         );
 
         return "—";
+
     }
 
 }
 
 
 /* =========================================
-   SHOW USER DATA
+   DISPLAY USER DATA
 ========================================= */
 
-function displayUserData(user, userData) {
+function displayUserData(
+    user,
+    userData
+) {
 
     const fullName =
         userData.fullName ||
         user.displayName ||
         "GlobalEarn Member";
+
 
     const username =
         userData.username ||
@@ -102,6 +127,7 @@ function displayUserData(user, userData) {
     const welcomeName =
         getElement("welcomeName");
 
+
     if (welcomeName) {
 
         welcomeName.textContent =
@@ -112,6 +138,7 @@ function displayUserData(user, userData) {
 
     const headerUsername =
         getElement("headerUsername");
+
 
     if (headerUsername) {
 
@@ -128,8 +155,10 @@ function displayUserData(user, userData) {
     const balance =
         Number(userData.balance) || 0;
 
+
     const walletBalance =
         getElement("walletBalance");
+
 
     if (walletBalance) {
 
@@ -144,10 +173,14 @@ function displayUserData(user, userData) {
     ===================================== */
 
     const welcomeBonus =
-        Number(userData.welcomeBonus) || 0;
+        Number(
+            userData.welcomeBonus
+        ) || 0;
+
 
     const welcomeBonusElement =
         getElement("welcomeBonus");
+
 
     if (welcomeBonusElement) {
 
@@ -162,10 +195,14 @@ function displayUserData(user, userData) {
     ===================================== */
 
     const taskEarnings =
-        Number(userData.taskEarnings) || 0;
+        Number(
+            userData.taskEarnings
+        ) || 0;
+
 
     const taskEarningsElement =
         getElement("taskEarnings");
+
 
     if (taskEarningsElement) {
 
@@ -180,15 +217,43 @@ function displayUserData(user, userData) {
     ===================================== */
 
     const referralEarnings =
-        Number(userData.referralEarnings) || 0;
+        Number(
+            userData.referralEarnings
+        ) || 0;
+
 
     const referralEarningsElement =
         getElement("referralEarnings");
 
+
     if (referralEarningsElement) {
 
         referralEarningsElement.textContent =
-            formatMoney(referralEarnings);
+            formatMoney(
+                referralEarnings
+            );
+
+    }
+
+
+    /* =====================================
+       REFERRAL COUNT
+    ===================================== */
+
+    const referralCount =
+        Number(
+            userData.referralCount
+        ) || 0;
+
+
+    const referralCountElement =
+        getElement("referralCount");
+
+
+    if (referralCountElement) {
+
+        referralCountElement.textContent =
+            referralCount;
 
     }
 
@@ -198,15 +263,21 @@ function displayUserData(user, userData) {
     ===================================== */
 
     const totalWithdrawn =
-        Number(userData.totalWithdrawn) || 0;
+        Number(
+            userData.totalWithdrawn
+        ) || 0;
+
 
     const totalWithdrawnElement =
         getElement("totalWithdrawn");
 
+
     if (totalWithdrawnElement) {
 
         totalWithdrawnElement.textContent =
-            formatMoney(totalWithdrawn);
+            formatMoney(
+                totalWithdrawn
+            );
 
     }
 
@@ -218,20 +289,24 @@ function displayUserData(user, userData) {
     const accountStatus =
         getElement("accountStatus");
 
+
     if (accountStatus) {
 
         const status =
             userData.accountStatus ||
             "active";
 
+
         accountStatus.textContent =
             status.charAt(0).toUpperCase() +
             status.slice(1);
+
 
         accountStatus.classList.remove(
             "status-active",
             "status-disabled"
         );
+
 
         if (
             status.toLowerCase() ===
@@ -260,6 +335,7 @@ function displayUserData(user, userData) {
     const memberSince =
         getElement("memberSince");
 
+
     if (memberSince) {
 
         memberSince.textContent =
@@ -277,6 +353,7 @@ function displayUserData(user, userData) {
     const countryElement =
         getElement("userCountry");
 
+
     if (countryElement) {
 
         countryElement.textContent =
@@ -293,6 +370,7 @@ function displayUserData(user, userData) {
     const emailElement =
         getElement("userEmail");
 
+
     if (emailElement) {
 
         emailElement.textContent =
@@ -304,61 +382,80 @@ function displayUserData(user, userData) {
 
 
     console.log(
-        "GlobalEarn user data loaded:",
-        userData
+        "GlobalEarn dashboard updated:",
+        {
+            balance: balance,
+            referralEarnings:
+                referralEarnings,
+            referralCount:
+                referralCount
+        }
     );
 
 }
 
 
 /* =========================================
-   LOAD USER FROM FIRESTORE
+   REAL-TIME USER DATA
 ========================================= */
 
-async function loadUserData(user) {
+function listenToUserData(user) {
 
-    try {
+    const userRef =
+        doc(
+            db,
+            "users",
+            user.uid
+        );
 
-        const userRef =
-            doc(
-                db,
-                "users",
-                user.uid
+
+    /*
+     * onSnapshot keeps the dashboard
+     * synchronized with Firestore.
+     *
+     * When the Cloud Function changes:
+     *
+     * balance: 50 → 53.50
+     *
+     * the dashboard updates automatically.
+     */
+
+    return onSnapshot(
+        userRef,
+
+        snapshot => {
+
+            if (!snapshot.exists()) {
+
+                console.error(
+                    "User document not found."
+                );
+
+                return;
+
+            }
+
+
+            const userData =
+                snapshot.data();
+
+
+            displayUserData(
+                user,
+                userData
             );
 
-        const snapshot =
-            await getDoc(userRef);
+        },
 
-
-        if (!snapshot.exists()) {
+        error => {
 
             console.error(
-                "User document not found."
+                "Real-time dashboard error:",
+                error
             );
 
-            return;
-
         }
-
-
-        const userData =
-            snapshot.data();
-
-
-        displayUserData(
-            user,
-            userData
-        );
-
-
-    } catch (error) {
-
-        console.error(
-            "Error loading dashboard:",
-            error
-        );
-
-    }
+    );
 
 }
 
@@ -367,11 +464,24 @@ async function loadUserData(user) {
    AUTH STATE
 ========================================= */
 
+let unsubscribeUser = null;
+
+
 onAuthStateChanged(
     auth,
-    async (user) => {
+    user => {
 
         if (!user) {
+
+            if (unsubscribeUser) {
+
+                unsubscribeUser();
+
+                unsubscribeUser =
+                    null;
+
+            }
+
 
             window.location.href =
                 "login.html";
@@ -381,7 +491,19 @@ onAuthStateChanged(
         }
 
 
-        await loadUserData(user);
+        /*
+         * Start real-time listener.
+         */
+
+        if (unsubscribeUser) {
+
+            unsubscribeUser();
+
+        }
+
+
+        unsubscribeUser =
+            listenToUserData(user);
 
     }
 );
@@ -408,7 +530,9 @@ if (logoutButton) {
 
 
             if (!confirmed) {
+
                 return;
+
             }
 
 
@@ -468,11 +592,15 @@ if (logoutButton) {
 const menuButton =
     getElement("menuButton");
 
+
 const sidebar =
     getElement("sidebar");
 
 
-if (menuButton && sidebar) {
+if (
+    menuButton &&
+    sidebar
+) {
 
     menuButton.addEventListener(
         "click",
