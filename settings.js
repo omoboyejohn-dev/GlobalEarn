@@ -3,203 +3,223 @@
    settings.js
 ========================================= */
 
-import { auth, db } from "./firebase.js";
+import {
+    auth,
+    db
+} from "./firebase.js";
 
 import {
     onAuthStateChanged,
     updatePassword,
-    signOut
-} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
+    updateProfile
+} from "https://www.gstatic.com/firebasejs/12.17.0/firebase-auth.js";
 
 import {
     doc,
     getDoc,
-    updateDoc
-} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+    updateDoc,
+    serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.17.0/firebase-firestore.js";
 
 
 /* =========================================
    ELEMENTS
 ========================================= */
 
-const editNameButton =
-    document.getElementById("editNameButton");
+const fullNameInput =
+    document.getElementById("fullName");
 
-const editPasswordButton =
-    document.getElementById("editPasswordButton");
+const usernameInput =
+    document.getElementById("username");
 
-const logoutButton =
-    document.getElementById("logoutButton");
+const emailInput =
+    document.getElementById("email");
 
-const nameModal =
-    document.getElementById("nameModal");
+const countryInput =
+    document.getElementById("country");
 
-const passwordModal =
-    document.getElementById("passwordModal");
+const phoneInput =
+    document.getElementById("phone");
 
-const closeNameModal =
-    document.getElementById("closeNameModal");
+const saveProfileButton =
+    document.getElementById("saveProfileButton");
 
-const closePasswordModal =
-    document.getElementById("closePasswordModal");
+const profileMessage =
+    document.getElementById("profileMessage");
 
-const nameForm =
-    document.getElementById("nameForm");
+
+/* PASSWORD */
 
 const passwordForm =
     document.getElementById("passwordForm");
 
-const newFullName =
-    document.getElementById("newFullName");
-
-const newPassword =
+const newPasswordInput =
     document.getElementById("newPassword");
 
-const confirmPassword =
+const confirmPasswordInput =
     document.getElementById("confirmPassword");
-
-const saveNameButton =
-    document.getElementById("saveNameButton");
 
 const savePasswordButton =
     document.getElementById("savePasswordButton");
 
-const nameMessage =
-    document.getElementById("nameMessage");
-
 const passwordMessage =
     document.getElementById("passwordMessage");
 
-const settingsEmail =
-    document.getElementById("settingsEmail");
 
-const settingsUsername =
-    document.getElementById("settingsUsername");
-
-const settingsCountry =
-    document.getElementById("settingsCountry");
-
+/* =========================================
+   CURRENT USER
+========================================= */
 
 let currentUser = null;
 
 
 /* =========================================
-   MODAL FUNCTIONS
+   MESSAGE HELPERS
 ========================================= */
 
-function openModal(modal) {
+function showProfileMessage(
+    message,
+    type = "error"
+) {
 
-    if (!modal) return;
+    if (!profileMessage) return;
 
-    modal.hidden = false;
+    profileMessage.textContent =
+        message;
 
+    profileMessage.className =
+        `settings-message ${type}`;
+
+    profileMessage.hidden = false;
 }
 
 
-function closeModal(modal) {
+function showPasswordMessage(
+    message,
+    type = "error"
+) {
 
-    if (!modal) return;
+    if (!passwordMessage) return;
 
-    modal.hidden = true;
+    passwordMessage.textContent =
+        message;
 
-}
-
-
-/* =========================================
-   MESSAGE
-========================================= */
-
-function showMessage(element, message, type) {
-
-    if (!element) return;
-
-    element.textContent = message;
-
-    element.className =
+    passwordMessage.className =
         `modal-message ${type}`;
 
-    element.hidden = false;
-
-}
-
-
-function hideMessage(element) {
-
-    if (!element) return;
-
-    element.hidden = true;
-
-    element.textContent = "";
-
+    passwordMessage.hidden = false;
 }
 
 
 /* =========================================
-   LOAD ACCOUNT INFORMATION
+   LOAD USER DATA
 ========================================= */
 
-async function loadSettings(user) {
+async function loadUserData(user) {
 
     try {
 
         const userRef =
-            doc(db, "users", user.uid);
+            doc(
+                db,
+                "users",
+                user.uid
+            );
 
-        const snapshot =
+        const userSnapshot =
             await getDoc(userRef);
 
 
-        if (!snapshot.exists()) {
+        if (!userSnapshot.exists()) {
 
-            settingsEmail.textContent =
-                user.email || "Not available";
-
-            settingsUsername.textContent =
-                "Not available";
-
-            settingsCountry.textContent =
-                "Not available";
+            showProfileMessage(
+                "Your account information could not be found."
+            );
 
             return;
 
         }
 
 
-        const data =
-            snapshot.data();
+        const userData =
+            userSnapshot.data();
 
 
-        settingsEmail.textContent =
-            data.email ||
-            user.email ||
-            "Not available";
+        /* =====================================
+           PROFILE FIELDS
+        ===================================== */
+
+        if (fullNameInput) {
+
+            fullNameInput.value =
+                userData.fullName ||
+                user.displayName ||
+                "";
+
+        }
 
 
-        settingsUsername.textContent =
-            data.username ||
-            "Not available";
+        if (usernameInput) {
+
+            usernameInput.value =
+                userData.username ||
+                "";
+
+            /*
+             * Username cannot be changed.
+             */
+
+            usernameInput.readOnly =
+                true;
+
+        }
 
 
-        settingsCountry.textContent =
-            data.country ||
-            "Not available";
+        if (emailInput) {
+
+            emailInput.value =
+                userData.email ||
+                user.email ||
+                "";
+
+            /*
+             * Email cannot be changed here.
+             */
+
+            emailInput.readOnly =
+                true;
+
+        }
+
+
+        if (countryInput) {
+
+            countryInput.value =
+                userData.country ||
+                "";
+
+        }
+
+
+        if (phoneInput) {
+
+            phoneInput.value =
+                userData.phone ||
+                "";
+
+        }
 
 
     } catch (error) {
 
         console.error(
-            "Settings loading error:",
+            "Load settings error:",
             error
         );
 
-        settingsEmail.textContent =
-            user.email || "Unavailable";
-
-        settingsUsername.textContent =
-            "Unavailable";
-
-        settingsCountry.textContent =
-            "Unavailable";
+        showProfileMessage(
+            "Unable to load your account information."
+        );
 
     }
 
@@ -207,490 +227,7 @@ async function loadSettings(user) {
 
 
 /* =========================================
-   CHANGE NAME
-========================================= */
-
-editNameButton?.addEventListener(
-    "click",
-    () => {
-
-        hideMessage(nameMessage);
-
-        newFullName.value = "";
-
-        openModal(nameModal);
-
-        setTimeout(() => {
-
-            newFullName.focus();
-
-        }, 100);
-
-    }
-);
-
-
-/* =========================================
-   CLOSE NAME MODAL
-========================================= */
-
-closeNameModal?.addEventListener(
-    "click",
-    () => {
-
-        closeModal(nameModal);
-
-    }
-);
-
-
-/* =========================================
-   SAVE NAME
-========================================= */
-
-nameForm?.addEventListener(
-    "submit",
-    async (event) => {
-
-        event.preventDefault();
-
-
-        if (!currentUser) {
-
-            showMessage(
-                nameMessage,
-                "You are not logged in.",
-                "error"
-            );
-
-            return;
-
-        }
-
-
-        const fullName =
-            newFullName.value.trim();
-
-
-        if (!fullName) {
-
-            showMessage(
-                nameMessage,
-                "Please enter your full name.",
-                "error"
-            );
-
-            return;
-
-        }
-
-
-        if (fullName.length < 2) {
-
-            showMessage(
-                nameMessage,
-                "Your full name must contain at least 2 characters.",
-                "error"
-            );
-
-            return;
-
-        }
-
-
-        saveNameButton.disabled = true;
-
-        saveNameButton.textContent =
-            "Saving...";
-
-
-        try {
-
-            const userRef =
-                doc(db, "users", currentUser.uid);
-
-
-            await updateDoc(
-                userRef,
-                {
-                    fullName: fullName
-                }
-            );
-
-
-            showMessage(
-                nameMessage,
-                "Your full name has been updated successfully.",
-                "success"
-            );
-
-
-            saveNameButton.textContent =
-                "Saved";
-
-
-            setTimeout(() => {
-
-                closeModal(nameModal);
-
-                saveNameButton.disabled = false;
-
-                saveNameButton.textContent =
-                    "Save Changes";
-
-            }, 1200);
-
-
-        } catch (error) {
-
-            console.error(
-                "Name update error:",
-                error
-            );
-
-
-            showMessage(
-                nameMessage,
-                "Unable to update your name. Please try again.",
-                "error"
-            );
-
-
-            saveNameButton.disabled = false;
-
-            saveNameButton.textContent =
-                "Save Changes";
-
-        }
-
-    }
-);
-
-
-/* =========================================
-   CHANGE PASSWORD
-========================================= */
-
-editPasswordButton?.addEventListener(
-    "click",
-    () => {
-
-        hideMessage(passwordMessage);
-
-        newPassword.value = "";
-
-        confirmPassword.value = "";
-
-        openModal(passwordModal);
-
-        setTimeout(() => {
-
-            newPassword.focus();
-
-        }, 100);
-
-    }
-);
-
-
-/* =========================================
-   CLOSE PASSWORD MODAL
-========================================= */
-
-closePasswordModal?.addEventListener(
-    "click",
-    () => {
-
-        closeModal(passwordModal);
-
-    }
-);
-
-
-/* =========================================
-   UPDATE PASSWORD
-========================================= */
-
-passwordForm?.addEventListener(
-    "submit",
-    async (event) => {
-
-        event.preventDefault();
-
-
-        if (!currentUser) {
-
-            showMessage(
-                passwordMessage,
-                "You are not logged in.",
-                "error"
-            );
-
-            return;
-
-        }
-
-
-        const password =
-            newPassword.value;
-
-        const confirm =
-            confirmPassword.value;
-
-
-        /* PASSWORD LENGTH */
-
-        if (password.length < 6) {
-
-            showMessage(
-                passwordMessage,
-                "Password must contain at least 6 characters.",
-                "error"
-            );
-
-            return;
-
-        }
-
-
-        /* PASSWORD MATCH */
-
-        if (password !== confirm) {
-
-            showMessage(
-                passwordMessage,
-                "Passwords do not match.",
-                "error"
-            );
-
-            return;
-
-        }
-
-
-        savePasswordButton.disabled = true;
-
-        savePasswordButton.textContent =
-            "Updating...";
-
-
-        try {
-
-            await updatePassword(
-                currentUser,
-                password
-            );
-
-
-            showMessage(
-                passwordMessage,
-                "Your password has been updated successfully.",
-                "success"
-            );
-
-
-            passwordForm.reset();
-
-
-            savePasswordButton.textContent =
-                "Updated";
-
-
-            setTimeout(() => {
-
-                closeModal(passwordModal);
-
-                savePasswordButton.disabled = false;
-
-                savePasswordButton.textContent =
-                    "Update Password";
-
-            }, 1200);
-
-
-        } catch (error) {
-
-            console.error(
-                "Password update error:",
-                error
-            );
-
-
-            let message =
-                "Unable to update your password. Please try again.";
-
-
-            if (
-                error.code ===
-                "auth/requires-recent-login"
-            ) {
-
-                message =
-                    "For security, please log in again before changing your password.";
-
-            }
-
-
-            showMessage(
-                passwordMessage,
-                message,
-                "error"
-            );
-
-
-            savePasswordButton.disabled = false;
-
-            savePasswordButton.textContent =
-                "Update Password";
-
-        }
-
-    }
-);
-
-
-/* =========================================
-   PASSWORD VISIBILITY
-========================================= */
-
-document
-    .querySelectorAll(".toggle-password")
-    .forEach(button => {
-
-        button.addEventListener(
-            "click",
-            () => {
-
-                const targetId =
-                    button.dataset.target;
-
-                const input =
-                    document.getElementById(targetId);
-
-                if (!input) return;
-
-
-                if (input.type === "password") {
-
-                    input.type = "text";
-
-                    button.innerHTML =
-                        '<i class="fa-solid fa-eye-slash"></i>';
-
-                } else {
-
-                    input.type = "password";
-
-                    button.innerHTML =
-                        '<i class="fa-solid fa-eye"></i>';
-
-                }
-
-            }
-        );
-
-    });
-
-
-/* =========================================
-   CLOSE MODAL WHEN CLICKING OUTSIDE
-========================================= */
-
-nameModal?.addEventListener(
-    "click",
-    (event) => {
-
-        if (event.target === nameModal) {
-
-            closeModal(nameModal);
-
-        }
-
-    }
-);
-
-
-passwordModal?.addEventListener(
-    "click",
-    (event) => {
-
-        if (event.target === passwordModal) {
-
-            closeModal(passwordModal);
-
-        }
-
-    }
-);
-
-
-/* =========================================
-   ESCAPE KEY
-========================================= */
-
-document.addEventListener(
-    "keydown",
-    (event) => {
-
-        if (event.key !== "Escape") return;
-
-
-        closeModal(nameModal);
-
-        closeModal(passwordModal);
-
-    }
-);
-
-
-/* =========================================
-   LOGOUT
-========================================= */
-
-logoutButton?.addEventListener(
-    "click",
-    async () => {
-
-        try {
-
-            logoutButton.disabled = true;
-
-            logoutButton.innerHTML = `
-                <i class="fa-solid fa-spinner fa-spin"></i>
-                Logging out...
-            `;
-
-
-            await signOut(auth);
-
-
-            window.location.href =
-                "login.html";
-
-
-        } catch (error) {
-
-            console.error(
-                "Logout error:",
-                error
-            );
-
-
-            logoutButton.disabled = false;
-
-            logoutButton.innerHTML = `
-                <i class="fa-solid fa-right-from-bracket"></i>
-                Logout
-            `;
-
-        }
-
-    }
-);
-
-
-/* =========================================
-   AUTH CHECK
+   AUTH STATE
 ========================================= */
 
 onAuthStateChanged(
@@ -707,36 +244,501 @@ onAuthStateChanged(
         }
 
 
-        currentUser = user;
+        currentUser =
+            user;
 
 
-        await loadSettings(user);
-
-
-        /*
-         * Open the correct modal when coming
-         * from Profile page.
-         *
-         * Example:
-         * settings.html#name
-         * settings.html#password
-         */
-
-        if (window.location.hash === "#name") {
-
-            openModal(nameModal);
-
-        }
-
-
-        if (
-            window.location.hash ===
-            "#password"
-        ) {
-
-            openModal(passwordModal);
-
-        }
+        await loadUserData(
+            user
+        );
 
     }
 );
+
+
+/* =========================================
+   SAVE PROFILE
+========================================= */
+
+if (saveProfileButton) {
+
+    saveProfileButton.addEventListener(
+        "click",
+        async function (event) {
+
+            event.preventDefault();
+
+
+            if (!currentUser) {
+
+                showProfileMessage(
+                    "Please log in again."
+                );
+
+                return;
+
+            }
+
+
+            const fullName =
+                fullNameInput?.value.trim() ||
+                "";
+
+            const country =
+                countryInput?.value.trim() ||
+                "";
+
+            const phone =
+                phoneInput?.value.trim() ||
+                "";
+
+
+            /* =================================
+               VALIDATION
+            ================================= */
+
+            if (!fullName) {
+
+                showProfileMessage(
+                    "Please enter your full name."
+                );
+
+                fullNameInput?.focus();
+
+                return;
+
+            }
+
+
+            if (fullName.length < 2) {
+
+                showProfileMessage(
+                    "Your full name is too short."
+                );
+
+                fullNameInput?.focus();
+
+                return;
+
+            }
+
+
+            /* =================================
+               LOADING
+            ================================= */
+
+            saveProfileButton.disabled =
+                true;
+
+            saveProfileButton.textContent =
+                "Saving...";
+
+
+            try {
+
+                const userRef =
+                    doc(
+                        db,
+                        "users",
+                        currentUser.uid
+                    );
+
+
+                /* =================================
+                   UPDATE FIRESTORE
+                ================================= */
+
+                await updateDoc(
+                    userRef,
+                    {
+
+                        fullName:
+                            fullName,
+
+                        country:
+                            country,
+
+                        phone:
+                            phone,
+
+                        updatedAt:
+                            serverTimestamp()
+
+                    }
+                );
+
+
+                /* =================================
+                   UPDATE FIREBASE AUTH NAME
+                ================================= */
+
+                await updateProfile(
+                    currentUser,
+                    {
+                        displayName:
+                            fullName
+                    }
+                );
+
+
+                showProfileMessage(
+                    "Your profile has been updated successfully.",
+                    "success"
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Profile update error:",
+                    error
+                );
+
+
+                showProfileMessage(
+                    "Unable to update your profile. Please try again."
+                );
+
+            } finally {
+
+                saveProfileButton.disabled =
+                    false;
+
+                saveProfileButton.textContent =
+                    "Save Changes";
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================
+   CHANGE PASSWORD
+========================================= */
+
+if (passwordForm) {
+
+    passwordForm.addEventListener(
+        "submit",
+        async function (event) {
+
+            event.preventDefault();
+
+
+            if (!currentUser) {
+
+                showPasswordMessage(
+                    "Please log in again."
+                );
+
+                return;
+
+            }
+
+
+            const newPassword =
+                newPasswordInput?.value ||
+                "";
+
+            const confirmPassword =
+                confirmPasswordInput?.value ||
+                "";
+
+
+            /* =================================
+               VALIDATION
+            ================================= */
+
+            if (!newPassword) {
+
+                showPasswordMessage(
+                    "Please enter your new password."
+                );
+
+                newPasswordInput?.focus();
+
+                return;
+
+            }
+
+
+            if (newPassword.length < 6) {
+
+                showPasswordMessage(
+                    "Password must contain at least 6 characters."
+                );
+
+                newPasswordInput?.focus();
+
+                return;
+
+            }
+
+
+            if (
+                newPassword !==
+                confirmPassword
+            ) {
+
+                showPasswordMessage(
+                    "Passwords do not match."
+                );
+
+                confirmPasswordInput?.focus();
+
+                return;
+
+            }
+
+
+            /* =================================
+               LOADING
+            ================================= */
+
+            savePasswordButton.disabled =
+                true;
+
+            savePasswordButton.textContent =
+                "Updating...";
+
+
+            try {
+
+                await updatePassword(
+                    currentUser,
+                    newPassword
+                );
+
+
+                showPasswordMessage(
+                    "Your password has been updated successfully.",
+                    "success"
+                );
+
+
+                /*
+                 * Clear password fields
+                 */
+
+                newPasswordInput.value =
+                    "";
+
+                confirmPasswordInput.value =
+                    "";
+
+
+                /*
+                 * Reset button after success
+                 */
+
+                setTimeout(
+                    () => {
+
+                        if (
+                            passwordMessage
+                        ) {
+
+                            passwordMessage.hidden =
+                                true;
+
+                        }
+
+                    },
+                    3000
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Password update error:",
+                    error
+                );
+
+
+                let message =
+                    "Unable to update your password.";
+
+
+                switch (
+                    error.code
+                ) {
+
+                    case "auth/requires-recent-login":
+
+                        message =
+                            "For security, please log out and log in again before changing your password.";
+
+                        break;
+
+
+                    case "auth/weak-password":
+
+                        message =
+                            "Your password is too weak. Use at least 6 characters.";
+
+                        break;
+
+
+                    case "auth/network-request-failed":
+
+                        message =
+                            "Network error. Please check your internet connection.";
+
+                        break;
+
+
+                    default:
+
+                        if (
+                            error.message
+                        ) {
+
+                            message =
+                                error.message;
+
+                        }
+
+                }
+
+
+                showPasswordMessage(
+                    message
+                );
+
+            } finally {
+
+                savePasswordButton.disabled =
+                    false;
+
+                savePasswordButton.textContent =
+                    "Update Password";
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================
+   SHOW / HIDE PASSWORD
+========================================= */
+
+document
+    .querySelectorAll(
+        ".toggle-password"
+    )
+    .forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                function () {
+
+                    const target =
+                        this.getAttribute(
+                            "data-target"
+                        );
+
+
+                    const input =
+                        document.getElementById(
+                            target
+                        );
+
+
+                    if (!input) return;
+
+
+                    if (
+                        input.type ===
+                        "password"
+                    ) {
+
+                        input.type =
+                            "text";
+
+
+                        this.innerHTML =
+                            '<i class="fa-solid fa-eye-slash"></i>';
+
+                        this.setAttribute(
+                            "aria-label",
+                            "Hide password"
+                        );
+
+                    } else {
+
+                        input.type =
+                            "password";
+
+
+                        this.innerHTML =
+                            '<i class="fa-solid fa-eye"></i>';
+
+                        this.setAttribute(
+                            "aria-label",
+                            "Show password"
+                        );
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+
+/* =========================================
+   LOGOUT
+========================================= */
+
+const logoutButton =
+    document.getElementById(
+        "logoutButton"
+    );
+
+
+if (logoutButton) {
+
+    logoutButton.addEventListener(
+        "click",
+        async function () {
+
+            try {
+
+                const {
+                    signOut
+                } = await import(
+                    "https://www.gstatic.com/firebasejs/12.17.0/firebase-auth.js"
+                );
+
+
+                await signOut(
+                    auth
+                );
+
+
+                window.location.href =
+                    "login.html";
+
+
+            } catch (error) {
+
+                console.error(
+                    "Logout error:",
+                    error
+                );
+
+            }
+
+        }
+    );
+
+}
